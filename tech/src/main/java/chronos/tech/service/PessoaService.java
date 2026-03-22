@@ -1,5 +1,7 @@
 package chronos.tech.service;
 
+import chronos.tech.dto.CreatePessoaRequestDto;
+import chronos.tech.dto.PessoaResponseDto;
 import chronos.tech.model.classes.Pessoa;
 import chronos.tech.repository.PessoaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,30 @@ public class PessoaService {
 
     @Autowired
     private PessoaRepository repository;
+
+    public PessoaResponseDto createPessoa(CreatePessoaRequestDto requestPessoaDto) {
+        Pessoa pessoa = new Pessoa();
+        pessoa.setNome(requestPessoaDto.nome());
+        pessoa.setGenero(requestPessoaDto.genero());
+        pessoa.setData_nascimento(requestPessoaDto.data_nascimento());
+
+        Pessoa pessoaSave = repository.save(pessoa);
+
+        return toResponse(pessoaSave);
+
+    }
+
+    public PessoaResponseDto pegarPorId(Long id) {
+        Pessoa pessoa = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Não foi possível achar"));
+
+        return toResponse(pessoa);
+
+    }
+
+    private PessoaResponseDto toResponse(Pessoa pessoa) {
+        return new PessoaResponseDto(pessoa.getNome(), pessoa.getGenero(), pessoa.getData_nascimento());
+    }
 
     //Método para pegar todas as pessoas
     public List<Pessoa> getAllPersons() {

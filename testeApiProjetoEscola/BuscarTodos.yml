@@ -5,7 +5,7 @@ info:
 
 http:
   method: GET
-  url: http://localhost:8080/pessoas
+  url: http://localhost:8080/pessoas/1
   auth: inherit
 
 settings:

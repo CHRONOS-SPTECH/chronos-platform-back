@@ -1,8 +1,12 @@
 package chronos.tech.controller;
 
+import chronos.tech.dto.CreatePessoaRequestDto;
+import chronos.tech.dto.PessoaResponseDto;
 import chronos.tech.model.classes.Pessoa;
 import chronos.tech.service.PessoaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -25,15 +29,14 @@ public class PessoaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Pessoa>> getPessoa(@PathVariable @Validated Long id){
-        var resposta = service.getPessoa(id);
-        return ResponseEntity.ok().body(resposta);
+    public ResponseEntity<PessoaResponseDto> getPessoa(@PathVariable @Validated Long id){
+        return ResponseEntity.ok(service.pegarPorId(id));
     }
 
     @PostMapping
-    public ResponseEntity<Void> savePessoa(@RequestBody @Validated Pessoa pessoa){
-        service.savePessoa(pessoa);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<PessoaResponseDto> savePessoa(@RequestBody @Validated CreatePessoaRequestDto pessoaRequestDto){
+        PessoaResponseDto pessoaResponseDto = service.createPessoa(pessoaRequestDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(pessoaResponseDto);
     }
 
     @PutMapping("{id}")
