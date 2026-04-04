@@ -2,10 +2,8 @@ package chronos.tech.model.classes;
 
 import chronos.tech.model.enums.TipoVinculo;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
 import java.time.LocalDate;
 
 @Getter
@@ -19,6 +17,7 @@ public class Pessoa {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_pessoa;
+    @NonNull
     private String nome;
     private String genero;
     private TipoVinculo tipoVinculo;

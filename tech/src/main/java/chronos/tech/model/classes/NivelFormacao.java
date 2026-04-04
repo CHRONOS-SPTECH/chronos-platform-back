@@ -18,6 +18,6 @@ public class NivelFormacao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_nivel;
     private String nome_nivel;
-    private Integer orderm_hierarquia;
+    private Integer ordem_hierarquia;
 
 }
