@@ -1,7 +1,7 @@
 package chronos.tech.controller;
 
-import chronos.tech.dto.CreatePessoaRequestDto;
-import chronos.tech.dto.PessoaResponseDto;
+import chronos.tech.dto.request.CreatePessoaRequestDto;
+import chronos.tech.dto.response.PessoaResponseDto;
 import chronos.tech.model.classes.Pessoa;
 import chronos.tech.service.PessoaService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,5 +1,6 @@
 package chronos.tech.controller;
 
+import chronos.tech.dto.response.CategoriaAtividadeResponseDto;
 import chronos.tech.model.classes.CategoriaAtividade;
 import chronos.tech.service.CategoriaAtividadeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,14 +20,12 @@ public class CategoriaAtividadeController {
 
     @GetMapping
     public ResponseEntity<List<CategoriaAtividade>> allCategoriaAtividade(){
-        var resposta = service.getAllCategoriaAtividade();
-        return ResponseEntity.ok().body(resposta);
+        return ResponseEntity.ok().body(service.getAllCategoriaAtividade());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<CategoriaAtividade>> getCategoriaAtividade(@PathVariable @Validated Long id){
-        var resposta = service.getCategoriaAtividade(id);
-        return ResponseEntity.ok().body(resposta);
+    public ResponseEntity<Optional<CategoriaAtividadeResponseDto>> getCategoriaAtividade(@PathVariable @Validated Long id){
+        return ResponseEntity.ok(service.getCategoriaAtividade(id));
     }
 
     @PostMapping

@@ -1,6 +1,8 @@
 package chronos.tech.service;
 
+import chronos.tech.dto.response.CategoriaAtividadeResponseDto;
 import chronos.tech.model.classes.CategoriaAtividade;
+import chronos.tech.model.classes.Pessoa;
 import chronos.tech.repository.CategoriaAtividadeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -18,8 +20,16 @@ public class CategoriaAtividadeService {
     }
 
     //Método pegar um categoriaAtividade específico
-    public Optional<CategoriaAtividade> getCategoriaAtividade(Long id){
-        return repository.findById(id);
+    public Optional<CategoriaAtividadeResponseDto> getCategoriaAtividade(Long id){
+
+        CategoriaAtividade categoriaAtividade = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Não foi possível achar"));
+
+        return toResponse(categoriaAtividade);
+    }
+
+    private Optional<CategoriaAtividadeResponseDto> toResponse(CategoriaAtividade categoriaAtividade) {
+        return Optional.of(new CategoriaAtividadeResponseDto(categoriaAtividade.getDescricao()));
     }
 
     //Salvar no banco de dados h2

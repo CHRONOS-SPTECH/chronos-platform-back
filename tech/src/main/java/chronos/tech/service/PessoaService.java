@@ -1,7 +1,7 @@
 package chronos.tech.service;
 
-import chronos.tech.dto.CreatePessoaRequestDto;
-import chronos.tech.dto.PessoaResponseDto;
+import chronos.tech.dto.request.CreatePessoaRequestDto;
+import chronos.tech.dto.response.PessoaResponseDto;
 import chronos.tech.model.classes.Pessoa;
 import chronos.tech.repository.PessoaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,11 +53,6 @@ public class PessoaService {
 
         return repository.findById(id);
 
-    }
-
-    //Salvar no banco de dados h2
-    public Pessoa savePessoa(Pessoa pessoa){
-        return repository.save(pessoa);
     }
 
     //Atualizar a pessoa

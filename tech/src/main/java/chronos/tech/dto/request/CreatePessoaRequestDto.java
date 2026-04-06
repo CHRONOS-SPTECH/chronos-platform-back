@@ -1,4 +1,4 @@
-package chronos.tech.dto;
+package chronos.tech.dto.request;
 
 import java.time.LocalDate;
 
