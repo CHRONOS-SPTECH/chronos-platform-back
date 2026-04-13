@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/PerfisAcesso")
+@RequestMapping("/perfisAcesso")
 public class PerfilAcessoController {
 
     @Autowired

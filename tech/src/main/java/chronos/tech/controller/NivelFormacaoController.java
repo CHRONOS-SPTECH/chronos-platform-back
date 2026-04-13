@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(name = "/niveisFormacao")
+@RequestMapping("/niveisFormacao")
 public class NivelFormacaoController {
 
     @Autowired

@@ -3,10 +3,12 @@ package chronos.tech.service;
 import chronos.tech.model.classes.PerfilAcesso;
 import chronos.tech.repository.PerfilAcessoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class PerfilAcessoService {
 
     @Autowired
