@@ -1,0 +1,53 @@
+ORGANIZACAO DE PASTAS POR CONTEXTO - PROJETO TECH
+
+Objetivo
+- Deixar claro "quem faz o que" em cada pasta.
+- Reduzir confusao entre regra de negocio e detalhes de framework.
+- Dar um mapa de crescimento para novos modulos.
+
+Estrutura atual consolidada (hexagonal)
+
+chronos.tech
+|- domain
+|  |- model
+|  |  |- classes     -> entidades de negocio
+|  |  |- enums       -> enumeracoes de dominio
+|  |- port           -> portas de saida (contratos)
+|
+|- application
+|  |- dto            -> contratos de entrada/saida da API
+|  |- mapper         -> conversoes DTO <-> dominio (MapStruct)
+|  |- port
+|  |  |- in          -> portas de entrada (use cases)
+|  |- service        -> implementacoes dos use cases
+|
+|- infrastructure
+|  |- web            -> controllers (entrada HTTP)
+|  |- adapter
+|  |  |- out
+|  |  |  |- persistence -> adapters JPA + SpringData repositories
+|  |- configs        -> configuracoes Spring
+
+Como ler essa estrutura
+- domain: nao depende de Spring/JPA.
+- application: orquestra casos de uso.
+- infrastructure: integra com mundo externo.
+
+Regra de dependencia
+- infrastructure -> application -> domain
+- Nunca o inverso.
+
+Padrao para novas features (exemplo "Aluno")
+1) Criar entidade em domain.model.classes (ou reaproveitar Pessoa, se for o caso).
+2) Criar porta de saida em domain.port (AlunoRepository).
+3) Criar porta de entrada em application.port.in (AlunoUseCase).
+4) Implementar caso de uso em application.service.
+5) Criar DTOs e mapper em application.dto/application.mapper.
+6) Criar adapter JPA em infrastructure.adapter.out.persistence.
+7) Criar controller em infrastructure.web usando somente a porta de entrada.
+
+Melhoria recomendada para proxima etapa
+- Renomear package domain.model.classes para domain.model.entity
+  (somente quando puder fazer uma rodada dedicada de refactor de imports).
+- Criar subpastas por contexto de negocio (ex: pessoa, turma, evento)
+  dentro de application e infrastructure para escalar melhor.

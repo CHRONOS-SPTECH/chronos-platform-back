@@ -1,0 +1,180 @@
+MIGRACAO HEXAGONAL - PROJETO TECH
+Data: 2026-04-21
+
+Objetivo desta migracao
+- Separar regra de negocio dos detalhes tecnicos (JPA/Spring MVC).
+- Tornar a aplicacao mais proxima de Hexagonal Architecture.
+- Manter compatibilidade comportamental dos endpoints existentes.
+- Padronizar injecao por construtor e dependencia por interfaces (portas).
+
+==================================================================
+1) MUDANCA ESTRUTURAL PRINCIPAL
+==================================================================
+
+ANTES
+- Interfaces em domain.port estendiam JpaRepository diretamente.
+- Application Service dependia da interface que tambem era Spring Data.
+- Controller dependia de Service concreto (classe), com @Autowired em campo.
+
+DEPOIS
+- domain.port virou porta de saida pura (sem JpaRepository).
+- infrastructure.adapter.out.persistence concentra implementacoes JPA.
+- application.port.in define portas de entrada (use cases).
+- Services implementam as portas de entrada.
+- Controllers dependem das portas de entrada e usam injecao por construtor.
+
+Fluxo consolidado
+Controller (adapter in) -> UseCase (port in) -> Service (application)
+-> Repository Port (domain port out) -> Repository Adapter (adapter out)
+-> Spring Data Repository (JPA) -> Banco
+
+==================================================================
+2) ALTERACOES POR CAMADA
+==================================================================
+
+2.1 DOMAIN (portas de saida)
+
+As interfaces abaixo deixaram de estender JpaRepository e passaram a expor
+somente os metodos necessarios ao dominio/aplicacao:
+
+- PessoaRepository
+- PerfilAcessoRepository
+- EventoRepository
+- TurmaRepository
+- CategoriaAtividadeRepository
+- UsuarioRepository
+- TipoParticipacaoRepository
+- NivelFormacaoRepository
+- SecretariaRepository
+
+Padrao de metodos adotado:
+- findAll()
+- findById(Long id)
+- save(...)
+- deleteById(Long id)
+
+Resultado:
+- O dominio nao conhece mais detalhes de Spring Data.
+
+--------------------------------------------------
+2.2 APPLICATION (portas de entrada/use cases)
+
+Foram criadas interfaces de caso de uso em application.port.in:
+
+- PessoaUseCase
+- PerfilAcessoUseCase
+- EventoUseCase
+- TurmaUseCase
+- CategoriaAtividadeUseCase
+- UsuarioUseCase
+- TipoParticipacaoUseCase
+- NivelFormacaoUseCase
+- SecretariaUseCase
+
+Cada interface representa a "porta de entrada" da funcionalidade.
+
+Services agora:
+- implementam suas respectivas interfaces UseCase.
+- usam injecao por construtor com @RequiredArgsConstructor.
+- removem @Autowired de campo.
+
+--------------------------------------------------
+2.3 INFRASTRUCTURE (adapters de saida JPA)
+
+Foi criado o pacote:
+- infrastructure.adapter.out.persistence
+
+Para cada modulo, foram criados 2 tipos:
+
+1) SpringDataXRepository (extends JpaRepository)
+2) XRepositoryAdapter (implementa porta do dominio e delega ao Spring Data)
+
+Lista criada:
+- SpringDataPessoaRepository / PessoaRepositoryAdapter
+- SpringDataPerfilAcessoRepository / PerfilAcessoRepositoryAdapter
+- SpringDataEventoRepository / EventoRepositoryAdapter
+- SpringDataTurmaRepository / TurmaRepositoryAdapter
+- SpringDataCategoriaAtividadeRepository / CategoriaAtividadeRepositoryAdapter
+- SpringDataUsuarioRepository / UsuarioRepositoryAdapter
+- SpringDataTipoParticipacaoRepository / TipoParticipacaoRepositoryAdapter
+- SpringDataNivelFormacaoRepository / NivelFormacaoRepositoryAdapter
+- SpringDataSecretariaRepository / SecretariaRepositoryAdapter
+
+Resultado:
+- JPA ficou restrito a infraestrutura.
+- Application/Domain dependem apenas de contratos.
+
+--------------------------------------------------
+2.4 INFRASTRUCTURE (adapters de entrada - web)
+
+Controllers foram alterados para depender de portas de entrada (UseCase):
+
+- PessoaController -> PessoaUseCase
+- PerfilAcessoController -> PerfilAcessoUseCase
+- EventoController -> EventoUseCase
+- TurmaController -> TurmaUseCase
+- CategoriaAtividadeController -> CategoriaAtividadeUseCase
+- UsuarioController -> UsuarioUseCase
+- TipoParticipacaoController -> TipoParticipacaoUseCase
+- NivelFormacaoController -> NivelFormacaoUseCase
+- SecretariaController -> SecretariaUseCase
+
+Tambem foi adotado:
+- @RequiredArgsConstructor
+- campo final para dependencia
+- remocao de @Autowired em campo
+
+==================================================================
+3) MAPPER - NOVAS NOTACOES E O QUE ELAS FAZEM
+==================================================================
+
+Arquivo foco: PessoaMapper
+
+Notacoes adicionadas:
+
+1) @Mapping(target = "campo", ignore = true)
+- Ignora campos que nao devem ser preenchidos no mapeamento daquele metodo.
+- Exemplo de uso aplicado:
+  - id_pessoa ignorado em criacao/update para nao sobrescrever identidade.
+  - campos nao presentes no DTO (tipoVinculo, data_ingresso etc.) ignorados.
+
+2) @Mapping(target = "dataNascimento", source = "data_nascimento")
+- Resolve diferenca de nomes entre entidade e DTO.
+- Sem isso, MapStruct nao consegue deduzir automaticamente este mapeamento.
+
+3) @MappingTarget
+- Indica objeto de destino ja existente em update parcial.
+- Em vez de criar nova entidade, atualiza a instancia carregada do banco.
+
+4) @BeanMapping(nullValuePropertyMappingStrategy = IGNORE)
+- Em updates, campos nulos do DTO nao sobrescrevem valores atuais da entidade.
+- Comportamento de patch parcial: atualiza so o que veio preenchido.
+
+Por que isso e importante:
+- Evita apagar dados em updates parciais.
+- Evita sobrescrever id e campos sensiveis por engano.
+- Centraliza regra de transformacao no mapper.
+
+==================================================================
+4) DECISOES DE ESCOPO DESTA ETAPA
+==================================================================
+
+- O foco desta rodada foi ESTRUTURA HEXAGONAL (ports/adapters/dependencias).
+- Nem todos os endpoints foram convertidos para DTO-only ainda.
+- O modulo Pessoa ja esta mais avancado (controller + service + mapper com DTO).
+- Os outros modulos mantem assinatura anterior em varios endpoints para reduzir
+  risco de quebra imediata no contrato externo.
+
+==================================================================
+5) PROXIMO PASSO RECOMENDADO
+==================================================================
+
+Etapa 2 da migracao (sugestao):
+1. Criar mappers dedicados para Turma, Evento, Secretaria, etc.
+2. Converter controllers restantes para RequestDTO/ResponseDTO.
+3. Padronizar nomenclatura de DTOs (request/response em pacote unico por entidade).
+4. Adicionar testes de use case (mock de portas de saida).
+5. Adicionar testes de adapter JPA (@DataJpaTest) e controller (@WebMvcTest).
+
+Com isso, o projeto fica hexagonal nao so na estrutura, mas tambem no contrato
+externo (API) e na cobertura de testes por camada.
