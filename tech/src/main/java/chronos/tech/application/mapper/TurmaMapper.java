@@ -12,12 +12,12 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 @Mapper(componentModel = "spring")
 public interface TurmaMapper {
 
-    @Mapping(target = "id_nivel", ignore = true)
+    @Mapping(target = "id_turma", ignore = true)
     Turma toModel(TurmaRequestDTO dto);
 
     TurmaResponseDTO toResponse(Turma turma);
 
-    @Mapping(target = "id_nivel", ignore = true)
+    @Mapping(target = "id_turma", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateFromDto(TurmaRequestDTO dto, @MappingTarget Turma turma);
 }

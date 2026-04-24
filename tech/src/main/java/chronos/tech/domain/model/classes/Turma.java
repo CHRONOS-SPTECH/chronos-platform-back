@@ -18,7 +18,7 @@ public class Turma {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_nivel;
+    private Long id_turma;
     private String nome_turma;
     private LocalDate data_inicio;
     private LocalDate data_encerramento;
