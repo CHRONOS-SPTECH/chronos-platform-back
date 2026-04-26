@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity(name = "tipo_participacao")
 @Table(name = "tipo_participacao")
 @NoArgsConstructor
@@ -17,9 +19,13 @@ public class TipoParticipacao {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_tipo_participacao;
-
+    @Column(name = "id_tipo_participacao")
+    private Integer idTipoParticipacao;
     private String descricao;
-    private TipoHoraGerada tipo_hora_gerada;
+    @Column(name = "tipo_hora_gerada")
+    private TipoHoraGerada tipoHoraGerada;
+
+    @OneToMany(mappedBy = "idTipoParticipacao")
+    private List<ParticipacaoEvento> participacaoEventos;
 
 }

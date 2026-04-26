@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/niveisFormacao")
+@RequestMapping("/niveis-formacao")
 @RequiredArgsConstructor
 @Tag(name = "Níveis de Formação", description = "Endpoints para gerenciamento de níveis de formação")
 public class NivelFormacaoController {

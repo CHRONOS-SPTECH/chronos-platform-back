@@ -16,10 +16,11 @@ public class Materia {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_materia;
+    @Column(name = "id_materia")
+    private Integer idMateria;
     private String nome;
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "fk_nivem_formacao")
-    private NivelFormacao id_nivel;
+    @JoinColumn(name = "id_nivel")
+    private NivelFormacao idNivel;
 
 }

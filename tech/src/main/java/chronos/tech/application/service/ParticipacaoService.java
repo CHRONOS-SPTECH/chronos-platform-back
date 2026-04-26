@@ -4,7 +4,7 @@ import chronos.tech.application.dto.request.ParticipacaoRequestDTO;
 import chronos.tech.application.dto.response.ParticipacaoResponseDTO;
 import chronos.tech.application.mapper.ParticipacaoMapper;
 import chronos.tech.application.port.in.ParticipacaoUseCase;
-import chronos.tech.domain.model.classes.Participacao;
+import chronos.tech.domain.model.classes.ParticipacaoEvento;
 import chronos.tech.domain.port.ParticipacaoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,8 +24,8 @@ public class ParticipacaoService implements ParticipacaoUseCase {
 
     @Override
     public ParticipacaoResponseDTO getParticipacao(Long id) {
-        Participacao participacao = repository.findById(id).orElseThrow(() -> new RuntimeException("Participacao nao encontrada: " + id));
-        return mapper.toResponse(participacao);
+        ParticipacaoEvento participacaoEvento = repository.findById(id).orElseThrow(() -> new RuntimeException("Participacao nao encontrada: " + id));
+        return mapper.toResponse(participacaoEvento);
     }
 
     @Override
@@ -35,7 +35,7 @@ public class ParticipacaoService implements ParticipacaoUseCase {
 
     @Override
     public ParticipacaoResponseDTO updateParticipacao(Long id, ParticipacaoRequestDTO dto) {
-        Participacao existente = repository.findById(id).orElseThrow(() -> new RuntimeException("Participacao nao encontrada: " + id));
+        ParticipacaoEvento existente = repository.findById(id).orElseThrow(() -> new RuntimeException("Participacao nao encontrada: " + id));
         mapper.updateFromDto(dto, existente);
         return mapper.toResponse(repository.save(existente));
     }

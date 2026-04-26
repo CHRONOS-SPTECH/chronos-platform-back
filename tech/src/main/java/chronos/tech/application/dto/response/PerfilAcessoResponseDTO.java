@@ -1,4 +1,8 @@
 package chronos.tech.application.dto.response;
 
-public record PerfilAcessoResponseDTO(String nome_perfil, String descricao) {
+public record PerfilAcessoResponseDTO(
+        Integer id_perfil,
+        String nome_perfil,
+        String descricao
+) {
 }

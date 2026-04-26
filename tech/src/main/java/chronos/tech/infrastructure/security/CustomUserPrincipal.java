@@ -1,6 +1,7 @@
 package chronos.tech.infrastructure.security;
 
 import chronos.tech.domain.model.classes.Usuario;
+import chronos.tech.domain.model.classes.UsuarioPerfil;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,9 +11,11 @@ import java.util.List;
 
 public class CustomUserPrincipal implements UserDetails {
     private final Usuario usuario;
+    private final List<UsuarioPerfil> perfis;
 
-    public CustomUserPrincipal(Usuario usuario) {
+    public CustomUserPrincipal(Usuario usuario, List<UsuarioPerfil> perfis) {
         this.usuario = usuario;
+        this.perfis = perfis;
     }
 
     public Usuario usuario() {
@@ -21,20 +24,24 @@ public class CustomUserPrincipal implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        String role = usuario.getPerfil() != null && usuario.getPerfil().getNome_perfil() != null
-                ? usuario.getPerfil().getNome_perfil().toUpperCase()
-                : "USER";
-        return List.of(new SimpleGrantedAuthority("ROLE_" + role));
+        if (perfis == null || perfis.isEmpty()) {
+            return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        }
+        return perfis.stream()
+                .map(v -> v.getPerfil() != null ? v.getPerfil().getNomePerfil() : null)
+                .filter(nome -> nome != null && !nome.isBlank())
+                .map(nome -> new SimpleGrantedAuthority("ROLE_" + nome.toUpperCase()))
+                .toList();
     }
 
     @Override
     public String getPassword() {
-        return usuario.getSenha_hash();
+        return usuario.getSenhaHash();
     }
 
     @Override
     public String getUsername() {
-        return usuario.getEmail_login();
+        return usuario.getEmailLogin();
     }
 
     @Override
@@ -54,6 +61,6 @@ public class CustomUserPrincipal implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return Boolean.TRUE.equals(usuario.getStatus_ativo());
+        return Boolean.TRUE.equals(usuario.getStatusAtivo());
     }
 }

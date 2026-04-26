@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/tipoParticipacoes")
+@RequestMapping("/tipo-participacoes")
 @RequiredArgsConstructor
 @Tag(name = "Tipos de Participação", description = "Endpoints para gerenciamento de tipos de participação")
 public class TipoParticipacaoController {

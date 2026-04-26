@@ -1,4 +1,11 @@
 package chronos.tech.application.dto.request;
 
-public record ParticipacaoRequestDTO(Long id_evento, Long id_pessoa, Long id_tipo_participacao, Boolean compareceu) {
+import jakarta.validation.constraints.NotNull;
+
+public record ParticipacaoRequestDTO(
+        @NotNull Long id_evento,
+        @NotNull Long id_pessoa,
+        @NotNull Long id_tipo_participacao,
+        Boolean compareceu
+) {
 }

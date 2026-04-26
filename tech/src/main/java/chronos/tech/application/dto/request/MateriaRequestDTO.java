@@ -1,4 +1,11 @@
 package chronos.tech.application.dto.request;
 
-public record MateriaRequestDTO(String nome, Long id_nivel) {
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
+public record MateriaRequestDTO(
+        @NotBlank @Size(max = 100) String nome,
+        @NotNull Long id_nivel
+) {
 }

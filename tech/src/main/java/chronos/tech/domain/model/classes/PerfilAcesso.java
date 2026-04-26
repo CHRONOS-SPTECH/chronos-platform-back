@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity(name = "perfil_acesso")
 @Table(name = "perfil_acesso")
 @NoArgsConstructor
@@ -16,9 +18,13 @@ public class PerfilAcesso {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_perfil;
-
-    private String nome_perfil;
+    @Column(name = "id_perfil")
+    private Integer idPerfil;
+    @Column(name = "nome_perfil")
+    private String nomePerfil;
     private String descricao;
+
+    @OneToMany(mappedBy = "perfil")
+    private List<UsuarioPerfil> usuarioPerfis;
 
 }

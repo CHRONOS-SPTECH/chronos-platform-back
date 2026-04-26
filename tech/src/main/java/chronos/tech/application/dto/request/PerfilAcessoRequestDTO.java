@@ -1,4 +1,10 @@
 package chronos.tech.application.dto.request;
 
-public record PerfilAcessoRequestDTO(String nome_perfil, String descricao) {
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
+public record PerfilAcessoRequestDTO(
+        @NotBlank @Size(max = 50) String nome_perfil,
+        @Size(max = 255) String descricao
+) {
 }

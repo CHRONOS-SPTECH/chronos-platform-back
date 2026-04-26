@@ -12,12 +12,16 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 @Mapper(componentModel = "spring")
 public interface PerfilAcessoMapper {
 
-    @Mapping(target = "id_perfil", ignore = true)
+    @Mapping(target = "idPerfil", ignore = true)
+    @Mapping(target = "nomePerfil", source = "nome_perfil")
     PerfilAcesso toModel(PerfilAcessoRequestDTO dto);
 
+    @Mapping(target = "id_perfil", source = "idPerfil")
+    @Mapping(target = "nome_perfil", source = "nomePerfil")
     PerfilAcessoResponseDTO toResponse(PerfilAcesso perfilAcesso);
 
-    @Mapping(target = "id_perfil", ignore = true)
+    @Mapping(target = "idPerfil", ignore = true)
+    @Mapping(target = "nomePerfil", source = "nome_perfil")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateFromDto(PerfilAcessoRequestDTO dto, @MappingTarget PerfilAcesso perfilAcesso);
 }

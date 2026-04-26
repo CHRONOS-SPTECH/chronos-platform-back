@@ -12,12 +12,13 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 @Mapper(componentModel = "spring")
 public interface CategoriaAtividadeMapper {
 
-    @Mapping(target = "id_categoria", ignore = true)
+    @Mapping(target = "idCategoria", ignore = true)
     CategoriaAtividade toModel(CategoriaAtividadeRequestDTO dto);
 
+    @Mapping(target = "id_categoria", source = "idCategoria")
     CategoriaAtividadeResponseDTO toResponse(CategoriaAtividade categoriaAtividade);
 
-    @Mapping(target = "id_categoria", ignore = true)
+    @Mapping(target = "idCategoria", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateFromDto(CategoriaAtividadeRequestDTO dto, @MappingTarget CategoriaAtividade categoriaAtividade);
 }

@@ -12,12 +12,19 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 @Mapper(componentModel = "spring")
 public interface SecretariaMapper {
 
-    @Mapping(target = "id_secretaria", ignore = true)
+    @Mapping(target = "idSecretaria", ignore = true)
+    @Mapping(target = "nomeSecretaria", source = "nome_secretaria")
+    @Mapping(target = "descricaoSecretaria", source = "descricao_secretaria")
     Secretaria toModel(SecretariaRequestDTO dto);
 
+    @Mapping(target = "id_secretaria", source = "idSecretaria")
+    @Mapping(target = "nome_secretaria", source = "nomeSecretaria")
+    @Mapping(target = "descricao_secretaria", source = "descricaoSecretaria")
     SecretariaResponseDTO toResponse(Secretaria secretaria);
 
-    @Mapping(target = "id_secretaria", ignore = true)
+    @Mapping(target = "idSecretaria", ignore = true)
+    @Mapping(target = "nomeSecretaria", source = "nome_secretaria")
+    @Mapping(target = "descricaoSecretaria", source = "descricao_secretaria")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateFromDto(SecretariaRequestDTO dto, @MappingTarget Secretaria secretaria);
 }

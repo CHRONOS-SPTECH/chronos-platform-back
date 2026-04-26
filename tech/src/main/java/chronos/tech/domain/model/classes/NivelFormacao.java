@@ -6,8 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity(name = "nivel")
-@Table(name = "nivel")
+@Entity(name = "nivel_formacao")
+@Table(name = "nivel_formacao")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -16,8 +16,11 @@ public class NivelFormacao {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_nivel;
-    private String nome_nivel;
-    private Integer ordem_hierarquia;
+    @Column(name = "id_nivel")
+    private Integer idNivel;
+    @Column(name = "nome_nivel")
+    private String nomeNivel;
+    @Column(name = "ordem_hierarquia")
+    private Integer ordemHierarquia;
 
 }

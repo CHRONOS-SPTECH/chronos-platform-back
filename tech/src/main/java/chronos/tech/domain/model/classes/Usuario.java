@@ -6,28 +6,35 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.List;
+
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-@Table(name = "usuarios")
-@Entity(name = "usuarios")
+@Table(name = "usuario")
+@Entity(name = "usuario")
 public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_usuario;
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "fk_pessoa")
+    @Column(name = "id_usuario")
+    private Integer idUsuario;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_pessoa")
     private Pessoa pessoa;
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "fk_perfil")
-    private PerfilAcesso perfil;
-    private String email_login;
-    private String senha_hash;
-    private Boolean status_ativo;
-    private LocalDateTime data_criacao;
+    @Column(name = "email_login")
+    private String emailLogin;
+    @Column(name = "senha_hash")
+    private String senhaHash;
+    @Column(name = "status_ativo")
+    private Boolean statusAtivo;
+    @Column(name = "data_criacao")
+    private LocalDate dataCriacao;
+
+    @OneToMany(mappedBy = "usuario")
+    private List<UsuarioPerfil> usuarioPerfis;
 
 }

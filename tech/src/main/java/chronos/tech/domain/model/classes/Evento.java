@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Entity(name = "evento")
 @Table(name = "evento")
@@ -19,24 +20,23 @@ public class Evento {
 
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long id_evento;
+        @Column(name = "id_evento")
+        private Integer idEvento;
+        @ManyToOne(cascade = CascadeType.PERSIST)
+        @JoinColumn(name = "id_categoria")
+        private CategoriaAtividade idCategoria;
+        @ManyToOne(cascade = CascadeType.PERSIST)
+        @JoinColumn(name = "id_secretaria")
+        private Secretaria idSecretaria;
         private String titulo;
-        private LocalDate data_evento;
-        private LocalTime hora_inicio_evento;
-        private LocalTime hora_fim_evento;
-        private LocalTime hora_inicio_formacao;
-        private LocalTime hora_fim_formacao;
-        @ManyToOne(cascade = CascadeType.PERSIST)
-        @JoinColumn(name = "fk_categoria")
-        private CategoriaAtividade id_categoria;
-        @ManyToOne(cascade = CascadeType.PERSIST)
-        @JoinColumn(name = "fk_secretaria")
-        private Secretaria id_secretaria;
-        @ManyToOne(cascade = CascadeType.PERSIST)
-        @JoinColumn(name = "fk_turma")
-        private Turma id_turma;
-        @ManyToOne(cascade = CascadeType.PERSIST)
-        @JoinColumn(name = "fk_tema")
-        private TemaAula id_tema;
+        @Column(name = "data_evento")
+        private LocalDate dataEvento;
+        @Column(name = "hora_inicio_evento")
+        private LocalTime horaInicioEvento;
+        @Column(name = "hora_fim_evento")
+        private LocalTime horaFimEventos;
+
+        @OneToMany(mappedBy = "evento")
+        private List<ParticipacaoEvento> participacaoEventoLong;
 
 }

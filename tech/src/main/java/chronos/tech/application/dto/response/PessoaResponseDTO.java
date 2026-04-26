@@ -1,4 +1,20 @@
 package chronos.tech.application.dto.response;
 
-public record PessoaResponseDTO(String nome, String genero, java.time.LocalDate dataNascimento) {
+import java.time.LocalDate;
+
+public record PessoaResponseDTO(
+        Integer id_pessoa,
+        String nome,
+        String email,
+        String telefone,
+        String genero,
+        String cpf,
+        Boolean bolsista,
+        String url_foto_perfil,
+        Integer tipo_vinculo_id,
+        LocalDate data_nascimento,
+        LocalDate data_ingresso,
+        LocalDate data_membro,
+        LocalDate data_saida
+) {
 }

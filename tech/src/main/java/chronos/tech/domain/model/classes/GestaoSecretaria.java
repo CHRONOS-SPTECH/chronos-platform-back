@@ -1,5 +1,6 @@
 package chronos.tech.domain.model.classes;
 
+import chronos.tech.domain.model.classes.compostas.GestaoSecretariaId;
 import chronos.tech.domain.model.enums.CargoAcesso;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,16 +16,19 @@ import lombok.Setter;
 @Setter
 public class GestaoSecretaria {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_gestao_secretaria;
+    @EmbeddedId
+    private GestaoSecretariaId id;
+
     @ManyToOne
-    @JoinColumn(name = "fk_pessoa")
-    private Pessoa id_pessoa;
+    @MapsId("idPessoa")
+    @JoinColumn(name = "id_pessoa")
+    private Pessoa pessoa;
     @ManyToOne
-    @JoinColumn(name = "fk_secretaria")
-    private Secretaria id_secretaria;
+    @MapsId("idSecretaria")
+    @JoinColumn(name = "id_secretaria")
+    private Secretaria secretaria;
     @Enumerated(EnumType.STRING)
-    private CargoAcesso cargo_acesso;
+    @Column(name = "cargo_acesso")
+    private CargoAcesso cargoAcesso;
 
 }

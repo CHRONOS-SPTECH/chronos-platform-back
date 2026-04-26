@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity(name = "secretaria")
 @Table(name = "secretaria")
 @NoArgsConstructor
@@ -16,8 +18,14 @@ public class Secretaria {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_secretaria;
-    private String nome_secretaria;
-    private String descricao_secretaria;
+    @Column(name = "id_secretaria")
+    private Integer idSecretaria;
+    @Column(name = "nome_secretaria")
+    private String nomeSecretaria;
+    @Column(name = "descricao_secretaria")
+    private String descricaoSecretaria;
+
+    @OneToMany(mappedBy = "secretaria")
+    private List<GestaoSecretaria> gestaoSecretarias;
 
 }

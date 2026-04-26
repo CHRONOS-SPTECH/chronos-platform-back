@@ -1,12 +1,18 @@
 package chronos.tech.application.dto.request;
 
-import chronos.tech.domain.model.classes.CategoriaAtividade;
-import chronos.tech.domain.model.classes.Secretaria;
-import chronos.tech.domain.model.classes.TemaAula;
-import chronos.tech.domain.model.classes.Turma;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public record EventoRequestDTO(String titulo, LocalDate data_evento, LocalTime hora_inicio_evento, LocalTime hora_fim_evento, LocalTime hora_inicio_formacao, LocalTime hora_fim_formacao, CategoriaAtividade id_categoria, Secretaria id_secretaria, Turma id_turma, TemaAula id_tema) {
+public record EventoRequestDTO(
+        @NotBlank @Size(max = 200) String titulo,
+        @NotNull LocalDate data_evento,
+        @NotNull LocalTime hora_inicio_evento,
+        @NotNull LocalTime hora_fim_evento,
+        @NotNull Long id_categoria,
+        @NotNull Long id_secretaria
+) {
 }

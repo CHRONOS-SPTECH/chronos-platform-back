@@ -1,12 +1,15 @@
 package chronos.tech.application.dto.response;
 
-import chronos.tech.domain.model.classes.CategoriaAtividade;
-import chronos.tech.domain.model.classes.Secretaria;
-import chronos.tech.domain.model.classes.TemaAula;
-import chronos.tech.domain.model.classes.Turma;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public record EventoResponseDTO(String titulo, LocalDate data_evento, LocalTime hora_inicio_evento, LocalTime hora_fim_evento, LocalTime hora_inicio_formacao, LocalTime hora_fim_formacao, CategoriaAtividade id_categoria, Secretaria id_secretaria, Turma id_turma, TemaAula id_tema) {
+public record EventoResponseDTO(
+        Integer id_evento,
+        String titulo,
+        LocalDate data_evento,
+        LocalTime hora_inicio_evento,
+        LocalTime hora_fim_evento,
+        Integer id_categoria,
+        Integer id_secretaria
+) {
 }

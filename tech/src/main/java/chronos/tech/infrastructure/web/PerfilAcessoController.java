@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/perfisAcesso")
+@RequestMapping("/perfis-acesso")
 @RequiredArgsConstructor
 @Tag(name = "Perfis de Acesso", description = "Endpoints para gerenciamento de perfis de acesso")
 public class PerfilAcessoController {

@@ -19,15 +19,18 @@ public class HistoricoAcademico {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_historico;
+    @Column(name = "id_historico")
+    private Integer idHistorico;
     @ManyToOne
-    @JoinColumn(name = "fk_pessoa")
-    private Pessoa id_pessoa;
+    @JoinColumn(name = "id_pessoa")
+    private Pessoa idPessoa;
     @ManyToOne
-    @JoinColumn(name = "fk_materia")
-    private Materia id_materia;
+    @JoinColumn(name = "id_materia")
+    private Materia idMateria;
     @Enumerated(EnumType.STRING)
-    private StatusMateria status_materia;
-    private LocalDate data_status;
+    @Column(name = "status_materia")
+    private StatusMateria statusMateria;
+    @Column(name = "data_status")
+    private LocalDate dataStatus;
 
 }

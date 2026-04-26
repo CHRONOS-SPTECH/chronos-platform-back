@@ -13,32 +13,36 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(componentModel = "spring")
 public interface MatriculaTurmaMapper {
-    @Mapping(target = "id_matricula_turma", ignore = true)
-    @Mapping(target = "id_turma", source = "id_turma")
-    @Mapping(target = "id_pessoa", source = "id_pessoa")
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "turma", source = "id_turma")
+    @Mapping(target = "pessoa", source = "id_pessoa")
+    @Mapping(target = "dataMatricula", source = "data_matricula")
     MatriculaTurma toModel(MatriculaTurmaRequestDTO dto);
 
-    @Mapping(target = "id_turma", source = "id_turma.id_turma")
-    @Mapping(target = "id_pessoa", source = "id_pessoa.id_pessoa")
+    @Mapping(target = "id_matricula_turma", ignore = true)
+    @Mapping(target = "id_turma", source = "turma.idTurma")
+    @Mapping(target = "id_pessoa", source = "pessoa.idPessoa")
+    @Mapping(target = "data_matricula", source = "dataMatricula")
     MatriculaTurmaResponseDTO toResponse(MatriculaTurma matriculaTurma);
 
-    @Mapping(target = "id_matricula_turma", ignore = true)
-    @Mapping(target = "id_turma", source = "id_turma")
-    @Mapping(target = "id_pessoa", source = "id_pessoa")
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "turma", source = "id_turma")
+    @Mapping(target = "pessoa", source = "id_pessoa")
+    @Mapping(target = "dataMatricula", source = "data_matricula")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateFromDto(MatriculaTurmaRequestDTO dto, @MappingTarget MatriculaTurma matriculaTurma);
 
     default Turma mapTurma(Long id_turma) {
         if (id_turma == null) return null;
         Turma turma = new Turma();
-        turma.setId_turma(id_turma);
+        turma.setIdTurma(Math.toIntExact(id_turma));
         return turma;
     }
 
     default Pessoa mapPessoa(Long id_pessoa) {
         if (id_pessoa == null) return null;
         Pessoa pessoa = new Pessoa();
-        pessoa.setId_pessoa(id_pessoa);
+        pessoa.setIdPessoa(Math.toIntExact(id_pessoa));
         return pessoa;
     }
 }

@@ -13,32 +13,39 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(componentModel = "spring")
 public interface HistoricoAcademicoMapper {
-    @Mapping(target = "id_historico", ignore = true)
-    @Mapping(target = "id_pessoa", source = "id_pessoa")
-    @Mapping(target = "id_materia", source = "id_materia")
+    @Mapping(target = "idHistorico", ignore = true)
+    @Mapping(target = "idPessoa", source = "id_pessoa")
+    @Mapping(target = "idMateria", source = "id_materia")
+    @Mapping(target = "statusMateria", source = "status_materia")
+    @Mapping(target = "dataStatus", source = "data_status")
     HistoricoAcademico toModel(HistoricoAcademicoRequestDTO dto);
 
-    @Mapping(target = "id_pessoa", source = "id_pessoa.id_pessoa")
-    @Mapping(target = "id_materia", source = "id_materia.id_materia")
+    @Mapping(target = "id_historico", source = "idHistorico")
+    @Mapping(target = "id_pessoa", source = "idPessoa.idPessoa")
+    @Mapping(target = "id_materia", source = "idMateria.idMateria")
+    @Mapping(target = "status_materia", source = "statusMateria")
+    @Mapping(target = "data_status", source = "dataStatus")
     HistoricoAcademicoResponseDTO toResponse(HistoricoAcademico historico);
 
-    @Mapping(target = "id_historico", ignore = true)
-    @Mapping(target = "id_pessoa", source = "id_pessoa")
-    @Mapping(target = "id_materia", source = "id_materia")
+    @Mapping(target = "idHistorico", ignore = true)
+    @Mapping(target = "idPessoa", source = "id_pessoa")
+    @Mapping(target = "idMateria", source = "id_materia")
+    @Mapping(target = "statusMateria", source = "status_materia")
+    @Mapping(target = "dataStatus", source = "data_status")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateFromDto(HistoricoAcademicoRequestDTO dto, @MappingTarget HistoricoAcademico historico);
 
     default Pessoa mapPessoa(Long id_pessoa) {
         if (id_pessoa == null) return null;
         Pessoa pessoa = new Pessoa();
-        pessoa.setId_pessoa(id_pessoa);
+        pessoa.setIdPessoa(Math.toIntExact(id_pessoa));
         return pessoa;
     }
 
     default Materia mapMateria(Long id_materia) {
         if (id_materia == null) return null;
         Materia materia = new Materia();
-        materia.setId_materia(id_materia);
+        materia.setIdMateria(Math.toIntExact(id_materia));
         return materia;
     }
 }

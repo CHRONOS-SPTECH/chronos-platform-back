@@ -1,4 +1,10 @@
 package chronos.tech.application.dto.request;
 
-public record CategoriaAtividadeRequestDTO(String descricao) {
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
+public record CategoriaAtividadeRequestDTO(
+        @NotBlank @Size(max = 50) String nome,
+        @NotBlank @Size(max = 50) String descricao
+) {
 }

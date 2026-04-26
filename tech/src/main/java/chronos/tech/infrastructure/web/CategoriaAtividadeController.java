@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/categoriasAtividade")
+@RequestMapping("/categorias-atividade")
 @RequiredArgsConstructor
 @Tag(name = "Categorias de Atividade", description = "Endpoints para gerenciamento de categorias de atividade")
 public class CategoriaAtividadeController {

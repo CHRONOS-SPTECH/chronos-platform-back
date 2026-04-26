@@ -1,5 +1,6 @@
 package chronos.tech.domain.model.classes;
 
+import chronos.tech.domain.model.classes.compostas.MatriculaTurmaId;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,15 +17,18 @@ import java.time.LocalDate;
 @Setter
 public class MatriculaTurma {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_matricula_turma;
+    @EmbeddedId
+    private MatriculaTurmaId id;
+
     @ManyToOne
-    @JoinColumn(name = "fk_turma")
-    private Turma id_turma;
+    @MapsId("idTurma")
+    @JoinColumn(name = "id_turma")
+    private Turma turma;
     @ManyToOne
-    @JoinColumn(name = "fk_pessoa")
-    private Pessoa id_pessoa;
-    private LocalDate data_matricula;
+    @MapsId("idPessoa")
+    @JoinColumn(name = "id_pessoa")
+    private Pessoa pessoa;
+    @Column(name = "data_matricula")
+    private LocalDate dataMatricula;
 
 }

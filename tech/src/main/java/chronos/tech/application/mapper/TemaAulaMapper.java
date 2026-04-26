@@ -12,22 +12,29 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(componentModel = "spring")
 public interface TemaAulaMapper {
-    @Mapping(target = "id_tema", ignore = true)
-    @Mapping(target = "id_materia", source = "id_materia")
+    @Mapping(target = "idTema", ignore = true)
+    @Mapping(target = "idMateria", source = "id_materia")
+    @Mapping(target = "tituloTema", source = "titulo_tema")
+    @Mapping(target = "ordemPrevista", source = "ordem_prevista")
     TemaAula toModel(TemaAulaRequestDTO dto);
 
-    @Mapping(target = "id_materia", source = "id_materia.id_materia")
+    @Mapping(target = "id_tema", source = "idTema")
+    @Mapping(target = "id_materia", source = "idMateria.idMateria")
+    @Mapping(target = "titulo_tema", source = "tituloTema")
+    @Mapping(target = "ordem_prevista", source = "ordemPrevista")
     TemaAulaResponseDTO toResponse(TemaAula temaAula);
 
-    @Mapping(target = "id_tema", ignore = true)
-    @Mapping(target = "id_materia", source = "id_materia")
+    @Mapping(target = "idTema", ignore = true)
+    @Mapping(target = "idMateria", source = "id_materia")
+    @Mapping(target = "tituloTema", source = "titulo_tema")
+    @Mapping(target = "ordemPrevista", source = "ordem_prevista")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateFromDto(TemaAulaRequestDTO dto, @MappingTarget TemaAula temaAula);
 
     default Materia map(Long id_materia) {
         if (id_materia == null) return null;
         Materia materia = new Materia();
-        materia.setId_materia(id_materia);
+        materia.setIdMateria(Math.toIntExact(id_materia));
         return materia;
     }
 }
