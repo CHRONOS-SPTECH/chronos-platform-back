@@ -13,12 +13,12 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(componentModel = "spring")
 public interface ChamadaAulaMapper {
-    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "id.idAula", source = "id_aula")
+    @Mapping(target = "id.idPessoa", source = "id_pessoa")
     @Mapping(target = "aula", source = "id_aula")
     @Mapping(target = "pessoa", source = "id_pessoa")
     ChamadaAula toModel(ChamadaAulaRequestDTO dto);
 
-    @Mapping(target = "id_chamada_aula", ignore = true)
     @Mapping(target = "id_aula", source = "aula.idAula")
     @Mapping(target = "id_pessoa", source = "pessoa.idPessoa")
     ChamadaAulaResponseDTO toResponse(ChamadaAula chamadaAula);

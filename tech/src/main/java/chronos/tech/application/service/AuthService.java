@@ -10,6 +10,7 @@ import chronos.tech.domain.model.classes.PerfilAcesso;
 import chronos.tech.domain.model.classes.Pessoa;
 import chronos.tech.domain.model.classes.Usuario;
 import chronos.tech.domain.model.classes.UsuarioPerfil;
+import chronos.tech.domain.model.classes.compostas.UsuarioPerfilId;
 import chronos.tech.domain.port.PerfilAcessoRepository;
 import chronos.tech.domain.port.UsuarioRepository;
 import chronos.tech.domain.port.UsuarioPerfilRepository;
@@ -19,8 +20,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -35,28 +37,43 @@ public class AuthService implements AuthUseCase {
     private final UsuarioPerfilRepository usuarioPerfilRepository;
 
     @Override
+    @Transactional // Adicionado para garantir que Pessoa, Usuario e Perfis sejam salvos ou falhem juntos
     public AuthResponseDTO register(AuthRegisterRequestDTO dto) {
+        // 1. Verificação de existência
         usuarioRepository.findByEmailLogin(dto.email_login()).ifPresent(u -> {
-            throw new RuntimeException("E-mail ja cadastrado");
+            throw new RuntimeException("E-mail já cadastrado");
         });
 
+        // 2. Mapeamento e persistência do Usuário (Cascade deve cuidar da Pessoa se configurado)
         Pessoa pessoa = pessoaMapper.toModel(dto.pessoa());
         Usuario usuario = new Usuario();
         usuario.setPessoa(pessoa);
         usuario.setEmailLogin(dto.email_login());
         usuario.setSenhaHash(passwordEncoder.encode(dto.senha()));
         usuario.setStatusAtivo(Boolean.TRUE);
-        usuario.setDataCriacao(LocalDate.now());
+        usuario.setDataCriacao(LocalDateTime.now());
 
+        // Salva o usuário primeiro para gerar o ID
         Usuario salvo = usuarioRepository.save(usuario);
 
-        if (dto.perfis_id() != null) {
+        // 3. Persistência da relação N:N (UsuarioPerfil)
+        if (dto.perfis_id() != null && !dto.perfis_id().isEmpty()) {
             for (Long perfilId : dto.perfis_id()) {
                 PerfilAcesso perfil = perfilAcessoRepository.findById(perfilId)
-                        .orElseThrow(() -> new RuntimeException("Perfil de acesso nao encontrado: " + perfilId));
+                        .orElseThrow(() -> new RuntimeException("Perfil de acesso não encontrado: " + perfilId));
+
+                // CORREÇÃO CRÍTICA: Instanciar a chave composta
+                UsuarioPerfilId idComposta = new UsuarioPerfilId();
+
+                // Setando os IDs na chave (Ajuste o cast para .intValue() se o seu ID no modelo for Integer)
+                idComposta.setIdUsuario(salvo.getIdUsuario());
+                idComposta.setIdPerfil(perfil.getIdPerfil().intValue());
+
                 UsuarioPerfil vinculo = new UsuarioPerfil();
+                vinculo.setId(idComposta); // Atribui a chave composta instanciada
                 vinculo.setUsuario(salvo);
                 vinculo.setPerfil(perfil);
+
                 usuarioPerfilRepository.save(vinculo);
             }
         }
@@ -71,7 +88,7 @@ public class AuthService implements AuthUseCase {
                 new UsernamePasswordAuthenticationToken(dto.email_login(), dto.senha())
         );
         Usuario usuario = usuarioRepository.findByEmailLogin(dto.email_login())
-                .orElseThrow(() -> new RuntimeException("Usuario nao encontrado"));
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
         String token = jwtService.generateToken(usuario.getEmailLogin());
         return new AuthResponseDTO(token, "Bearer", usuarioMapper.toResponse(usuario));

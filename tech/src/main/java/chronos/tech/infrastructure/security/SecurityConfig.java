@@ -31,7 +31,7 @@ public class SecurityConfig {
                 .headers(headers -> headers.frameOptions(frame -> frame.disable()))
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**", "/h2-console/**","/swagger-ui/**",
+                        .requestMatchers("/auth/**", "/h2-console/**",
                                 "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated())
                 .authenticationProvider(authenticationProvider())
