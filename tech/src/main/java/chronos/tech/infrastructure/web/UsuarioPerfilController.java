@@ -4,6 +4,7 @@ import chronos.tech.application.dto.request.UsuarioPerfilRequestDTO;
 import chronos.tech.application.dto.response.UsuarioPerfilResponseDTO;
 import chronos.tech.application.port.in.UsuarioPerfilUseCase;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -20,6 +21,7 @@ import java.util.List;
 @RequestMapping("/usuarios-perfis")
 @RequiredArgsConstructor
 @Tag(name = "Usuários x Perfis", description = "Endpoints para gerenciamento de vínculos entre usuários e perfis")
+@SecurityRequirement(name = "bearerAuth")
 public class UsuarioPerfilController {
 
     private final UsuarioPerfilUseCase service;

@@ -4,6 +4,7 @@ import chronos.tech.application.dto.request.TipoVinculoRequestDTO;
 import chronos.tech.application.dto.response.TipoVinculoResponseDTO;
 import chronos.tech.application.port.in.TipoVinculoUseCase;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -20,6 +21,7 @@ import java.util.List;
 @RequestMapping("/tipos-vinculo")
 @RequiredArgsConstructor
 @Tag(name = "Tipos de Vínculo", description = "Endpoints para gerenciamento de tipos de vínculo")
+@SecurityRequirement(name = "bearerAuth")
 public class TipoVinculoController {
 
     private final TipoVinculoUseCase service;

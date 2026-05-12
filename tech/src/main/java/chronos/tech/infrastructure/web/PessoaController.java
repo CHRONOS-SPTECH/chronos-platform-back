@@ -4,6 +4,7 @@ import chronos.tech.application.dto.request.PessoaRequestDTO;
 import chronos.tech.application.dto.response.PessoaResponseDTO;
 import chronos.tech.application.port.in.PessoaUseCase;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -20,6 +21,7 @@ import java.util.List;
 @RequestMapping("/pessoas")
 @RequiredArgsConstructor
 @Tag(name = "Pessoas", description = "Endpoints para gerenciamento de pessoas")
+@SecurityRequirement(name = "bearerAuth")
 public class PessoaController {
 
     private final PessoaUseCase service;

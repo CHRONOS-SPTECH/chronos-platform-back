@@ -4,6 +4,7 @@ import chronos.tech.application.dto.request.CategoriaAtividadeRequestDTO;
 import chronos.tech.application.dto.response.CategoriaAtividadeResponseDTO;
 import chronos.tech.application.port.in.CategoriaAtividadeUseCase;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -20,6 +21,7 @@ import java.util.List;
 @RequestMapping("/categorias-atividade")
 @RequiredArgsConstructor
 @Tag(name = "Categorias de Atividade", description = "Endpoints para gerenciamento de categorias de atividade")
+@SecurityRequirement(name = "bearerAuth")
 public class CategoriaAtividadeController {
 
     private final CategoriaAtividadeUseCase service;

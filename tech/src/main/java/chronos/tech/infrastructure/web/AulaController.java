@@ -4,6 +4,7 @@ import chronos.tech.application.dto.request.AulaRequestDTO;
 import chronos.tech.application.dto.response.AulaResponseDTO;
 import chronos.tech.application.port.in.AulaUseCase;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -20,6 +21,7 @@ import java.util.List;
 @RequestMapping("/aulas")
 @RequiredArgsConstructor
 @Tag(name = "Aulas", description = "Endpoints para gerenciamento de aulas")
+@SecurityRequirement(name = "bearerAuth")
 public class AulaController {
 
     private final AulaUseCase service;

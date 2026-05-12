@@ -5,6 +5,7 @@ import chronos.tech.application.dto.request.AuthRegisterRequestDTO;
 import chronos.tech.application.dto.response.AuthResponseDTO;
 import chronos.tech.application.port.in.AuthUseCase;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 @Tag(name = "Autenticação", description = "Endpoints para login e registro de usuários")
+@SecurityRequirement(name = "bearerAuth")
 public class AuthController {
 
     private final AuthUseCase authUseCase;
