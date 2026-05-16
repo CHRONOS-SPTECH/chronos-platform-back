@@ -34,12 +34,12 @@ public class Aula {
     @JoinColumn(name = "id_instrutor")
     private Pessoa instrutor;
     @Column(name = "data_aula")
+    @Temporal(TemporalType.DATE)
     private Date dataAula;
     @Column(name = "hora_inicio")
     private Time horaInicio;
     @Column(name = "hora_fim")
     private Time horaFim;
-    @Enumerated(EnumType.STRING)
     private StatusAula statusAula;
     @Column(name = "data_criacao_registro")
     private LocalDateTime data_criacao_registro;
