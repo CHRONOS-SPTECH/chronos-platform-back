@@ -1,23 +1,25 @@
 package chronos.tech.infrastructure.configs;
 
-import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.info.Info;
-import io.swagger.v3.oas.models.info.Contact;
-import org.springframework.context.annotation.Bean;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class SwaggerConfig {
+@OpenAPIDefinition(
+        info = @Info(
+                title = "Chronos API",
+                version = "1.0",
+                description = "Documentação da API"
+        )
+)
+@SecurityScheme(
+        name = "bearerAuth",
+        type = SecuritySchemeType.HTTP,
+        scheme = "bearer",
+        bearerFormat = "JWT"
+)
 
-    @Bean
-    public OpenAPI chronosOpenAPI() {
-        return new OpenAPI()
-                .info(new Info()
-                        .title("Chronos - Gestão Acadêmica")
-                        .description("API para gerenciamento de fluxos acadêmicos e administrativos.")
-                        .version("v0.0.1")
-                        .contact(new Contact()
-                                .name("Equipe de Desenvolvimento - KairozTech")
-                                .email("dev@kairoz.tech")));
-    }
+public class SwaggerConfig {
 }

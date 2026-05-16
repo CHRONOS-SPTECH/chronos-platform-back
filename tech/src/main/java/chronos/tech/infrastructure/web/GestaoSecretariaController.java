@@ -4,6 +4,7 @@ import chronos.tech.application.dto.request.GestaoSecretariaRequestDTO;
 import chronos.tech.application.dto.response.GestaoSecretariaResponseDTO;
 import chronos.tech.application.port.in.GestaoSecretariaUseCase;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -20,6 +21,7 @@ import java.util.List;
 @RequestMapping("/gestoes-secretaria")
 @RequiredArgsConstructor
 @Tag(name = "Gestão de Secretaria", description = "Endpoints para gerenciamento de gestões da secretaria")
+@SecurityRequirement(name = "bearerAuth")
 public class GestaoSecretariaController {
 
     private final GestaoSecretariaUseCase service;

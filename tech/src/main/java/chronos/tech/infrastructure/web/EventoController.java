@@ -4,6 +4,7 @@ import chronos.tech.application.dto.request.EventoRequestDTO;
 import chronos.tech.application.dto.response.EventoResponseDTO;
 import chronos.tech.application.port.in.EventoUseCase;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -20,6 +21,7 @@ import java.util.List;
 @RequestMapping("/eventos")
 @RequiredArgsConstructor
 @Tag(name = "Eventos", description = "Endpoints para gerenciamento de eventos")
+@SecurityRequirement(name = "bearerAuth")
 public class EventoController {
 
     private final EventoUseCase service;

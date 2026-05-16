@@ -4,6 +4,7 @@ import chronos.tech.application.dto.request.EnderecoPessoaRequestDTO;
 import chronos.tech.application.dto.response.EnderecoPessoaResponseDTO;
 import chronos.tech.application.port.in.EnderecoPessoaUseCase;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -20,6 +21,7 @@ import java.util.List;
 @RequestMapping("/enderecos-pessoa")
 @RequiredArgsConstructor
 @Tag(name = "Endereços de Pessoa", description = "Endpoints para gerenciamento de endereços de pessoas")
+@SecurityRequirement(name = "bearerAuth")
 public class EnderecoPessoaController {
 
     private final EnderecoPessoaUseCase service;

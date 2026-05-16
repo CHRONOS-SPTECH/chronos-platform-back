@@ -4,6 +4,7 @@ import chronos.tech.application.dto.request.MateriaRequestDTO;
 import chronos.tech.application.dto.response.MateriaResponseDTO;
 import chronos.tech.application.port.in.MateriaUseCase;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -20,6 +21,7 @@ import java.util.List;
 @RequestMapping("/materias")
 @RequiredArgsConstructor
 @Tag(name = "Matérias", description = "Endpoints para gerenciamento de matérias")
+@SecurityRequirement(name = "bearerAuth")
 public class MateriaController {
 
     private final MateriaUseCase service;
