@@ -1,6 +1,7 @@
 package chronos.tech.infrastructure.web;
 
 import chronos.tech.application.dto.request.AulaRequestDTO;
+import chronos.tech.application.dto.response.AulaComAlunosResponseDTO;
 import chronos.tech.application.dto.response.AulaResponseDTO;
 import chronos.tech.application.port.in.AulaUseCase;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,11 +11,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -38,6 +41,22 @@ public class AulaController {
     @GetMapping
     public ResponseEntity<List<AulaResponseDTO>> all() {
         return ResponseEntity.ok(service.getAllAulas());
+    }
+
+    @Operation(
+            summary = "Buscar aulas do dia com alunos",
+            description = "Retorna as aulas do dia especificado com seus alunos correspondentes, filtradas por instrutor. Formato da data: yyyy-MM-dd"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Aulas do dia retornadas com sucesso",
+            content = @Content(schema = @Schema(implementation = AulaComAlunosResponseDTO.class))
+    )
+    @GetMapping("/dia")
+    public ResponseEntity<List<AulaComAlunosResponseDTO>> aulasDoDia(
+            @RequestParam @Validated @DateTimeFormat(pattern = "yyyy-MM-dd") Date data,
+            @RequestParam @Validated Integer instrutorId) {
+        return ResponseEntity.ok(service.getAulasDoDiaComAlunos(data, instrutorId));
     }
 
     @Operation(

@@ -12,8 +12,29 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ChamadaAulaRepositoryAdapter implements ChamadaAulaRepository {
     private final SpringDataChamadaAulaRepository repository;
-    public List<ChamadaAula> findAll() { return repository.findAll(); }
-    public Optional<ChamadaAula> findById(Long id) { return repository.findById(id); }
-    public ChamadaAula save(ChamadaAula chamadaAula) { return repository.save(chamadaAula); }
-    public void deleteById(Long id) { repository.deleteById(id); }
+
+    @Override
+    public List<ChamadaAula> findAll() {
+        return repository.findAll();
+    }
+
+    @Override
+    public Optional<ChamadaAula> findById(Long id) {
+        return repository.findById(id);
+    }
+
+    @Override
+    public ChamadaAula save(ChamadaAula chamadaAula) {
+        return repository.save(chamadaAula);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        repository.deleteById(id);
+    }
+
+    @Override
+    public List<ChamadaAula> findByPessoaIdPessoaAndAulaTurmaIdTurma(Integer pessoaId, Integer turmaId) {
+        return repository.findByPessoaIdPessoaAndAulaTurmaIdTurma(pessoaId, turmaId);
+    }
 }
