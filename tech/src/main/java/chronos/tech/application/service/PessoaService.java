@@ -1,7 +1,9 @@
 package chronos.tech.application.service;
 
 import chronos.tech.application.dto.request.PessoaRequestDTO;
+import chronos.tech.application.dto.response.PessoaDetalhadaResponseDTO;
 import chronos.tech.application.dto.response.PessoaResponseDTO;
+import chronos.tech.application.dto.response.TipoVinculoResponseDTO;
 import chronos.tech.application.mapper.PessoaMapper;
 import chronos.tech.application.port.in.PessoaUseCase;
 import chronos.tech.domain.model.classes.Pessoa;
@@ -17,6 +19,15 @@ public class PessoaService implements PessoaUseCase {
 
     private final PessoaRepository repository;
     private final PessoaMapper mapper;
+
+    @Override
+    public List<PessoaDetalhadaResponseDTO> getAllPersonsDetails() {
+
+        return repository.findAll()
+                .stream()
+                .map(this::toDetalhadaResponse)
+                .toList();
+    }
 
     @Override
     public PessoaResponseDTO createPessoa(PessoaRequestDTO requestPessoaDto) {
@@ -58,4 +69,30 @@ public class PessoaService implements PessoaUseCase {
         repository.deleteById(id);
     }
 
+    private PessoaDetalhadaResponseDTO toDetalhadaResponse(Pessoa pessoa) {
+
+        TipoVinculoResponseDTO vinculoDTO =
+                new TipoVinculoResponseDTO(
+                        pessoa.getTipoVinculo().getIdTipoVinculo(),
+                        pessoa.getTipoVinculo().getNome_vinculo(),
+                        pessoa.getTipoVinculo().getDescricao()
+
+                );
+
+        return new PessoaDetalhadaResponseDTO(
+                pessoa.getIdPessoa(),
+                pessoa.getNome(),
+                pessoa.getEmail(),
+                pessoa.getTelefone(),
+                pessoa.getGenero(),
+                pessoa.getCpf(),
+                pessoa.getBolsista(),
+                pessoa.getUrlFotoPerfil(),
+                pessoa.getDataNascimento(),
+                pessoa.getDataIngresso(),
+                pessoa.getDataMembro(),
+                pessoa.getDataSaida(),
+                vinculoDTO
+        );
+    }
 }
