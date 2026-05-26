@@ -32,4 +32,9 @@ public class TemaAulaRepositoryAdapter implements TemaAulaRepository {
     public void deleteById(Long id) {
         repository.deleteById(id);
     }
+
+    @Override
+    public Optional<TemaAula> findByTituloTema(String tituloTema) {
+        return repository.findByTituloTema(tituloTema);
+    }
 }

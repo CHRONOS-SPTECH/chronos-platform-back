@@ -10,4 +10,6 @@ public interface TemaAulaRepository {
     Optional<TemaAula> findById(Long id);
     TemaAula save(TemaAula temaAula);
     void deleteById(Long id);
+
+    Optional<TemaAula> findByTituloTema(String tituloTema);
 }

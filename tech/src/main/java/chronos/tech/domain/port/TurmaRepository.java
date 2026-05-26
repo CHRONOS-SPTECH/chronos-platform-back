@@ -12,4 +12,6 @@ public interface TurmaRepository {
     Turma save(Turma turma);
 
     void deleteById(Long id);
+
+    Optional<Turma> findByNomeTurma(String nomeTurma);
 }

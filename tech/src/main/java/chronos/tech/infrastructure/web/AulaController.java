@@ -2,6 +2,7 @@ package chronos.tech.infrastructure.web;
 
 import chronos.tech.application.dto.request.AulaRequestDTO;
 import chronos.tech.application.dto.response.AulaResponseDTO;
+import chronos.tech.application.dto.response.RelatorioImportacaoResponseDTO;
 import chronos.tech.application.port.in.AulaUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -11,9 +12,11 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -22,8 +25,10 @@ import java.util.List;
 @RequiredArgsConstructor
 @Tag(name = "Aulas", description = "Endpoints para gerenciamento de aulas")
 @SecurityRequirement(name = "bearerAuth")
+@CrossOrigin(origins = "*" )
 public class AulaController {
 
+    // Aqui nós injetamos a PORTA DE ENTRADA (Use Case), nunca o serviço direto!
     private final AulaUseCase service;
 
     @Operation(
@@ -120,5 +125,17 @@ public class AulaController {
             @PathVariable @Validated Integer id) {
         service.deleteAula(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping(value = "/importar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(summary = "Importa o cronograma de aulas a partir de um arquivo Excel")
+    public ResponseEntity<RelatorioImportacaoResponseDTO> importarPlanilha(
+            @RequestParam("file") MultipartFile file) {
+
+        // Chama o caso de uso passando o arquivo bruto
+        RelatorioImportacaoResponseDTO relatorio = service.importarCronograma(file);
+
+        // Retorna HTTP 200 com o resumo de tudo o que aconteceu
+        return ResponseEntity.ok(relatorio);
     }
 }

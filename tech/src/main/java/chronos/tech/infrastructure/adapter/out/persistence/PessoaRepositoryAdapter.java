@@ -33,4 +33,9 @@ public class PessoaRepositoryAdapter implements PessoaRepository {
     public void deleteById(Long id) {
         repository.deleteById(id);
     }
+
+    @Override
+    public Optional<Pessoa> findByNome(String nome) {
+        return repository.findByNome(nome);
+    }
 }

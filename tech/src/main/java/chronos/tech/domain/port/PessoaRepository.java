@@ -12,4 +12,6 @@ public interface PessoaRepository {
     List<Pessoa> findAll();
 
     void deleteById(Long id);
+
+    Optional<Pessoa> findByNome(String nome);
 }
