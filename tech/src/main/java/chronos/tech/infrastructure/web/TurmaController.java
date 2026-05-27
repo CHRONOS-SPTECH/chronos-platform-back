@@ -1,6 +1,7 @@
 package chronos.tech.infrastructure.web;
 
 import chronos.tech.application.dto.request.TurmaRequestDTO;
+import chronos.tech.application.dto.response.AlunoComPresencaResponseDTO;
 import chronos.tech.application.dto.response.TurmaResponseDTO;
 import chronos.tech.application.port.in.TurmaUseCase;
 import io.swagger.v3.oas.annotations.Operation;
@@ -122,6 +123,11 @@ public class TurmaController {
             @PathVariable @Validated Long id){
         service.deleteTurma(id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{id}/alunos")
+    public ResponseEntity<List<AlunoComPresencaResponseDTO>> alunosDaTurma(@PathVariable Integer id) {
+        return ResponseEntity.ok(service.getAlunosDaTurmaComPresenca(id));
     }
 
 }

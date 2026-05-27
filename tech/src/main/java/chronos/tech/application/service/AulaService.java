@@ -1,25 +1,22 @@
 package chronos.tech.application.service;
 
 import chronos.tech.application.dto.request.AulaRequestDTO;
-import chronos.tech.application.dto.response.AulaComAlunosResponseDTO;
+import chronos.tech.application.dto.response.AulaComTemaEMateriaResponseDTO;
 import chronos.tech.application.dto.response.AulaResponseDTO;
-import chronos.tech.application.dto.response.AlunoComPresencaDTO;
-import chronos.tech.application.dto.response.TurmaSimplificadaDTO;
 import chronos.tech.application.mapper.AulaMapper;
+import chronos.tech.application.mapper.MateriaMapper;
+import chronos.tech.application.mapper.TemaAulaMapper;
 import chronos.tech.application.port.in.AulaUseCase;
 import chronos.tech.domain.model.classes.Aula;
-import chronos.tech.domain.model.classes.ChamadaAula;
-import chronos.tech.domain.model.classes.MatriculaTurma;
-import chronos.tech.domain.model.classes.Turma;
 import chronos.tech.domain.port.AulaRepository;
 import chronos.tech.domain.port.ChamadaAulaRepository;
 import chronos.tech.domain.port.MatriculaTurmaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +25,8 @@ public class AulaService implements AulaUseCase {
     private final AulaMapper mapper;
     private final MatriculaTurmaRepository matriculaTurmaRepository;
     private final ChamadaAulaRepository chamadaAulaRepository;
+    private final TemaAulaMapper temaMapper;
+    private final MateriaMapper materiaMapper;
 
     public List<AulaResponseDTO> getAllAulas() {
         return repository.findAll().stream().map(mapper::toResponse).toList();
@@ -51,62 +50,26 @@ public class AulaService implements AulaUseCase {
         repository.deleteById(id);
     }
 
-    public List<AulaComAlunosResponseDTO> getAulasDoDiaComAlunos(Date data, Integer instrutorId) {
+    public List<AulaComTemaEMateriaResponseDTO> getAulasDoDia(Date data, Integer instrutorId) {
         List<Aula> aulasDoDia = repository.findByDataAulaAndInstrutorIdPessoa(data, instrutorId);
 
-        return aulasDoDia.stream().map(aula -> {
-            Turma turma = aula.getTurma();
-            String nomeAula = aula.getTema() != null ? aula.getTema().getTituloTema() : null;
+        return aulasDoDia.stream()
+                .map(a -> new AulaComTemaEMateriaResponseDTO(
+                        mapper.toResponse(a),
+                        temaMapper.toResponse(a.getTema()),
+                        materiaMapper.toResponse(a.getTema().getIdMateria())
+                ))
+                .toList();
+    }
 
-            TurmaSimplificadaDTO turmaDTO = null;
-            List<AlunoComPresencaDTO> alunos = List.of();
-            
-            if (turma != null) {
-                turmaDTO = new TurmaSimplificadaDTO(
-                    turma.getIdTurma(),
-                    turma.getNomeTurma(),
-                    turma.getDataInicio(),
-                    turma.getDataEncerramento()
-                );
+    public AulaComTemaEMateriaResponseDTO getAulaComTemaEMateriaPorId(Integer id) {
+        Aula aula = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Aula não encontrada com o ID: " + id));
 
-                List<MatriculaTurma> matriculas = matriculaTurmaRepository.findByTurmaIdTurma(turma.getIdTurma());
-                
-                alunos = matriculas.stream()
-                        .map(m -> {
-                            Integer pessoaId = m.getPessoa().getIdPessoa();
-                            
-                            List<ChamadaAula> chamadasAluno = chamadaAulaRepository
-                                .findByPessoaIdPessoaAndAulaTurmaIdTurma(pessoaId, turma.getIdTurma());
-                            
-                            double percentualPresenca = 0.0;
-                            if (!chamadasAluno.isEmpty()) {
-                                long compareceuCount = chamadasAluno.stream()
-                                    .filter(c -> c.getCompareceu() != null && c.getCompareceu())
-                                    .count();
-                                percentualPresenca = (compareceuCount * 100.0) / chamadasAluno.size();
-                            }
-                            
-                            return new AlunoComPresencaDTO(
-                                pessoaId,
-                                m.getPessoa().getNome(),
-                                m.getPessoa().getCpf(),
-                                percentualPresenca
-                            );
-                        })
-                        .collect(Collectors.toList());
-            }
-
-            return new AulaComAlunosResponseDTO(
-                    aula.getIdAula(),
-                    nomeAula,
-                    aula.getDataAula(),
-                    aula.getHoraInicio(),
-                    aula.getHoraFim(),
-                    aula.getStatusAula(),
-                    aula.getData_criacao_registro(),
-                    turmaDTO,
-                    alunos
-            );
-        }).collect(Collectors.toList());
+        return new AulaComTemaEMateriaResponseDTO(
+                mapper.toResponse(aula),
+                temaMapper.toResponse(aula.getTema()),
+                materiaMapper.toResponse(aula.getTema().getIdMateria())
+        );
     }
 }

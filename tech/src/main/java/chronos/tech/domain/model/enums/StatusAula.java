@@ -4,7 +4,7 @@ public enum StatusAula {
     AGENDADA("Agendada"),
     CANCELADA("Cancelada"),
     FERIADO("Feriado");
-    
+
     private final String displayName;
     
     StatusAula(String displayName) {

@@ -1,7 +1,7 @@
 package chronos.tech.infrastructure.web;
 
 import chronos.tech.application.dto.request.AulaRequestDTO;
-import chronos.tech.application.dto.response.AulaComAlunosResponseDTO;
+import chronos.tech.application.dto.response.AulaComTemaEMateriaResponseDTO;
 import chronos.tech.application.dto.response.AulaResponseDTO;
 import chronos.tech.application.port.in.AulaUseCase;
 import io.swagger.v3.oas.annotations.Operation;
@@ -43,21 +43,6 @@ public class AulaController {
         return ResponseEntity.ok(service.getAllAulas());
     }
 
-    @Operation(
-            summary = "Buscar aulas do dia com alunos",
-            description = "Retorna as aulas do dia especificado com seus alunos correspondentes, filtradas por instrutor. Formato da data: yyyy-MM-dd"
-    )
-    @ApiResponse(
-            responseCode = "200",
-            description = "Aulas do dia retornadas com sucesso",
-            content = @Content(schema = @Schema(implementation = AulaComAlunosResponseDTO.class))
-    )
-    @GetMapping("/dia")
-    public ResponseEntity<List<AulaComAlunosResponseDTO>> aulasDoDia(
-            @RequestParam @Validated @DateTimeFormat(pattern = "yyyy-MM-dd") Date data,
-            @RequestParam @Validated Integer instrutorId) {
-        return ResponseEntity.ok(service.getAulasDoDiaComAlunos(data, instrutorId));
-    }
 
     @Operation(
             summary = "Buscar aula por ID",
@@ -139,5 +124,18 @@ public class AulaController {
             @PathVariable @Validated Integer id) {
         service.deleteAula(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/dia")
+    public ResponseEntity<List<AulaComTemaEMateriaResponseDTO>> aulasDoDia(
+            @RequestParam @Validated @DateTimeFormat(pattern = "yyyy-MM-dd") Date data,
+            @RequestParam @Validated Integer instrutorId) {
+        return ResponseEntity.ok(service.getAulasDoDia(data, instrutorId));
+    }
+
+    @GetMapping("/{id}/detalhada")
+    public ResponseEntity<AulaComTemaEMateriaResponseDTO> getAulaDetalhada(@PathVariable Integer id) {
+        AulaComTemaEMateriaResponseDTO dto = service.getAulaComTemaEMateriaPorId(id);
+        return ResponseEntity.ok(dto);
     }
 }

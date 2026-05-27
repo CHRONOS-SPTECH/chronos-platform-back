@@ -1,7 +1,7 @@
 package chronos.tech.application.port.in;
 
 import chronos.tech.application.dto.request.AulaRequestDTO;
-import chronos.tech.application.dto.response.AulaComAlunosResponseDTO;
+import chronos.tech.application.dto.response.AulaComTemaEMateriaResponseDTO;
 import chronos.tech.application.dto.response.AulaResponseDTO;
 
 import java.util.Date;
@@ -13,5 +13,7 @@ public interface AulaUseCase {
     AulaResponseDTO saveAula(AulaRequestDTO dto);
     AulaResponseDTO updateAula(Integer id, AulaRequestDTO dto);
     void deleteAula(Integer id);
-    List<AulaComAlunosResponseDTO> getAulasDoDiaComAlunos(Date data, Integer instrutorId);
+
+    List<AulaComTemaEMateriaResponseDTO> getAulasDoDia(Date data, Integer instrutorId);
+    AulaComTemaEMateriaResponseDTO getAulaComTemaEMateriaPorId(Integer id);
 }

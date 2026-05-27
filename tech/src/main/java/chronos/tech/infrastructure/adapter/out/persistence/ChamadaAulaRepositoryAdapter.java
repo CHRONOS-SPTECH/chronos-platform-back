@@ -37,4 +37,9 @@ public class ChamadaAulaRepositoryAdapter implements ChamadaAulaRepository {
     public List<ChamadaAula> findByPessoaIdPessoaAndAulaTurmaIdTurma(Integer pessoaId, Integer turmaId) {
         return repository.findByPessoaIdPessoaAndAulaTurmaIdTurma(pessoaId, turmaId);
     }
+
+    @Override
+    public List<ChamadaAula> saveAll(List<ChamadaAula> chamadas) {
+        return repository.saveAll(chamadas);
+    }
 }
