@@ -1,6 +1,7 @@
 package chronos.tech.infrastructure.web;
 
 import chronos.tech.application.dto.request.AulaRequestDTO;
+import chronos.tech.application.dto.response.AulaComTemaEMateriaResponseDTO;
 import chronos.tech.application.dto.response.AulaResponseDTO;
 import chronos.tech.application.port.in.AulaUseCase;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,11 +11,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -39,6 +42,7 @@ public class AulaController {
     public ResponseEntity<List<AulaResponseDTO>> all() {
         return ResponseEntity.ok(service.getAllAulas());
     }
+
 
     @Operation(
             summary = "Buscar aula por ID",
@@ -120,5 +124,18 @@ public class AulaController {
             @PathVariable @Validated Integer id) {
         service.deleteAula(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/dia")
+    public ResponseEntity<List<AulaComTemaEMateriaResponseDTO>> aulasDoDia(
+            @RequestParam @Validated @DateTimeFormat(pattern = "yyyy-MM-dd") Date data,
+            @RequestParam @Validated Integer instrutorId) {
+        return ResponseEntity.ok(service.getAulasDoDia(data, instrutorId));
+    }
+
+    @GetMapping("/{id}/detalhada")
+    public ResponseEntity<AulaComTemaEMateriaResponseDTO> getAulaDetalhada(@PathVariable Integer id) {
+        AulaComTemaEMateriaResponseDTO dto = service.getAulaComTemaEMateriaPorId(id);
+        return ResponseEntity.ok(dto);
     }
 }

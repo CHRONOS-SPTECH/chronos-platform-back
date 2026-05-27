@@ -1,9 +1,11 @@
 package chronos.tech.infrastructure.web;
 
 import chronos.tech.application.dto.request.ChamadaAulaRequestDTO;
+import chronos.tech.application.dto.request.ListaChamadaAulaRequestDTO;
 import chronos.tech.application.dto.response.ChamadaAulaResponseDTO;
 import chronos.tech.application.port.in.ChamadaAulaUseCase;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -120,5 +122,25 @@ public class ChamadaAulaController {
             @PathVariable @Validated Long id) {
         service.deleteChamada(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @Operation(
+            summary = "Criar chamada em lote",
+            description = "Cria a chamada de aula para múltiplos alunos de uma vez"
+    )
+    @ApiResponse(
+            responseCode = "201",
+            description = "Chamadas criadas com sucesso",
+            content = @Content(array = @ArraySchema(schema = @Schema(implementation = ChamadaAulaResponseDTO.class)))
+    )
+    @ApiResponse(
+            responseCode = "400",
+            description = "Dados inválidos",
+            content = @Content
+    )
+    @PostMapping("/em-lote")
+    public ResponseEntity<List<ChamadaAulaResponseDTO>> createEmLote(
+            @RequestBody @Validated ListaChamadaAulaRequestDTO dto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.saveListaChamada(dto));
     }
 }
