@@ -143,4 +143,10 @@ public class ChamadaAulaController {
             @RequestBody @Validated ListaChamadaAulaRequestDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.saveListaChamada(dto));
     }
+
+    @GetMapping("/aula/{id_aula}")
+    public ResponseEntity<List<ChamadaAulaResponseDTO>> byAula(
+            @PathVariable @Validated Long id_aula) {
+        return ResponseEntity.ok(service.getChamadasByAula(id_aula));
+    }
 }

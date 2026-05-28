@@ -54,11 +54,16 @@ public class AulaService implements AulaUseCase {
         List<Aula> aulasDoDia = repository.findByDataAulaAndInstrutorIdPessoa(data, instrutorId);
 
         return aulasDoDia.stream()
-                .map(a -> new AulaComTemaEMateriaResponseDTO(
-                        mapper.toResponse(a),
-                        temaMapper.toResponse(a.getTema()),
-                        materiaMapper.toResponse(a.getTema().getIdMateria())
-                ))
+                .map(a -> {
+                    Boolean chamadaFeita = chamadaAulaRepository.existsByAula(a);
+
+                    return new AulaComTemaEMateriaResponseDTO(
+                            mapper.toResponse(a),
+                            temaMapper.toResponse(a.getTema()),
+                            materiaMapper.toResponse(a.getTema().getIdMateria()),
+                            chamadaFeita
+                    );
+                })
                 .toList();
     }
 
@@ -66,10 +71,13 @@ public class AulaService implements AulaUseCase {
         Aula aula = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Aula não encontrada com o ID: " + id));
 
+        Boolean chamadaFeita = chamadaAulaRepository.existsByAula(aula);
+
         return new AulaComTemaEMateriaResponseDTO(
                 mapper.toResponse(aula),
                 temaMapper.toResponse(aula.getTema()),
-                materiaMapper.toResponse(aula.getTema().getIdMateria())
+                materiaMapper.toResponse(aula.getTema().getIdMateria()),
+                chamadaFeita
         );
     }
 }

@@ -14,4 +14,6 @@ public interface ChamadaAulaUseCase {
     void deleteChamada(Long id);
 
     List<ChamadaAulaResponseDTO> saveListaChamada(ListaChamadaAulaRequestDTO dto);
+
+    List<ChamadaAulaResponseDTO> getChamadasByAula(Long id_aula);
 }

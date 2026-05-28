@@ -1,5 +1,6 @@
 package chronos.tech.infrastructure.adapter.out.persistence;
 
+import chronos.tech.domain.model.classes.Aula;
 import chronos.tech.domain.model.classes.ChamadaAula;
 import chronos.tech.domain.port.ChamadaAulaRepository;
 import lombok.RequiredArgsConstructor;
@@ -41,5 +42,15 @@ public class ChamadaAulaRepositoryAdapter implements ChamadaAulaRepository {
     @Override
     public List<ChamadaAula> saveAll(List<ChamadaAula> chamadas) {
         return repository.saveAll(chamadas);
+    }
+
+    @Override
+    public Boolean existsByAula(Aula aula) {
+        return repository.existsByAula(aula);
+    }
+
+    @Override
+    public List<ChamadaAula> findByAulaIdAula(Long id_aula) {
+        return repository.findByAulaIdAula(id_aula);
     }
 }

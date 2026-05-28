@@ -43,11 +43,15 @@ public class ChamadaAulaService implements ChamadaAulaUseCase {
             return mapper.toModel(individualDto);
         }).toList();
 
-        // Salva todos de uma vez no banco
         List<ChamadaAula> chamadasSalvas = repository.saveAll(chamadas);
 
-        // Transforma o resultado no DTO de resposta
         return chamadasSalvas.stream()
+                .map(mapper::toResponse)
+                .toList();
+    }
+
+    public List<ChamadaAulaResponseDTO> getChamadasByAula(Long id_aula) {
+        return repository.findByAulaIdAula(id_aula).stream()
                 .map(mapper::toResponse)
                 .toList();
     }
