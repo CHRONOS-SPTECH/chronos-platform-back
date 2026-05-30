@@ -11,6 +11,6 @@ public interface AulaRepository {
     Optional<Aula> findById(Integer id);
     Aula save(Aula aula);
     void deleteById(Integer id);
-    List<Aula> findByDataAula(Date data);
     List<Aula> findByDataAulaAndInstrutorIdPessoa(Date data, Integer instrutorId);
+    List<Aula> findByTurmaIdTurma(Integer idTurma);
 }

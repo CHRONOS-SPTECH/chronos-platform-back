@@ -2,6 +2,7 @@ package chronos.tech.application.mapper;
 
 import chronos.tech.application.dto.request.PessoaRequestDTO;
 import chronos.tech.application.dto.response.PessoaResponseDTO;
+import chronos.tech.application.dto.response.PessoaResumidoResponseDTO;
 import chronos.tech.domain.model.classes.Pessoa;
 import chronos.tech.domain.model.classes.TipoVinculo;
 import org.mapstruct.BeanMapping;
@@ -43,6 +44,10 @@ public interface PessoaMapper {
     @Mapping(target = "dataSaida", source = "data_saida")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateFromDto(PessoaRequestDTO dto, @MappingTarget Pessoa pessoa);
+
+    @Mapping(target = "id_pessoa", source = "idPessoa")
+    @Mapping(target = "url_foto_perfil", source = "urlFotoPerfil")
+    PessoaResumidoResponseDTO toResumidoResponse(Pessoa pessoa);
 
     default TipoVinculo map(Integer tipo_vinculo_id) {
         if (tipo_vinculo_id == null) return null;

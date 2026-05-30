@@ -1,6 +1,7 @@
 package chronos.tech.infrastructure.web;
 
 import chronos.tech.application.dto.request.AulaRequestDTO;
+import chronos.tech.application.dto.response.AulaComTemaEMateriaComInstrutorResponseDTO;
 import chronos.tech.application.dto.response.AulaComTemaEMateriaResponseDTO;
 import chronos.tech.application.dto.response.AulaResponseDTO;
 import chronos.tech.application.port.in.AulaUseCase;
@@ -138,4 +139,10 @@ public class AulaController {
         AulaComTemaEMateriaResponseDTO dto = service.getAulaComTemaEMateriaPorId(id);
         return ResponseEntity.ok(dto);
     }
+
+    @GetMapping("turma/{id}")
+    public ResponseEntity<List<AulaComTemaEMateriaComInstrutorResponseDTO>> getAulasPorTurma(@PathVariable Integer id) {
+        return ResponseEntity.ok(service.getAulasPorTurma(id));
+    }
+
 }
