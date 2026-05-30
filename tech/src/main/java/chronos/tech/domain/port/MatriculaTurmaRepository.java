@@ -10,4 +10,5 @@ public interface MatriculaTurmaRepository {
     Optional<MatriculaTurma> findById(Long id);
     MatriculaTurma save(MatriculaTurma matriculaTurma);
     void deleteById(Long id);
+    List<MatriculaTurma> findByTurmaIdTurma(Integer turmaId);
 }
