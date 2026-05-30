@@ -37,4 +37,8 @@ public class AulaRepositoryAdapter implements AulaRepository {
     public List<Aula> findByDataAulaAndInstrutorIdPessoa(Date data, Integer instrutorId) {
         return repository.findByDataAulaAndInstrutorIdPessoa(data, instrutorId);
     }
+
+    public List<Aula> findByTurmaIdTurma(Integer idTurma){
+        return repository.findByTurmaIdTurma(idTurma);
+    }
 }

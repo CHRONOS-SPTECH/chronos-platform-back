@@ -14,6 +14,7 @@ public record AulaResponseDTO(
         StatusAula statusAula,
         LocalDateTime data_criacao_registro,
         Long id_turma,
-        Long id_tema
+        Long id_tema,
+        Long id_instrutor
 ) {
 }
