@@ -4,8 +4,10 @@ import chronos.tech.application.dto.request.AulaRequestDTO;
 import chronos.tech.application.dto.response.AulaComTemaEMateriaComInstrutorResponseDTO;
 import chronos.tech.application.dto.response.AulaComTemaEMateriaResponseDTO;
 import chronos.tech.application.dto.response.AulaResponseDTO;
+import chronos.tech.application.dto.response.RelatorioImportacaoResponseDTO;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 public interface AulaUseCase {
@@ -19,4 +21,6 @@ public interface AulaUseCase {
     AulaComTemaEMateriaResponseDTO getAulaComTemaEMateriaPorId(Integer id);
 
     List<AulaComTemaEMateriaComInstrutorResponseDTO> getAulasPorTurma(Integer idTurma);
+
+    RelatorioImportacaoResponseDTO importarCronograma(MultipartFile file);
 }

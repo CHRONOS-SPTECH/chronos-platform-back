@@ -4,6 +4,7 @@ import chronos.tech.application.dto.request.AulaRequestDTO;
 import chronos.tech.application.dto.response.AulaComTemaEMateriaComInstrutorResponseDTO;
 import chronos.tech.application.dto.response.AulaComTemaEMateriaResponseDTO;
 import chronos.tech.application.dto.response.AulaResponseDTO;
+import chronos.tech.application.dto.response.RelatorioImportacaoResponseDTO;
 import chronos.tech.application.port.in.AulaUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -14,11 +15,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 @RestController
@@ -138,6 +141,16 @@ public class AulaController {
     public ResponseEntity<AulaComTemaEMateriaResponseDTO> getAulaDetalhada(@PathVariable Integer id) {
         AulaComTemaEMateriaResponseDTO dto = service.getAulaComTemaEMateriaPorId(id);
         return ResponseEntity.ok(dto);
+    }
+
+    @PostMapping(value = "/importar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(summary = "Importa o cronograma de aulas a partir de um arquivo Excel")
+    public ResponseEntity<RelatorioImportacaoResponseDTO> importarPlanilha(
+            @RequestParam("file") MultipartFile file) {
+
+        RelatorioImportacaoResponseDTO relatorio = service.importarCronograma(file);
+
+        return ResponseEntity.ok(relatorio);
     }
 
     @GetMapping("turma/{id}")
