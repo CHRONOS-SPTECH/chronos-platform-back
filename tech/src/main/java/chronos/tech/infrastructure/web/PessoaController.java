@@ -80,6 +80,26 @@ public class PessoaController {
     }
 
     @Operation(
+            summary = "Buscar pessoa detalhada por ID",
+            description = "Retorna uma pessoa específica pelo ID"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Pessoa encontrada",
+            content = @Content(schema = @Schema(implementation = PessoaResponseDTO.class))
+    )
+    @ApiResponse(
+            responseCode = "404",
+            description = "Pessoa não encontrada",
+            content = @Content
+    )
+    @GetMapping("/details/{id}")
+    public ResponseEntity<PessoaDetalhadaResponseDTO> getPersonDetailsId(
+            @PathVariable @Validated Long id){
+        return ResponseEntity.ok(service.getPersonsDetailsId(id));
+    }
+
+    @Operation(
             summary = "Criar pessoa",
             description = "Cria uma nova pessoa"
     )

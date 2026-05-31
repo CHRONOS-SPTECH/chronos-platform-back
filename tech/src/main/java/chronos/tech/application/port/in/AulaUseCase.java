@@ -1,6 +1,7 @@
 package chronos.tech.application.port.in;
 
 import chronos.tech.application.dto.request.AulaRequestDTO;
+import chronos.tech.application.dto.response.AulaComTemaEMateriaComInstrutorResponseDTO;
 import chronos.tech.application.dto.response.AulaComTemaEMateriaResponseDTO;
 import chronos.tech.application.dto.response.AulaResponseDTO;
 import chronos.tech.application.dto.response.RelatorioImportacaoResponseDTO;
@@ -18,6 +19,8 @@ public interface AulaUseCase {
 
     List<AulaComTemaEMateriaResponseDTO> getAulasDoDia(Date data, Integer instrutorId);
     AulaComTemaEMateriaResponseDTO getAulaComTemaEMateriaPorId(Integer id);
+
+    List<AulaComTemaEMateriaComInstrutorResponseDTO> getAulasPorTurma(Integer idTurma);
 
     RelatorioImportacaoResponseDTO importarCronograma(MultipartFile file);
 }

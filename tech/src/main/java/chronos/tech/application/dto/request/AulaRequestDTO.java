@@ -19,6 +19,8 @@ public record AulaRequestDTO(
         @NotNull
         Long id_turma,
         @NotNull
-        Long id_tema
+        Long id_tema,
+        @NotNull
+        Long id_instrutor
 ) {
 }

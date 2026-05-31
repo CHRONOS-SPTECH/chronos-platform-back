@@ -9,6 +9,8 @@ import java.util.List;
 public interface PessoaUseCase {
     List<PessoaDetalhadaResponseDTO> getAllPersonsDetails ();
 
+    PessoaDetalhadaResponseDTO getPersonsDetailsId (Long id);
+
     PessoaResponseDTO createPessoa(PessoaRequestDTO requestPessoaDto);
 
     PessoaResponseDTO pegarPorId(Long id);

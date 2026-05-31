@@ -13,6 +13,7 @@ public interface AulaRepository {
     void deleteById(Integer id);
     List<Aula> findByDataAula(Date data);
     List<Aula> findByDataAulaAndInstrutorIdPessoa(Date data, Integer instrutorId);
+    List<Aula> findByTurmaIdTurma(Integer idTurma);
 
     // Busca se o professor tem aulas sobrepostas no mesmo período
     List<Aula> findByInstrutorIdPessoaAndDataAula(Integer idInstrutor, Date dataAula);

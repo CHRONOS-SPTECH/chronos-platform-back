@@ -1,6 +1,7 @@
 package chronos.tech.infrastructure.web;
 
 import chronos.tech.application.dto.request.AulaRequestDTO;
+import chronos.tech.application.dto.response.AulaComTemaEMateriaComInstrutorResponseDTO;
 import chronos.tech.application.dto.response.AulaComTemaEMateriaResponseDTO;
 import chronos.tech.application.dto.response.AulaResponseDTO;
 import chronos.tech.application.dto.response.RelatorioImportacaoResponseDTO;
@@ -45,6 +46,7 @@ public class AulaController {
     public ResponseEntity<List<AulaResponseDTO>> all() {
         return ResponseEntity.ok(service.getAllAulas());
     }
+
 
     @Operation(
             summary = "Buscar aula por ID",
@@ -130,7 +132,7 @@ public class AulaController {
 
     @GetMapping("/dia")
     public ResponseEntity<List<AulaComTemaEMateriaResponseDTO>> aulasDoDia(
-            @RequestParam @Validated @DateTimeFormat(pattern = "yyyy-MM-dd") Date data, // Mudou dinamicamente para java.sql.Date
+            @RequestParam @Validated @DateTimeFormat(pattern = "yyyy-MM-dd") Date data,
             @RequestParam @Validated Integer instrutorId) {
         return ResponseEntity.ok(service.getAulasDoDia(data, instrutorId));
     }
@@ -150,4 +152,10 @@ public class AulaController {
 
         return ResponseEntity.ok(relatorio);
     }
+
+    @GetMapping("turma/{id}")
+    public ResponseEntity<List<AulaComTemaEMateriaComInstrutorResponseDTO>> getAulasPorTurma(@PathVariable Integer id) {
+        return ResponseEntity.ok(service.getAulasPorTurma(id));
+    }
+
 }

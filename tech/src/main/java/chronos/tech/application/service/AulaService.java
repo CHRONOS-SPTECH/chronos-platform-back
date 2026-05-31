@@ -2,12 +2,14 @@ package chronos.tech.application.service;
 
 import chronos.tech.application.dto.request.AulaRequestDTO;
 import chronos.tech.application.dto.request.LinhaPlanilhaDTO;
+import chronos.tech.application.dto.response.AulaComTemaEMateriaComInstrutorResponseDTO;
 import chronos.tech.application.dto.response.AulaComTemaEMateriaResponseDTO;
 import chronos.tech.application.dto.response.AulaResponseDTO;
 import chronos.tech.application.dto.response.ItemRelatorioImportacaoResponseDTO;
 import chronos.tech.application.dto.response.RelatorioImportacaoResponseDTO;
 import chronos.tech.application.mapper.AulaMapper;
 import chronos.tech.application.mapper.MateriaMapper;
+import chronos.tech.application.mapper.PessoaMapper;
 import chronos.tech.application.mapper.TemaAulaMapper;
 import chronos.tech.application.port.in.AulaUseCase;
 import chronos.tech.application.util.ExcelProcessor;
@@ -21,6 +23,7 @@ import chronos.tech.domain.port.ChamadaAulaRepository;
 import chronos.tech.domain.port.PessoaRepository;
 import chronos.tech.domain.port.TemaAulaRepository;
 import chronos.tech.domain.port.TurmaRepository;
+import chronos.tech.domain.port.MatriculaTurmaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -41,12 +44,14 @@ public class AulaService implements AulaUseCase {
 
     private final AulaRepository repository;
     private final AulaMapper mapper;
+    private final MatriculaTurmaRepository matriculaTurmaRepository;
     private final ChamadaAulaRepository chamadaAulaRepository;
     private final TemaAulaMapper temaMapper;
     private final MateriaMapper materiaMapper;
     private final TurmaRepository turmaRepository;
     private final PessoaRepository pessoaRepository;
     private final TemaAulaRepository temaAulaRepository;
+    private final PessoaMapper pessoaMapper;
 
     public List<AulaResponseDTO> getAllAulas() {
         return repository.findAll().stream().map(mapper::toResponse).toList();
@@ -78,6 +83,7 @@ public class AulaService implements AulaUseCase {
         return aulasDoDia.stream()
                 .map(a -> {
                     Boolean chamadaFeita = chamadaAulaRepository.existsByAula(a);
+
                     return new AulaComTemaEMateriaResponseDTO(
                             mapper.toResponse(a),
                             temaMapper.toResponse(a.getTema()),
@@ -100,6 +106,24 @@ public class AulaService implements AulaUseCase {
                 materiaMapper.toResponse(aula.getTema().getIdMateria()),
                 chamadaFeita
         );
+    }
+
+    public List<AulaComTemaEMateriaComInstrutorResponseDTO> getAulasPorTurma(Integer idTurma) {
+        List<Aula> aulasDaTurma = repository.findByTurmaIdTurma(idTurma);
+
+        return aulasDaTurma.stream()
+                .map(aula -> {
+                    Boolean chamadaFeita = chamadaAulaRepository.existsByAula(aula);
+
+                    return new AulaComTemaEMateriaComInstrutorResponseDTO(
+                            mapper.toResponse(aula),
+                            temaMapper.toResponse(aula.getTema()),
+                            materiaMapper.toResponse(aula.getTema() != null ? aula.getTema().getIdMateria() : null),
+                            pessoaMapper.toResumidoResponse(aula.getInstrutor()),
+                            chamadaFeita
+                    );
+                })
+                .toList();
     }
 
     @Override

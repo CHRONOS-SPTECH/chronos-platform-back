@@ -30,6 +30,15 @@ public class PessoaService implements PessoaUseCase {
     }
 
     @Override
+    public PessoaDetalhadaResponseDTO getPersonsDetailsId(Long id) {
+
+        return repository.findById(id).map(
+                        this::toDetalhadaResponse)
+                .orElseThrow(() -> new RuntimeException("Não foi possível achar"));
+
+    }
+
+    @Override
     public PessoaResponseDTO createPessoa(PessoaRequestDTO requestPessoaDto) {
         Pessoa pessoa = mapper.toModel(requestPessoaDto);
         Pessoa pessoaSave = repository.save(pessoa);

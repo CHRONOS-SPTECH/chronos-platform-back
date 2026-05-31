@@ -49,6 +49,10 @@ public class AulaRepositoryAdapter implements AulaRepository {
         return repository.findByInstrutorIdPessoaAndDataAula(idInstrutor, dataAula);
     }
 
+    public List<Aula> findByTurmaIdTurma(Integer idTurma){
+        return repository.findByTurmaIdTurma(idTurma);
+    }
+
     @Override
     public List<Aula> findByTurmaIdTurmaAndDataAula(Integer idTurma, Date dataAula) {
         return repository.findByTurmaIdTurmaAndDataAula(idTurma, dataAula);
