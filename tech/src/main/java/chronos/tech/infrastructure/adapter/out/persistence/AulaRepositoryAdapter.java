@@ -35,11 +35,6 @@ public class AulaRepositoryAdapter implements AulaRepository {
     }
 
     @Override
-    public List<Aula> findByDataAula(Date data) {
-        return repository.findByDataAula(data);
-    }
-
-    @Override
     public List<Aula> findByDataAulaAndInstrutorIdPessoa(Date data, Integer instrutorId) {
         return repository.findByDataAulaAndInstrutorIdPessoa(data, instrutorId);
     }
@@ -56,5 +51,15 @@ public class AulaRepositoryAdapter implements AulaRepository {
     @Override
     public List<Aula> findByTurmaIdTurmaAndDataAula(Integer idTurma, Date dataAula) {
         return repository.findByTurmaIdTurmaAndDataAula(idTurma, dataAula);
+    }
+
+    @Override
+    public List<Aula> findByInstrutorIdPessoaAndDataAulaAndIdAulaNot(Integer idInstrutor, Date dataAula, Integer idAula) {
+        return repository.findByInstrutorIdPessoaAndDataAulaAndIdAulaNot(idInstrutor, dataAula, idAula);
+    }
+
+    @Override
+    public List<Aula> findByTurmaIdTurmaAndDataAulaAndIdAulaNot(Integer idTurma, Date dataAula, Integer idAula) {
+        return repository.findByTurmaIdTurmaAndDataAulaAndIdAulaNot(idTurma, dataAula, idAula);
     }
 }

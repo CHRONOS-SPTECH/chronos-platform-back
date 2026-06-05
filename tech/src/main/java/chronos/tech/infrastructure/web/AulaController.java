@@ -1,6 +1,7 @@
 package chronos.tech.infrastructure.web;
 
 import chronos.tech.application.dto.request.AulaRequestDTO;
+import chronos.tech.application.dto.request.MovimentacaoAulaDTO;
 import chronos.tech.application.dto.response.AulaComTemaEMateriaComInstrutorResponseDTO;
 import chronos.tech.application.dto.response.AulaComTemaEMateriaResponseDTO;
 import chronos.tech.application.dto.response.AulaResponseDTO;
@@ -137,6 +138,11 @@ public class AulaController {
         return ResponseEntity.ok(service.getAulasDoDia(data, instrutorId));
     }
 
+    @GetMapping("/detalhadas")
+    public ResponseEntity<List<AulaComTemaEMateriaComInstrutorResponseDTO>> getAllAulasDetails() {
+        return ResponseEntity.ok(service.getAllAulasDetails());
+    }
+
     @GetMapping("/{id}/detalhada")
     public ResponseEntity<AulaComTemaEMateriaResponseDTO> getAulaDetalhada(@PathVariable Integer id) {
         AulaComTemaEMateriaResponseDTO dto = service.getAulaComTemaEMateriaPorId(id);
@@ -158,4 +164,12 @@ public class AulaController {
         return ResponseEntity.ok(service.getAulasPorTurma(id));
     }
 
+
+    @PatchMapping("/remanejar")
+    public ResponseEntity<Void> remanejarAulasEmLote(
+            @RequestBody List<MovimentacaoAulaDTO> movimentacoes) {
+
+        service.remanejarAulasEmLote(movimentacoes);
+        return ResponseEntity.noContent().build();
+    }
 }

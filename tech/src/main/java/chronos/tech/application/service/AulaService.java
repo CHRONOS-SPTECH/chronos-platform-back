@@ -2,6 +2,7 @@ package chronos.tech.application.service;
 
 import chronos.tech.application.dto.request.AulaRequestDTO;
 import chronos.tech.application.dto.request.LinhaPlanilhaDTO;
+import chronos.tech.application.dto.request.MovimentacaoAulaDTO;
 import chronos.tech.application.dto.response.AulaComTemaEMateriaComInstrutorResponseDTO;
 import chronos.tech.application.dto.response.AulaComTemaEMateriaResponseDTO;
 import chronos.tech.application.dto.response.AulaResponseDTO;
@@ -24,6 +25,7 @@ import chronos.tech.domain.port.PessoaRepository;
 import chronos.tech.domain.port.TemaAulaRepository;
 import chronos.tech.domain.port.TurmaRepository;
 import chronos.tech.domain.port.MatriculaTurmaRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -108,21 +110,15 @@ public class AulaService implements AulaUseCase {
         );
     }
 
+    public List<AulaComTemaEMateriaComInstrutorResponseDTO> getAllAulasDetails() {
+        return repository.findAll().stream()
+                .map(this::converterParaDtoCompleto)
+                .toList();
+    }
+
     public List<AulaComTemaEMateriaComInstrutorResponseDTO> getAulasPorTurma(Integer idTurma) {
-        List<Aula> aulasDaTurma = repository.findByTurmaIdTurma(idTurma);
-
-        return aulasDaTurma.stream()
-                .map(aula -> {
-                    Boolean chamadaFeita = chamadaAulaRepository.existsByAula(aula);
-
-                    return new AulaComTemaEMateriaComInstrutorResponseDTO(
-                            mapper.toResponse(aula),
-                            temaMapper.toResponse(aula.getTema()),
-                            materiaMapper.toResponse(aula.getTema() != null ? aula.getTema().getIdMateria() : null),
-                            pessoaMapper.toResumidoResponse(aula.getInstrutor()),
-                            chamadaFeita
-                    );
-                })
+        return repository.findByTurmaIdTurma(idTurma).stream()
+                .map(this::converterParaDtoCompleto)
                 .toList();
     }
 
@@ -186,7 +182,6 @@ public class AulaService implements AulaUseCase {
                     }
                 }
 
-                // Montando Aula
                 Aula novaAula = new Aula();
                 novaAula.setTurma(turma);
                 novaAula.setInstrutor(professor);
@@ -216,6 +211,76 @@ public class AulaService implements AulaUseCase {
                 totalSucesso,
                 falhas.size(),
                 falhas
+        );
+    }
+
+
+    @Override
+    @Transactional
+    public void remanejarAulasEmLote(List<MovimentacaoAulaDTO> movimentacoes) {
+        for (MovimentacaoAulaDTO mov : movimentacoes) {
+            Aula aula = repository.findById(mov.idAula())
+                    .orElseThrow(() -> new RuntimeException("Aula não encontrada no sistema com o ID: " + mov.idAula()));
+
+            // Se a nova data ou hora vier nula, limpa o registro
+            if (mov.dataAula() == null || mov.horaInicio() == null) {
+                aula.setDataAula(null);
+                aula.setHoraInicio(null);
+                aula.setHoraFim(null);
+            } else {
+                try {
+                    LocalDate localData = LocalDate.parse(mov.dataAula());
+                    LocalTime localHoraInicio = LocalTime.parse(mov.horaInicio());
+                    LocalTime localHoraFim = localHoraInicio.plusHours(2);
+
+                    Date dataBanco = Date.valueOf(localData);
+                    Time inicioBanco = Time.valueOf(localHoraInicio);
+                    Time fimBanco = Time.valueOf(localHoraFim);
+
+                    this.validarConflitosDeRemanejamento(aula, dataBanco, inicioBanco, fimBanco);
+
+                    aula.setDataAula(dataBanco);
+                    aula.setHoraInicio(inicioBanco);
+                    aula.setHoraFim(fimBanco);
+
+                } catch (Exception e) {
+                    throw new RuntimeException("Erro ao converter dados de tempo na aula ID " + mov.idAula() + ": " + e.getMessage());
+                }
+            }
+
+            repository.save(aula);
+        }
+    }
+
+    private void validarConflitosDeRemanejamento(Aula aula, Date data, Time inicio, Time fim) {
+        // Validação do Instrutor
+        if (aula.getInstrutor() != null) {
+            boolean profOcupado = repository.findByInstrutorIdPessoaAndDataAulaAndIdAulaNot(aula.getInstrutor().getIdPessoa(), data, aula.getIdAula()).stream()
+                    .anyMatch(a -> inicio.before(a.getHoraFim()) && fim.after(a.getHoraInicio()));
+            if (profOcupado) {
+                throw new RuntimeException("Conflito: O Prof. " + aula.getInstrutor().getNome() + " já tem aula agendada neste horário.");
+            }
+        }
+
+        // Validação da Turma
+        if (aula.getTurma() != null) {
+            boolean turmaOcupada = repository.findByTurmaIdTurmaAndDataAulaAndIdAulaNot(aula.getTurma().getIdTurma(), data, aula.getIdAula()).stream()
+                    .anyMatch(a -> inicio.before(a.getHoraFim()) && fim.after(a.getHoraInicio()));
+            if (turmaOcupada) {
+                throw new RuntimeException("Conflito: A turma '" + aula.getTurma().getNomeTurma() + "' já possui outra aula agendada neste horário.");
+            }
+        }
+    }
+
+    private AulaComTemaEMateriaComInstrutorResponseDTO converterParaDtoCompleto(Aula aula) {
+        Boolean chamadaFeita = chamadaAulaRepository.existsByAula(aula);
+
+        return new AulaComTemaEMateriaComInstrutorResponseDTO(
+                mapper.toResponse(aula),
+                temaMapper.toResponse(aula.getTema()),
+                materiaMapper.toResponse(aula.getTema() != null ? aula.getTema().getIdMateria() : null),
+                pessoaMapper.toResumidoResponse(aula.getInstrutor()),
+                chamadaFeita
         );
     }
 }

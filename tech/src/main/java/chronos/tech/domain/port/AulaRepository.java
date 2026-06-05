@@ -11,7 +11,6 @@ public interface AulaRepository {
     Optional<Aula> findById(Integer id);
     Aula save(Aula aula);
     void deleteById(Integer id);
-    List<Aula> findByDataAula(Date data);
     List<Aula> findByDataAulaAndInstrutorIdPessoa(Date data, Integer instrutorId);
     List<Aula> findByTurmaIdTurma(Integer idTurma);
 
@@ -20,4 +19,7 @@ public interface AulaRepository {
 
     // Busca se a turma já possui aulas sobrepostas no mesmo período
     List<Aula> findByTurmaIdTurmaAndDataAula(Integer idTurma, Date dataAula);
+
+    List<Aula> findByInstrutorIdPessoaAndDataAulaAndIdAulaNot(Integer idInstrutor, Date dataAula, Integer idAula);
+    List<Aula> findByTurmaIdTurmaAndDataAulaAndIdAulaNot(Integer idTurma, Date dataAula, Integer idAula);
 }
