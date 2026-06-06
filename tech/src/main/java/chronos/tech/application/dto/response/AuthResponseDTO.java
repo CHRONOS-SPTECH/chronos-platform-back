@@ -1,4 +1,6 @@
 package chronos.tech.application.dto.response;
 
-public record AuthResponseDTO(String token, String token_type, UsuarioResponseDTO usuario) {
+import java.util.List;
+
+public record AuthResponseDTO(String token, String token_type, UsuarioResponseDTO usuario, List<PerfilAcessoResponseDTO> perfis) {
 }

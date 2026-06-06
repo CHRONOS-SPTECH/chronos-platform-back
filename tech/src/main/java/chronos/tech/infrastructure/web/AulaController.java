@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -133,9 +134,14 @@ public class AulaController {
 
     @GetMapping("/dia")
     public ResponseEntity<List<AulaComTemaEMateriaResponseDTO>> aulasDoDia(
-            @RequestParam @Validated @DateTimeFormat(pattern = "yyyy-MM-dd") Date data,
+            @RequestParam
+            @Validated
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data,
             @RequestParam @Validated Integer instrutorId) {
-        return ResponseEntity.ok(service.getAulasDoDia(data, instrutorId));
+
+        Date dataSql = Date.valueOf(data);
+
+        return ResponseEntity.ok(service.getAulasDoDia(dataSql, instrutorId));
     }
 
     @GetMapping("/detalhadas")
