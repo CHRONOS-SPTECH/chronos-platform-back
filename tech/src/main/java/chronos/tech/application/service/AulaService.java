@@ -3,15 +3,8 @@ package chronos.tech.application.service;
 import chronos.tech.application.dto.request.AulaRequestDTO;
 import chronos.tech.application.dto.request.LinhaPlanilhaDTO;
 import chronos.tech.application.dto.request.MovimentacaoAulaDTO;
-import chronos.tech.application.dto.response.AulaComTemaEMateriaComInstrutorResponseDTO;
-import chronos.tech.application.dto.response.AulaComTemaEMateriaResponseDTO;
-import chronos.tech.application.dto.response.AulaResponseDTO;
-import chronos.tech.application.dto.response.ItemRelatorioImportacaoResponseDTO;
-import chronos.tech.application.dto.response.RelatorioImportacaoResponseDTO;
-import chronos.tech.application.mapper.AulaMapper;
-import chronos.tech.application.mapper.MateriaMapper;
-import chronos.tech.application.mapper.PessoaMapper;
-import chronos.tech.application.mapper.TemaAulaMapper;
+import chronos.tech.application.dto.response.*;
+import chronos.tech.application.mapper.*;
 import chronos.tech.application.port.in.AulaUseCase;
 import chronos.tech.application.util.ExcelProcessor;
 import chronos.tech.domain.model.classes.Aula;
@@ -54,6 +47,7 @@ public class AulaService implements AulaUseCase {
     private final PessoaRepository pessoaRepository;
     private final TemaAulaRepository temaAulaRepository;
     private final PessoaMapper pessoaMapper;
+    private final TurmaMapper turmaMapper;
 
     public List<AulaResponseDTO> getAllAulas() {
         return repository.findAll().stream().map(mapper::toResponse).toList();
@@ -65,7 +59,12 @@ public class AulaService implements AulaUseCase {
     }
 
     public AulaResponseDTO saveAula(AulaRequestDTO dto) {
-        return mapper.toResponse(repository.save(mapper.toModel(dto)));
+        Aula aula = mapper.toModel(dto);
+
+        aula.setStatusAula(StatusAula.AGENDADA);
+        aula.setData_criacao_registro(LocalDateTime.now());
+
+        return mapper.toResponse(repository.save(aula));
     }
 
     public AulaResponseDTO updateAula(Integer id, AulaRequestDTO dto) {
@@ -123,6 +122,7 @@ public class AulaService implements AulaUseCase {
     }
 
     @Override
+    @Transactional
     public RelatorioImportacaoResponseDTO importarCronograma(MultipartFile file) {
         List<ItemRelatorioImportacaoResponseDTO> falhas = new ArrayList<>();
         int totalSucesso = 0;
@@ -146,7 +146,7 @@ public class AulaService implements AulaUseCase {
                 try {
                     localData = LocalDate.parse(linha.data(), formatadorData);
                     localHoraInicio = LocalTime.parse(linha.horario().trim(), formatadorHora);
-                    localHoraFim = localHoraInicio.plusHours(2);
+                    localHoraFim = localHoraInicio.plusHours(1).plusMinutes(30);
                 } catch (Exception e) {
                     throw new RuntimeException("Formato de data ou hora inválido no Excel. Use 'dd/MM/yyyy' e 'HH:mm'");
                 }
@@ -164,24 +164,53 @@ public class AulaService implements AulaUseCase {
                 TemaAula tema = temaAulaRepository.findByTituloTema(linha.materia())
                         .orElseThrow(() -> new RuntimeException("Tema não encontrado: " + linha.materia()));
 
-                // Verificar se o professor já está ocupado nesse horário em QUALQUER turma
-                List<Aula> aulasDoProfessor = repository.findByInstrutorIdPessoaAndDataAula(professor.getIdPessoa(), dataFormatada);
-                for (Aula aulaExistente : aulasDoProfessor) {
-                    if (timeInicio.before(aulaExistente.getHoraFim()) && timeFim.after(aulaExistente.getHoraInicio())) {
-                        throw new RuntimeException("Conflito: O Prof. " + professor.getNome() + " já está alocado na turma '"
-                                + aulaExistente.getTurma().getNomeTurma() + "' neste horário.");
-                    }
+                // Buscar os registros existentes para o dia
+                List<Aula> aulasDaTurmaNoDia = repository.findByTurmaIdTurmaAndDataAula(turma.getIdTurma(), dataFormatada);
+                List<Aula> aulasDoProfessorNoDia = repository.findByInstrutorIdPessoaAndDataAula(professor.getIdPessoa(), dataFormatada);
+
+                // --- REGRA 1: Se já existe um registro EXATO, ignora e pula.
+                boolean existeRegistroIdentico = aulasDaTurmaNoDia.stream()
+                        .anyMatch(a ->
+                                a.getHoraInicio() != null && a.getHoraFim() != null
+                                        && a.getHoraInicio().equals(timeInicio)
+                                        && a.getHoraFim().equals(timeFim)
+                                        && a.getInstrutor() != null && a.getInstrutor().getIdPessoa().equals(professor.getIdPessoa())
+                                        && a.getTema() != null && a.getTema().getIdTema().equals(tema.getIdTema())
+                        );
+
+                if (existeRegistroIdentico) {
+                    totalSucesso++;
+                    continue;
                 }
 
-                // Verificar se a TURMA já tem aula agendada nesse horário
-                List<Aula> aulasDaTurma = repository.findByTurmaIdTurmaAndDataAula(turma.getIdTurma(), dataFormatada);
-                for (Aula aulaExistente : aulasDaTurma) {
-                    if (timeInicio.before(aulaExistente.getHoraFim()) && timeFim.after(aulaExistente.getHoraInicio())) {
-                        throw new RuntimeException("Conflito: A turma '" + turma.getNomeTurma() + "' já possui a aula '"
-                                + (aulaExistente.getTema() != null ? aulaExistente.getTema().getTituloTema() : "Sem Matéria") + "' neste horário.");
-                    }
+                // --- REGRA 2: Se já existe aula na mesma DATA/TURMA ou conflito de horário, salva como PENDENTE (sem data e hora)
+                boolean existeAulaDiferenteNoMesmoDia = !aulasDaTurmaNoDia.isEmpty();
+
+                boolean conflitoHorarioProfessor = aulasDoProfessorNoDia.stream()
+                        .filter(a -> a.getHoraInicio() != null && a.getHoraFim() != null)
+                        .anyMatch(a -> timeInicio.before(a.getHoraFim()) && timeFim.after(a.getHoraInicio()));
+
+                boolean conflitoHorarioTurma = aulasDaTurmaNoDia.stream()
+                        .filter(a -> a.getHoraInicio() != null && a.getHoraFim() != null)
+                        .anyMatch(a -> timeInicio.before(a.getHoraFim()) && timeFim.after(a.getHoraInicio()));
+
+                if (existeAulaDiferenteNoMesmoDia || conflitoHorarioProfessor || conflitoHorarioTurma) {
+                    Aula novaPendente = new Aula();
+                    novaPendente.setTurma(turma);
+                    novaPendente.setInstrutor(professor);
+                    novaPendente.setTema(tema);
+                    novaPendente.setDataAula(null);
+                    novaPendente.setHoraInicio(null);
+                    novaPendente.setHoraFim(null);
+                    novaPendente.setStatusAula(StatusAula.AGENDADA);
+                    novaPendente.setData_criacao_registro(LocalDateTime.now());
+
+                    repository.save(novaPendente);
+                    totalSucesso++;
+                    continue;
                 }
 
+                // --- FLUXO NORMAL
                 Aula novaAula = new Aula();
                 novaAula.setTurma(turma);
                 novaAula.setInstrutor(professor);
@@ -213,7 +242,6 @@ public class AulaService implements AulaUseCase {
                 falhas
         );
     }
-
 
     @Override
     @Transactional
@@ -274,12 +302,14 @@ public class AulaService implements AulaUseCase {
 
     private AulaComTemaEMateriaComInstrutorResponseDTO converterParaDtoCompleto(Aula aula) {
         Boolean chamadaFeita = chamadaAulaRepository.existsByAula(aula);
+        TurmaResponseDTO turma = turmaMapper.toResponse(aula.getTurma());
 
         return new AulaComTemaEMateriaComInstrutorResponseDTO(
                 mapper.toResponse(aula),
                 temaMapper.toResponse(aula.getTema()),
                 materiaMapper.toResponse(aula.getTema() != null ? aula.getTema().getIdMateria() : null),
                 pessoaMapper.toResumidoResponse(aula.getInstrutor()),
+                turma,
                 chamadaFeita
         );
     }

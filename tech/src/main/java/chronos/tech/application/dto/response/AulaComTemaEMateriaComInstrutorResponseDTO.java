@@ -8,13 +8,15 @@ public class AulaComTemaEMateriaComInstrutorResponseDTO {
     private TemaAulaResponseDTO tema;
     private MateriaResponseDTO materia;
     private PessoaResumidoResponseDTO instrutor;
+    private TurmaResponseDTO turma;
     private Boolean chamadaFeita;
 
-    public AulaComTemaEMateriaComInstrutorResponseDTO(AulaResponseDTO aula, TemaAulaResponseDTO tema, MateriaResponseDTO materia, PessoaResumidoResponseDTO instrutor, Boolean chamadaFeita) {
+    public AulaComTemaEMateriaComInstrutorResponseDTO(AulaResponseDTO aula, TemaAulaResponseDTO tema, MateriaResponseDTO materia, PessoaResumidoResponseDTO instrutor, TurmaResponseDTO turma, Boolean chamadaFeita) {
         this.aula = aula;
         this.tema = tema;
         this.materia = materia;
         this.instrutor = instrutor;
+        this.turma = turma;
         this.chamadaFeita = chamadaFeita;
     }
 }

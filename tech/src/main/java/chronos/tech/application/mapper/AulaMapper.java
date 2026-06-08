@@ -17,6 +17,7 @@ public interface AulaMapper {
 
     @Mapping(target = "idAula", ignore = true)
     @Mapping(target = "turma", source = "id_turma")
+    @Mapping(target = "statusAula", ignore = true)
     @Mapping(target = "tema", source = "id_tema")
     @Mapping(target = "instrutor", source = "id_instrutor")
     @Mapping(target = "dataAula", source = "data_aula")
