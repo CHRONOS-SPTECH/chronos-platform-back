@@ -1,6 +1,8 @@
 package chronos.tech.domain.port;
 
 import chronos.tech.domain.model.classes.Pessoa;
+
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,4 +14,16 @@ public interface PessoaRepository {
     List<Pessoa> findAll();
 
     void deleteById(Long id);
+
+    Long countTotal();
+
+    Long countByTipoVinculo(String nome);
+
+    Long countMembrosAtivos();
+
+    List<Object[]> countByGenero();
+
+    List<LocalDate> findAllDatasNascimento();
+
+    List<Object[]> findDatasNascimentoEGenero();
 }

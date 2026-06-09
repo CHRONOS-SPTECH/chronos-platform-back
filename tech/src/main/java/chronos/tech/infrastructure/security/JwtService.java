@@ -1,6 +1,8 @@
 package chronos.tech.infrastructure.security;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,16 +35,36 @@ public class JwtService {
     }
 
     public String extractUsername(String token) {
-        return parseClaims(token).getSubject();
+        try {
+            return parseClaims(token).getSubject();
+        } catch (ExpiredJwtException e) {
+            // Token expirado — retorna null para o filtro decidir o que fazer
+            // Não é um erro crítico, é uma situação esperada
+            return null;
+        } catch (JwtException e) {
+            // Token malformado ou adulterado — também retorna null
+            return null;
+        }
     }
 
     public boolean isTokenValid(String token, String username) {
-        String tokenUsername = extractUsername(token);
-        return tokenUsername.equals(username) && !isTokenExpired(token);
+        try {
+            String tokenUsername = extractUsername(token);
+            return tokenUsername != null
+                    && tokenUsername.equals(username)
+                    && !isTokenExpired(token);
+        } catch (JwtException e) {
+            return false;
+        }
+
     }
 
     private boolean isTokenExpired(String token) {
-        return parseClaims(token).getExpiration().before(new Date());
+        try {
+            return parseClaims(token).getExpiration().before(new Date());
+        } catch (ExpiredJwtException e) {
+            return true; // se lançou essa exceção, definitivamente expirou
+        }
     }
 
     private Claims parseClaims(String token) {
@@ -51,5 +73,25 @@ public class JwtService {
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
+    }
+
+    public String generateRefreshToken(String username) {
+        Date now = new Date();
+        Date expiration = new Date(now.getTime() + (expirationMs * 48));
+        return Jwts.builder()
+                .subject(username)
+                .issuedAt(now)
+                .expiration(expiration)
+                .claim("type", "refresh")
+                .signWith(secretKey)
+                .compact();
+    }
+
+    public boolean isRefreshToken(String token) {
+        try {
+            return "refresh".equals(parseClaims(token).get("type", String.class));
+        } catch (JwtException e) {
+            return false;
+        }
     }
 }

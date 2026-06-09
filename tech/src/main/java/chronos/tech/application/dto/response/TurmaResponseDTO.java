@@ -9,6 +9,7 @@ public record TurmaResponseDTO(
         String nome_turma,
         LocalDate data_inicio,
         LocalDate data_encerramento,
-        StatusTurma status_turma
+        StatusTurma status_turma,
+        Double percentual_conclusao
 ) {
 }

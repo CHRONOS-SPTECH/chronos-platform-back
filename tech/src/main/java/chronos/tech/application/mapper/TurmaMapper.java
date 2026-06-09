@@ -24,6 +24,10 @@ public interface TurmaMapper {
     @Mapping(target = "data_inicio", source = "dataInicio")
     @Mapping(target = "data_encerramento", source = "dataEncerramento")
     @Mapping(target = "status_turma", source = "statusTurma")
+    @Mapping(
+            target = "percentual_conclusao",
+            expression = "java(turma.calcularPercentualConclusao())"
+    )
     TurmaResponseDTO toResponse(Turma turma);
 
     @Mapping(target = "idTurma", ignore = true)

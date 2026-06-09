@@ -12,6 +12,10 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:5173", "http://localhost:8080") // Vite e Postman
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowedHeaders("*");
+                .allowedHeaders("Authorization", "Content-Type", "OPTIONS")
+                // Isso é crítico — permite que o frontend leia headers da resposta
+                .exposedHeaders("Authorization")
+                // Se for usar cookies com credenciais
+                .allowCredentials(true); // true só se usar cookies
     }
 }

@@ -1,6 +1,7 @@
 package chronos.tech.infrastructure.adapter.out.persistence;
 
 import chronos.tech.domain.model.classes.Turma;
+import chronos.tech.domain.model.enums.StatusTurma;
 import chronos.tech.domain.port.TurmaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -32,5 +33,10 @@ public class TurmaRepositoryAdapter implements TurmaRepository {
     @Override
     public void deleteById(Long id) {
         repository.deleteById(id);
+    }
+
+    @Override
+    public Long countByStatus(StatusTurma status) {
+        return 0L;
     }
 }
