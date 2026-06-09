@@ -1,6 +1,7 @@
 package chronos.tech.infrastructure.web;
 
 import chronos.tech.application.dto.request.PessoaRequestDTO;
+import chronos.tech.application.dto.response.PessoaDetalhadaResponseDTO;
 import chronos.tech.application.dto.response.PessoaResponseDTO;
 import chronos.tech.application.port.in.PessoaUseCase;
 import io.swagger.v3.oas.annotations.Operation;
@@ -58,6 +59,44 @@ public class PessoaController {
     public ResponseEntity<PessoaResponseDTO> getPessoa(
             @PathVariable @Validated Long id){
         return ResponseEntity.ok(service.pegarPorId(id));
+    }
+
+    @Operation(
+            summary = "Listar todas as pessoas detalhadas",
+            description = "Retorna todas as pessoas com os dados do vínculo"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Lista retornada com sucesso",
+            content = @Content(
+                    schema = @Schema(implementation = PessoaDetalhadaResponseDTO.class)
+            )
+    )
+    @GetMapping("/details")
+    public ResponseEntity<List<PessoaDetalhadaResponseDTO>> getAllPersonsDetails() {
+
+        return ResponseEntity.ok()
+                .body(service.getAllPersonsDetails());
+    }
+
+    @Operation(
+            summary = "Buscar pessoa detalhada por ID",
+            description = "Retorna uma pessoa específica pelo ID"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Pessoa encontrada",
+            content = @Content(schema = @Schema(implementation = PessoaResponseDTO.class))
+    )
+    @ApiResponse(
+            responseCode = "404",
+            description = "Pessoa não encontrada",
+            content = @Content
+    )
+    @GetMapping("/details/{id}")
+    public ResponseEntity<PessoaDetalhadaResponseDTO> getPersonDetailsId(
+            @PathVariable @Validated Long id){
+        return ResponseEntity.ok(service.getPersonsDetailsId(id));
     }
 
     @Operation(

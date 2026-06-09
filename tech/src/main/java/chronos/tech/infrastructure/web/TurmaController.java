@@ -163,4 +163,9 @@ public class TurmaController {
         return ResponseEntity.ok(service.getAlunosByTurma(id));
     }
 
+    @GetMapping("/{id}/alunos")
+    public ResponseEntity<List<AlunoComPresencaResponseDTO>> alunosDaTurma(@PathVariable Integer id) {
+        return ResponseEntity.ok(service.getAlunosDaTurmaComPresenca(id));
+    }
+
 }

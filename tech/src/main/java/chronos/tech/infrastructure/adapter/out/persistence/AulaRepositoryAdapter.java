@@ -6,6 +6,7 @@ import chronos.tech.domain.port.AulaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
