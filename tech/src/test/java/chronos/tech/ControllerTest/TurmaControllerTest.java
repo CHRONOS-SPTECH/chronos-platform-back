@@ -1,13 +1,16 @@
 package chronos.tech.ControllerTest;
 
 import chronos.tech.application.dto.response.AlunoComPresencaResponseDTO;
+import chronos.tech.application.dto.response.TurmaDeletadaResponseDTO;
 import chronos.tech.application.dto.response.TurmaResponseDTO;
 import chronos.tech.application.port.in.TurmaUseCase;
+import chronos.tech.domain.model.enums.StatusTurma;
 import chronos.tech.infrastructure.security.CustomUserDetailsService;
 import chronos.tech.infrastructure.security.JwtAuthenticationFilter;
 import chronos.tech.infrastructure.security.JwtService;
 import chronos.tech.infrastructure.web.TurmaController;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
@@ -16,15 +19,11 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(TurmaController.class)
@@ -45,6 +44,9 @@ class TurmaControllerTest {
 
     @MockitoBean
     private CustomUserDetailsService customUserDetailsService;
+
+    @InjectMocks
+    private TurmaController turmaController;
 
     @Test
     void deveListarTurmas() throws Exception {
@@ -140,8 +142,15 @@ class TurmaControllerTest {
 
         Long id = 1L;
 
-        doNothing().when(service)
-                .deleteTurma(id);
+        TurmaDeletadaResponseDTO dto =
+                new TurmaDeletadaResponseDTO(
+                        "Turma desativada com sucesso",
+                        id,
+                        StatusTurma.INATIVA
+                );
+
+        when(service.deleteTurma(id))
+                .thenReturn(dto);
 
         mockMvc.perform(delete("/turmas/{id}", id))
                 .andExpect(status().isOk());
