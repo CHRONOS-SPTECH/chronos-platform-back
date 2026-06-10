@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -32,7 +32,7 @@ public class Usuario {
     @Column(name = "status_ativo")
     private Boolean statusAtivo;
     @Column(name = "data_criacao")
-    private LocalDate dataCriacao;
+    private LocalDateTime dataCriacao;
 
     @OneToMany(mappedBy = "usuario")
     private List<UsuarioPerfil> usuarioPerfis;

@@ -4,6 +4,7 @@ import chronos.tech.application.dto.request.MatriculaTurmaRequestDTO;
 import chronos.tech.application.dto.response.MatriculaTurmaResponseDTO;
 import chronos.tech.application.port.in.MatriculaTurmaUseCase;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -20,6 +21,7 @@ import java.util.List;
 @RequestMapping("/matriculas-turma")
 @RequiredArgsConstructor
 @Tag(name = "Matrículas em Turma", description = "Endpoints para gerenciamento de matrículas em turmas")
+@SecurityRequirement(name = "bearerAuth")
 public class MatriculaTurmaController {
 
     private final MatriculaTurmaUseCase service;

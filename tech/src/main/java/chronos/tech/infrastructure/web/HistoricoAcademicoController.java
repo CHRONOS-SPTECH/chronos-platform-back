@@ -4,6 +4,7 @@ import chronos.tech.application.dto.request.HistoricoAcademicoRequestDTO;
 import chronos.tech.application.dto.response.HistoricoAcademicoResponseDTO;
 import chronos.tech.application.port.in.HistoricoAcademicoUseCase;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -20,6 +21,7 @@ import java.util.List;
 @RequestMapping("/historicos-academicos")
 @RequiredArgsConstructor
 @Tag(name = "Histórico Acadêmico", description = "Endpoints para gerenciamento de históricos acadêmicos")
+@SecurityRequirement(name = "bearerAuth")
 public class HistoricoAcademicoController {
 
     private final HistoricoAcademicoUseCase service;

@@ -4,6 +4,7 @@ import chronos.tech.application.dto.request.NivelFormacaoRequestDTO;
 import chronos.tech.application.dto.response.NivelFormacaoResponseDTO;
 import chronos.tech.application.port.in.NivelFormacaoUseCase;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -20,6 +21,7 @@ import java.util.List;
 @RequestMapping("/niveis-formacao")
 @RequiredArgsConstructor
 @Tag(name = "Níveis de Formação", description = "Endpoints para gerenciamento de níveis de formação")
+@SecurityRequirement(name = "bearerAuth")
 public class NivelFormacaoController {
 
     private final NivelFormacaoUseCase service;

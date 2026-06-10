@@ -8,17 +8,16 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 public record AulaRequestDTO(
-        @NotNull
         Date data_aula,
-        @NotNull
         Time hora_inicio,
-        @NotNull
         Time hora_fim,
-        StatusAula statusAula,
+        String statusAula,
         LocalDateTime data_criacao_registro,
         @NotNull
         Long id_turma,
         @NotNull
-        Long id_tema
+        Long id_tema,
+        @NotNull
+        Long id_instrutor
 ) {
 }

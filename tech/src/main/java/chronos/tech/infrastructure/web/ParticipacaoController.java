@@ -4,6 +4,7 @@ import chronos.tech.application.dto.request.ParticipacaoRequestDTO;
 import chronos.tech.application.dto.response.ParticipacaoResponseDTO;
 import chronos.tech.application.port.in.ParticipacaoUseCase;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -20,6 +21,7 @@ import java.util.List;
 @RequestMapping("/participacoes")
 @RequiredArgsConstructor
 @Tag(name = "Participações", description = "Endpoints para gerenciamento de participações")
+@SecurityRequirement(name = "bearerAuth")
 public class ParticipacaoController {
 
     private final ParticipacaoUseCase service;

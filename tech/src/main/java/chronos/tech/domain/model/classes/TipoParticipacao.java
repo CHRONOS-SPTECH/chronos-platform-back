@@ -23,6 +23,7 @@ public class TipoParticipacao {
     private Integer idTipoParticipacao;
     private String descricao;
     @Column(name = "tipo_hora_gerada")
+    @Enumerated(EnumType.STRING)
     private TipoHoraGerada tipoHoraGerada;
 
     @OneToMany(mappedBy = "idTipoParticipacao")

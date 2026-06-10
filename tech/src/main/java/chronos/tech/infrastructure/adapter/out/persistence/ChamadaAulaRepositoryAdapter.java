@@ -1,5 +1,6 @@
 package chronos.tech.infrastructure.adapter.out.persistence;
 
+import chronos.tech.domain.model.classes.Aula;
 import chronos.tech.domain.model.classes.ChamadaAula;
 import chronos.tech.domain.port.ChamadaAulaRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,8 +13,44 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ChamadaAulaRepositoryAdapter implements ChamadaAulaRepository {
     private final SpringDataChamadaAulaRepository repository;
-    public List<ChamadaAula> findAll() { return repository.findAll(); }
-    public Optional<ChamadaAula> findById(Long id) { return repository.findById(id); }
-    public ChamadaAula save(ChamadaAula chamadaAula) { return repository.save(chamadaAula); }
-    public void deleteById(Long id) { repository.deleteById(id); }
+
+    @Override
+    public List<ChamadaAula> findAll() {
+        return repository.findAll();
+    }
+
+    @Override
+    public Optional<ChamadaAula> findById(Long id) {
+        return repository.findById(id);
+    }
+
+    @Override
+    public ChamadaAula save(ChamadaAula chamadaAula) {
+        return repository.save(chamadaAula);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        repository.deleteById(id);
+    }
+
+    @Override
+    public List<ChamadaAula> findByPessoaIdPessoaAndAulaTurmaIdTurma(Integer pessoaId, Integer turmaId) {
+        return repository.findByPessoaIdPessoaAndAulaTurmaIdTurma(pessoaId, turmaId);
+    }
+
+    @Override
+    public List<ChamadaAula> saveAll(List<ChamadaAula> chamadas) {
+        return repository.saveAll(chamadas);
+    }
+
+    @Override
+    public Boolean existsByAula(Aula aula) {
+        return repository.existsByAula(aula);
+    }
+
+    @Override
+    public List<ChamadaAula> findByAulaIdAula(Long id_aula) {
+        return repository.findByAulaIdAula(id_aula);
+    }
 }

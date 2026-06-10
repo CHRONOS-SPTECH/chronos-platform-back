@@ -33,4 +33,9 @@ public class TurmaRepositoryAdapter implements TurmaRepository {
     public void deleteById(Long id) {
         repository.deleteById(id);
     }
+
+    @Override
+    public Optional<Turma> findByNomeTurma(String nomeTurma) {
+        return repository.findByNomeTurma(nomeTurma);
+    }
 }
