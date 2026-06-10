@@ -22,7 +22,6 @@ public interface TurmaUseCase {
     TurmaDeletadaResponseDTO encerrarTurma(Long id);
 
     TurmaAlunoResponseDTO getAlunosByTurma(Long id);
-    void deleteTurma(Long id);
 
     List<AlunoComPresencaResponseDTO> getAlunosDaTurmaComPresenca(Integer turmaId);
 }

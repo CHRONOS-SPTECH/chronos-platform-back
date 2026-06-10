@@ -146,25 +146,6 @@ public class TurmaController {
     }
 
     @Operation(
-            summary = "Listar alunos da turma",
-            description = "Retorna todos os alunos matriculados em uma turma"
-    )
-    @ApiResponse(
-            responseCode = "200",
-            description = "Alunos encontrados com sucesso",
-            content = @Content(schema = @Schema(implementation = TurmaAlunoResponseDTO.class)
-            ))
-    @ApiResponse(responseCode = "404",
-            description = "Turma não encontrada",
-            content = @Content
-    )
-    @GetMapping("/{id}/alunos")
-    public ResponseEntity<TurmaAlunoResponseDTO> getAlunosByTurma(
-            @PathVariable Long id) {
-        return ResponseEntity.ok(service.getAlunosByTurma(id));
-    }
-
-    @Operation(
             summary = "Buscar alunos por turma",
             description = "Retorna alunos com base no ID da Turma"
     )
