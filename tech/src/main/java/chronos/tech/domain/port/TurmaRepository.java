@@ -16,4 +16,5 @@ public interface TurmaRepository {
     void deleteById(Long id);
 
     Long countByStatus(StatusTurma status);
+    Optional<Turma> findByNomeTurma(String nomeTurma);
 }

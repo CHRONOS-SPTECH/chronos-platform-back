@@ -4,6 +4,8 @@ import chronos.tech.application.dto.request.AuthLoginRequestDTO;
 import chronos.tech.application.dto.request.AuthRefreshRequestDTO;
 import chronos.tech.application.dto.request.AuthRegisterRequestDTO;
 import chronos.tech.application.dto.response.AuthResponseDTO;
+import chronos.tech.application.dto.response.PerfilAcessoResponseDTO;
+import chronos.tech.application.mapper.PerfilAcessoMapper;
 import chronos.tech.application.mapper.PessoaMapper;
 import chronos.tech.application.mapper.UsuarioMapper;
 import chronos.tech.application.port.in.AuthUseCase;
@@ -24,6 +26,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +40,7 @@ public class AuthService implements AuthUseCase {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final UsuarioPerfilRepository usuarioPerfilRepository;
+    private final PerfilAcessoMapper perfilAcessoMapper;
 
     @Override
     @Transactional // Adicionado para garantir que Pessoa, Usuario e Perfis sejam salvos ou falhem juntos

@@ -65,4 +65,7 @@ public class PessoaRepositoryAdapter implements PessoaRepository {
         return List.of();
     }
 
+    public Optional<Pessoa> findByNome(String nome) {
+        return repository.findByNome(nome);
+    }
 }

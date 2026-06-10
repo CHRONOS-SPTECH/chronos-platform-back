@@ -32,4 +32,9 @@ public class MatriculaTurmaRepositoryAdapter implements MatriculaTurmaRepository
     public void deleteById(Long id) {
         repository.deleteById(id);
     }
+
+    @Override
+    public List<MatriculaTurma> findByTurmaIdTurma(Integer turmaId) {
+        return repository.findByTurmaIdTurma(turmaId);
+    }
 }

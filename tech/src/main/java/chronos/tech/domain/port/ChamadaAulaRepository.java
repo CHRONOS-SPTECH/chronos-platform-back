@@ -1,5 +1,6 @@
 package chronos.tech.domain.port;
 
+import chronos.tech.domain.model.classes.Aula;
 import chronos.tech.domain.model.classes.ChamadaAula;
 
 import java.util.List;
@@ -10,4 +11,11 @@ public interface ChamadaAulaRepository {
     Optional<ChamadaAula> findById(Long id);
     ChamadaAula save(ChamadaAula chamadaAula);
     void deleteById(Long id);
+    List<ChamadaAula> findByPessoaIdPessoaAndAulaTurmaIdTurma(Integer pessoaId, Integer turmaId);
+
+    List<ChamadaAula> saveAll(List<ChamadaAula> chamadas);
+
+    Boolean existsByAula(Aula aula);
+
+    List<ChamadaAula> findByAulaIdAula(Long id_aula);
 }

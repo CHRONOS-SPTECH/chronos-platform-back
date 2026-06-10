@@ -8,6 +8,8 @@ import org.springframework.data.repository.query.Param;
 import java.time.LocalDate;
 import java.util.List;
 
+import java.util.Optional;
+
 public interface SpringDataPessoaRepository extends JpaRepository<Pessoa, Long> {
 
     @Query("SELECT COUNT(p) FROM pessoa p")
@@ -28,4 +30,5 @@ public interface SpringDataPessoaRepository extends JpaRepository<Pessoa, Long> 
     @Query("SELECT p.dataNascimento, p.genero FROM pessoa p WHERE p.dataNascimento IS NOT NULL")
     List<Object[]> findDatasNascimentoEGenero();
 
+    Optional<Pessoa> findByNome(String nome);
 }
