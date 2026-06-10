@@ -1,6 +1,14 @@
 package chronos.tech.application.service;
 
 import chronos.tech.application.dto.request.TurmaRequestDTO;
+import chronos.tech.application.dto.response.TurmaAlunoResponseDTO;
+import chronos.tech.application.dto.response.TurmaDeletadaResponseDTO;
+import chronos.tech.application.dto.response.TurmaResponseDTO;
+import chronos.tech.application.mapper.TurmaMapper;
+import chronos.tech.application.port.in.TurmaUseCase;
+import chronos.tech.domain.model.classes.Pessoa;
+import chronos.tech.domain.model.classes.Turma;
+import chronos.tech.domain.model.enums.StatusTurma;
 import chronos.tech.application.dto.response.AlunoComPresencaResponseDTO;
 import chronos.tech.application.dto.response.TurmaResponseDTO;
 import chronos.tech.application.mapper.TurmaMapper;
@@ -14,6 +22,7 @@ import chronos.tech.domain.port.TurmaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,8 +68,65 @@ public class TurmaService implements TurmaUseCase {
 
     //Deletar uma turma
     @Override
-    public void deleteTurma(Long id) {
-        repository.deleteById(id);
+    public TurmaDeletadaResponseDTO deleteTurma(Long id) {
+        Turma turma = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Turma não encontrada com o ID: " + id));
+
+        turma.setStatusTurma(StatusTurma.INATIVA);
+        repository.save(turma);
+
+        return new TurmaDeletadaResponseDTO(
+                "Turma desativada com sucesso",
+                turma.getIdTurma().longValue(),
+                turma.getStatusTurma()
+        );
+    }
+
+    @Override
+    public TurmaDeletadaResponseDTO encerrarTurma(Long id) {
+        Turma turma = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Turma não encontrada com o ID: " + id));
+
+        turma.setStatusTurma(StatusTurma.CONCLUIDA);
+
+        // Se ainda não chegou na data de encerramento, força para hoje
+        if (LocalDate.now().isBefore(turma.getDataEncerramento())) {
+            turma.setDataEncerramento(LocalDate.now());
+        }
+
+        repository.save(turma);
+
+        return new TurmaDeletadaResponseDTO(
+                "Turma encerrada com sucesso",
+                turma.getIdTurma().longValue(),
+                turma.getStatusTurma()
+        );
+    }
+
+    @Override
+    public TurmaAlunoResponseDTO getAlunosByTurma(Long id) {
+        Turma turma = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Turma não encontrada com o ID: " + id));
+
+        List<TurmaAlunoResponseDTO.AlunoResumoDTO> alunos = turma.getMatriculaTurmas()
+                .stream()
+                .map(matricula -> {
+                    Pessoa p = matricula.getPessoa();
+                    return new TurmaAlunoResponseDTO.AlunoResumoDTO(
+                            p.getIdPessoa().longValue(),
+                            p.getNome(),
+                            p.getEmail(),
+                            p.getDataSaida() == null ? "Ativo" : "Inativo"
+                    );
+                })
+                .toList();
+
+        return new TurmaAlunoResponseDTO(
+                turma.getIdTurma().longValue(),
+                turma.getNomeTurma(),
+                alunos.size(),
+                alunos
+        );
     }
 
     //Listar todos os alunos de uma turma com presença

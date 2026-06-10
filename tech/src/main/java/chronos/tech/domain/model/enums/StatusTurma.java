@@ -3,7 +3,8 @@ package chronos.tech.domain.model.enums;
 public enum StatusTurma {
     NAO_INICIADA("Não Iniciada"),
     EM_ANDAMENTO("Em Andamento"),
-    CONCLUIDA("Concluída");
+    CONCLUIDA("Concluída"),
+    INATIVA("Inativa");
     
     private final String displayName;
     
@@ -27,6 +28,8 @@ public enum StatusTurma {
         switch (value) {
             case "Não Iniciada":
                 return NAO_INICIADA;
+            case "Inativa":
+                return INATIVA;
             case "Em Andamento":
                 return EM_ANDAMENTO;
             case "Concluída":

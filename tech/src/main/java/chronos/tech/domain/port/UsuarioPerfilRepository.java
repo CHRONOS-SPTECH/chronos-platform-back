@@ -1,5 +1,6 @@
 package chronos.tech.domain.port;
 
+import chronos.tech.domain.model.classes.PerfilAcesso;
 import chronos.tech.domain.model.classes.UsuarioPerfil;
 
 import java.util.List;

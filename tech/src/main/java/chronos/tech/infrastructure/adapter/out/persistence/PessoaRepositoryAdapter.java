@@ -5,6 +5,7 @@ import chronos.tech.domain.port.PessoaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,6 +36,35 @@ public class PessoaRepositoryAdapter implements PessoaRepository {
     }
 
     @Override
+    public Long countTotal() {
+        return 0L;
+    }
+
+    @Override
+    public Long countByTipoVinculo(String nome) {
+        return 0L;
+    }
+
+    @Override
+    public Long countMembrosAtivos() {
+        return 0L;
+    }
+
+    @Override
+    public List<Object[]> countByGenero() {
+        return List.of();
+    }
+
+    @Override
+    public List<LocalDate> findAllDatasNascimento() {
+        return List.of();
+    }
+
+    @Override
+    public List<Object[]> findDatasNascimentoEGenero() {
+        return List.of();
+    }
+
     public Optional<Pessoa> findByNome(String nome) {
         return repository.findByNome(nome);
     }

@@ -18,7 +18,7 @@ public class EnderecoPessoa {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_endereco")
     private Integer idEndereco;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "id_pessoa", unique = true)
     private Pessoa pessoa;
     private String cep;

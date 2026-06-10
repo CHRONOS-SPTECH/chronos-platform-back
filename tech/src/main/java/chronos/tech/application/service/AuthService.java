@@ -1,6 +1,7 @@
 package chronos.tech.application.service;
 
 import chronos.tech.application.dto.request.AuthLoginRequestDTO;
+import chronos.tech.application.dto.request.AuthRefreshRequestDTO;
 import chronos.tech.application.dto.request.AuthRegisterRequestDTO;
 import chronos.tech.application.dto.response.AuthResponseDTO;
 import chronos.tech.application.dto.response.PerfilAcessoResponseDTO;
@@ -25,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,14 +44,14 @@ public class AuthService implements AuthUseCase {
     private final PerfilAcessoMapper perfilAcessoMapper;
 
     @Override
-    @Transactional // Adicionado para garantir que Pessoa, Usuario e Perfis sejam salvos ou falhem juntos
+    @Transactional
     public AuthResponseDTO register(AuthRegisterRequestDTO dto) {
         // 1. Verificação de existência
         usuarioRepository.findByEmailLogin(dto.email_login()).ifPresent(u -> {
             throw new RuntimeException("E-mail já cadastrado");
         });
 
-        // 2. Mapeamento e persistência do Usuário (Cascade deve cuidar da Pessoa se configurado)
+        // 2. Mapeamento e persistência do Usuário
         Pessoa pessoa = pessoaMapper.toModel(dto.pessoa());
         Usuario usuario = new Usuario();
         usuario.setPessoa(pessoa);
@@ -58,8 +60,10 @@ public class AuthService implements AuthUseCase {
         usuario.setStatusAtivo(Boolean.TRUE);
         usuario.setDataCriacao(LocalDateTime.now());
 
-        // Salva o usuário primeiro para gerar o ID
         Usuario salvo = usuarioRepository.save(usuario);
+
+        // Lista para armazenar as respostas dos perfis criados e retornar no DTO
+        List<PerfilAcessoResponseDTO> perfisResponse = new ArrayList<>();
 
         // 3. Persistência da relação N:N (UsuarioPerfil)
         if (dto.perfis_id() != null && !dto.perfis_id().isEmpty()) {
@@ -67,47 +71,64 @@ public class AuthService implements AuthUseCase {
                 PerfilAcesso perfil = perfilAcessoRepository.findById(perfilId)
                         .orElseThrow(() -> new RuntimeException("Perfil de acesso não encontrado: " + perfilId));
 
-                // CORREÇÃO CRÍTICA: Instanciar a chave composta
                 UsuarioPerfilId idComposta = new UsuarioPerfilId();
-
-                // Setando os IDs na chave (Ajuste o cast para .intValue() se o seu ID no modelo for Integer)
                 idComposta.setIdUsuario(salvo.getIdUsuario());
                 idComposta.setIdPerfil(perfil.getIdPerfil().intValue());
 
                 UsuarioPerfil vinculo = new UsuarioPerfil();
-                vinculo.setId(idComposta); // Atribui a chave composta instanciada
+                vinculo.setId(idComposta);
                 vinculo.setUsuario(salvo);
                 vinculo.setPerfil(perfil);
 
                 usuarioPerfilRepository.save(vinculo);
+
+                // Alimenta a lista de resposta
+                perfisResponse.add(perfilAcessoMapper.toResponse(perfil));
             }
         }
 
         String token = jwtService.generateToken(salvo.getEmailLogin());
+        String refreshToken = jwtService.generateRefreshToken(salvo.getEmailLogin());
 
-        List<PerfilAcessoResponseDTO> perfis = perfilAcessoRepository.findAll()
-                .stream()
-                .map(perfilAcessoMapper::toResponse)
-                .collect(Collectors.toList());
-
-        return new AuthResponseDTO(token, "Bearer", usuarioMapper.toResponse(salvo), perfis);
+        return new AuthResponseDTO(token, "Bearer", refreshToken, usuarioMapper.toResponse(salvo), perfisResponse);
     }
 
     @Override
+    @Transactional(readOnly = true) // Boa prática para buscas
     public AuthResponseDTO login(AuthLoginRequestDTO dto) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(dto.email_login(), dto.senha())
         );
+
         Usuario usuario = usuarioRepository.findByEmailLogin(dto.email_login())
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-        String token = jwtService.generateToken(usuario.getEmailLogin());
-
-        List<PerfilAcessoResponseDTO> perfis = perfilAcessoRepository.findAll()
+        List<PerfilAcessoResponseDTO> perfis = usuarioPerfilRepository.findByUsuarioId(Long.valueOf(usuario.getIdUsuario()))
                 .stream()
+                .map(UsuarioPerfil::getPerfil)
                 .map(perfilAcessoMapper::toResponse)
                 .collect(Collectors.toList());
 
-        return new AuthResponseDTO(token, "Bearer", usuarioMapper.toResponse(usuario), perfis);
+        String token = jwtService.generateToken(usuario.getEmailLogin());
+        String refreshToken = jwtService.generateRefreshToken(usuario.getEmailLogin());
+
+        return new AuthResponseDTO(token, "Bearer", refreshToken, usuarioMapper.toResponse(usuario), perfis);
+    }
+
+    @Override
+    public AuthResponseDTO refresh(AuthRefreshRequestDTO dto) {
+        String username = jwtService.extractUsername(dto.refreshToken());
+
+        if (username == null || !jwtService.isRefreshToken(dto.refreshToken())) {
+            throw new RuntimeException("Refresh token inválido ou expirado");
+        }
+
+        return new AuthResponseDTO(
+                jwtService.generateToken(username),
+                "Bearer",
+                jwtService.generateRefreshToken(username),
+                null,
+                null // Adicionado nulo ou carregue os perfis se o DTO exigir
+        );
     }
 }

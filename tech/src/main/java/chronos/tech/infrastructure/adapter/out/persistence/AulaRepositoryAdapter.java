@@ -1,6 +1,7 @@
 package chronos.tech.infrastructure.adapter.out.persistence;
 
 import chronos.tech.domain.model.classes.Aula;
+import chronos.tech.domain.model.classes.Pessoa;
 import chronos.tech.domain.port.AulaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -61,5 +62,10 @@ public class AulaRepositoryAdapter implements AulaRepository {
     @Override
     public List<Aula> findByTurmaIdTurmaAndDataAulaAndIdAulaNot(Integer idTurma, Date dataAula, Integer idAula) {
         return repository.findByTurmaIdTurmaAndDataAulaAndIdAulaNot(idTurma, dataAula, idAula);
+    }
+  
+      @Override
+    public List<Pessoa> findInstrutoresAtivos() {
+        return List.of();
     }
 }

@@ -32,4 +32,9 @@ public class HistoricoAcademicoRepositoryAdapter implements HistoricoAcademicoRe
     public void deleteById(Long id) {
         repository.deleteById(id);
     }
+
+    @Override
+    public List<Object[]> countAlunosPorNivel() {
+        return List.of();
+    }
 }

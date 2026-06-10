@@ -1,9 +1,11 @@
 package chronos.tech.infrastructure.web;
 
 import chronos.tech.application.dto.request.AuthLoginRequestDTO;
+import chronos.tech.application.dto.request.AuthRefreshRequestDTO;
 import chronos.tech.application.dto.request.AuthRegisterRequestDTO;
 import chronos.tech.application.dto.response.AuthResponseDTO;
 import chronos.tech.application.port.in.AuthUseCase;
+import chronos.tech.infrastructure.security.JwtService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -15,6 +17,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
@@ -49,5 +53,15 @@ public class AuthController {
     public ResponseEntity<AuthResponseDTO> login(
             @RequestBody @Validated AuthLoginRequestDTO dto) {
         return ResponseEntity.ok(authUseCase.login(dto));
+    }
+
+    @Operation(summary = "Renovar token", description = "Gera novo access token a partir do refresh token")
+    @ApiResponse(responseCode = "200", description = "Token renovado com sucesso",
+            content = @Content(schema = @Schema(implementation = AuthResponseDTO.class)))
+    @ApiResponse(responseCode = "401", description = "Refresh token inválido", content = @Content)
+    @PostMapping("/refresh")
+    public ResponseEntity<AuthResponseDTO> refresh(
+            @RequestBody @Validated AuthRefreshRequestDTO dto) {
+        return ResponseEntity.ok(authUseCase.refresh(dto));
     }
 }
