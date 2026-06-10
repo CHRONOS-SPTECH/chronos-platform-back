@@ -35,6 +35,6 @@ public class HistoricoAcademicoRepositoryAdapter implements HistoricoAcademicoRe
 
     @Override
     public List<Object[]> countAlunosPorNivel() {
-        return List.of();
+        return repository.countAlunosPorNivel();
     }
 }

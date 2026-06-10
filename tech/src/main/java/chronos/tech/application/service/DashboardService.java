@@ -28,6 +28,7 @@ public class DashboardService {
     public DashboardResumoResponseDTO getResumo() {
         Long total       = pessoaRepository.countTotal();
         Long membros     = pessoaRepository.countByTipoVinculo("Membro");
+        Long membro_forca = pessoaRepository.countByTipoVinculo("Membro Força Viva");
         Long provac      = pessoaRepository.countByTipoVinculo("Provacionista");
         Long externo     = pessoaRepository.countByTipoVinculo("Público Externo");
         Long instrutores = (long) aulaRepository.findInstrutoresAtivos().size();
@@ -37,7 +38,7 @@ public class DashboardService {
         Long naoIniciadas = turmaRepository.countByStatus(StatusTurma.NAO_INICIADA);
 
         return new DashboardResumoResponseDTO(
-                new DashboardResumoResponseDTO.ComunidadeDTO(total, membros, provac, externo),
+                new DashboardResumoResponseDTO.ComunidadeDTO(total, membros + membro_forca, provac, externo),
                 new DashboardResumoResponseDTO.CapacidadeDTO(instrutores),
                 new DashboardResumoResponseDTO.EngajamentoDTO(membrosAtivos, percentual),
                 new DashboardResumoResponseDTO.ResumoTurmasDTO(emAndamento, naoIniciadas)

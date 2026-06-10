@@ -37,9 +37,10 @@ public class TurmaRepositoryAdapter implements TurmaRepository {
 
     @Override
     public Long countByStatus(StatusTurma status) {
-        return 0L;
+        return repository.countByStatus(status);
     }
 
+    @Override
     public Optional<Turma> findByNomeTurma(String nomeTurma) {
         return repository.findByNomeTurma(nomeTurma);
     }
