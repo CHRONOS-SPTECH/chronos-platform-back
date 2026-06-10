@@ -1,6 +1,7 @@
 package chronos.tech.application.service;
 
 import chronos.tech.application.dto.request.AuthLoginRequestDTO;
+import chronos.tech.application.dto.request.AuthRefreshRequestDTO;
 import chronos.tech.application.dto.request.AuthRegisterRequestDTO;
 import chronos.tech.application.dto.response.AuthResponseDTO;
 import chronos.tech.application.dto.response.PerfilAcessoResponseDTO;
@@ -84,13 +85,8 @@ public class AuthService implements AuthUseCase {
         }
 
         String token = jwtService.generateToken(salvo.getEmailLogin());
-
-        List<PerfilAcessoResponseDTO> perfis = perfilAcessoRepository.findAll()
-                .stream()
-                .map(perfilAcessoMapper::toResponse)
-                .collect(Collectors.toList());
-
-        return new AuthResponseDTO(token, "Bearer", usuarioMapper.toResponse(salvo), perfis);
+        String refreshToken = jwtService.generateRefreshToken(salvo.getEmailLogin());
+        return new AuthResponseDTO(token, "Bearer", refreshToken, usuarioMapper.toResponse(salvo));
     }
 
     @Override
@@ -102,12 +98,22 @@ public class AuthService implements AuthUseCase {
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
         String token = jwtService.generateToken(usuario.getEmailLogin());
+        String refreshToken = jwtService.generateRefreshToken(usuario.getEmailLogin());
+        return new AuthResponseDTO(token, "Bearer", refreshToken, usuarioMapper.toResponse(usuario));
+    }
 
-        List<PerfilAcessoResponseDTO> perfis = perfilAcessoRepository.findAll()
-                .stream()
-                .map(perfilAcessoMapper::toResponse)
-                .collect(Collectors.toList());
+    @Override
+    public AuthResponseDTO refresh(AuthRefreshRequestDTO dto) {
+        String username = jwtService.extractUsername(dto.refreshToken());
 
-        return new AuthResponseDTO(token, "Bearer", usuarioMapper.toResponse(usuario), perfis);
+        if (username == null || !jwtService.isRefreshToken(dto.refreshToken())) {
+            throw new RuntimeException("Refresh token inválido ou expirado");
+        }
+        return new AuthResponseDTO(
+                jwtService.generateToken(username),
+                "Bearer",
+                jwtService.generateRefreshToken(username),
+                null
+        );
     }
 }

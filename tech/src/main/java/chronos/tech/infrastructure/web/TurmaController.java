@@ -1,6 +1,8 @@
 package chronos.tech.infrastructure.web;
 
 import chronos.tech.application.dto.request.TurmaRequestDTO;
+import chronos.tech.application.dto.response.TurmaAlunoResponseDTO;
+import chronos.tech.application.dto.response.TurmaDeletadaResponseDTO;
 import chronos.tech.application.dto.response.AlunoComPresencaResponseDTO;
 import chronos.tech.application.dto.response.TurmaResponseDTO;
 import chronos.tech.application.port.in.TurmaUseCase;
@@ -81,7 +83,6 @@ public class TurmaController {
         TurmaResponseDTO turmaCriada = service.saveTurma(turma);
         return ResponseEntity.status(HttpStatus.CREATED).body(turmaCriada);
     }
-
     @Operation(
             summary = "Atualizar turma",
             description = "Atualiza uma turma existente"
@@ -105,24 +106,62 @@ public class TurmaController {
     }
 
     @Operation(
-            summary = "Deletar turma",
-            description = "Remove uma turma pelo ID"
+            summary = "Desativar turma",
+            description = "Muda o status da turma para inativa"
     )
     @ApiResponse(
             responseCode = "200",
-            description = "Turma removida com sucesso",
-            content = @Content
-    )
+            description = "Turma desativada com sucesso",
+            content = @Content(schema = @Schema(implementation = TurmaDeletadaResponseDTO.class
+            )))
     @ApiResponse(
             responseCode = "404",
             description = "Turma não encontrada",
             content = @Content
     )
-    @DeleteMapping("{id}")
-    public ResponseEntity<Void> deleteTurma(
-            @PathVariable @Validated Long id){
-        service.deleteTurma(id);
-        return ResponseEntity.ok().build();
+    @DeleteMapping("/{id}")
+    public ResponseEntity<TurmaDeletadaResponseDTO> deleteTurma(
+            @PathVariable Long id) {
+        return ResponseEntity.ok(service.deleteTurma(id));
+    }
+
+    @Operation(
+            summary = "Encerrar turma",
+            description = "Muda o status da turma para concluída"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Turma encerrada com sucesso",
+            content = @Content(schema = @Schema(implementation = TurmaDeletadaResponseDTO.class)
+            ))
+    @ApiResponse(
+            responseCode = "404",
+            description = "Turma não encontrada",
+            content = @Content
+    )
+    @PatchMapping("/{id}/encerrar")
+    public ResponseEntity<TurmaDeletadaResponseDTO> encerrarTurma(
+            @PathVariable Long id) {
+        return ResponseEntity.ok(service.encerrarTurma(id));
+    }
+
+    @Operation(
+            summary = "Listar alunos da turma",
+            description = "Retorna todos os alunos matriculados em uma turma"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Alunos encontrados com sucesso",
+            content = @Content(schema = @Schema(implementation = TurmaAlunoResponseDTO.class)
+            ))
+    @ApiResponse(responseCode = "404",
+            description = "Turma não encontrada",
+            content = @Content
+    )
+    @GetMapping("/{id}/alunos")
+    public ResponseEntity<TurmaAlunoResponseDTO> getAlunosByTurma(
+            @PathVariable Long id) {
+        return ResponseEntity.ok(service.getAlunosByTurma(id));
     }
 
     @Operation(

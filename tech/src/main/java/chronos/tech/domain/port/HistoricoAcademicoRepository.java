@@ -10,4 +10,6 @@ public interface HistoricoAcademicoRepository {
     Optional<HistoricoAcademico> findById(Long id);
     HistoricoAcademico save(HistoricoAcademico historico);
     void deleteById(Long id);
+
+    List<Object[]> countAlunosPorNivel();
 }

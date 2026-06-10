@@ -19,7 +19,6 @@ public interface MatriculaTurmaMapper {
     @Mapping(target = "dataMatricula", source = "data_matricula")
     MatriculaTurma toModel(MatriculaTurmaRequestDTO dto);
 
-    @Mapping(target = "id_matricula_turma", ignore = true)
     @Mapping(target = "id_turma", source = "turma.idTurma")
     @Mapping(target = "id_pessoa", source = "pessoa.idPessoa")
     @Mapping(target = "data_matricula", source = "dataMatricula")

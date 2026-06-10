@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Entity(name = "turma")
@@ -30,6 +31,26 @@ public class Turma {
     private LocalDate dataEncerramento;
     @Column(name = "status_turma")
     private StatusTurma statusTurma;
+
+    public Double calcularPercentualConclusao() {
+        LocalDate hoje = LocalDate.now();
+
+        if (statusTurma == StatusTurma.NAO_INICIADA ||
+            hoje.isBefore(dataInicio)){
+            return 0.0;
+        }
+
+        if(hoje.isAfter(dataEncerramento)){
+            return 100.0;
+        }
+
+        Long diasTotais = ChronoUnit.DAYS.between(dataInicio, dataEncerramento);
+
+        Long diasPassados = ChronoUnit.DAYS.between(dataInicio, hoje);
+
+        return ((double) diasPassados / diasTotais) * 100;
+
+    }
 
     @OneToMany(mappedBy = "turma")
     private List<MatriculaTurma> matriculaTurmas;

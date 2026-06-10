@@ -1,6 +1,8 @@
 package chronos.tech.application.port.in;
 
 import chronos.tech.application.dto.request.TurmaRequestDTO;
+import chronos.tech.application.dto.response.TurmaAlunoResponseDTO;
+import chronos.tech.application.dto.response.TurmaDeletadaResponseDTO;
 import chronos.tech.application.dto.response.AlunoComPresencaResponseDTO;
 import chronos.tech.application.dto.response.TurmaResponseDTO;
 
@@ -15,6 +17,11 @@ public interface TurmaUseCase {
 
     TurmaResponseDTO updateTurma(Long id, TurmaRequestDTO turmaAtualizado);
 
+    TurmaDeletadaResponseDTO deleteTurma(Long id);
+
+    TurmaDeletadaResponseDTO encerrarTurma(Long id);
+
+    TurmaAlunoResponseDTO getAlunosByTurma(Long id);
     void deleteTurma(Long id);
 
     List<AlunoComPresencaResponseDTO> getAlunosDaTurmaComPresenca(Integer turmaId);
