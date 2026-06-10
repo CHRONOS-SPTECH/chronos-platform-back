@@ -144,6 +144,20 @@ public class ChamadaAulaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.saveListaChamada(dto));
     }
 
+    @Operation(
+            summary = "Buscar aula por ID",
+            description = "Buscar aula através de um ID específico"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Aula encontrada",
+            content = @Content(array = @ArraySchema(schema = @Schema(implementation = ChamadaAulaResponseDTO.class)))
+    )
+    @ApiResponse(
+            responseCode = "404",
+            description = "Aula por ID não encontrada",
+            content = @Content
+    )
     @GetMapping("/aula/{id_aula}")
     public ResponseEntity<List<ChamadaAulaResponseDTO>> byAula(
             @PathVariable @Validated Long id_aula) {

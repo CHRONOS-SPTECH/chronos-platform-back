@@ -125,6 +125,20 @@ public class TurmaController {
         return ResponseEntity.ok().build();
     }
 
+    @Operation(
+            summary = "Buscar alunos por turma",
+            description = "Retorna alunos com base no ID da Turma"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Alunos da turma encontrado com sucesso",
+            content = @Content(schema = @Schema(implementation = TurmaResponseDTO.class))
+    )
+    @ApiResponse(
+            responseCode = "404",
+            description = "Alunos da turma não encontrada",
+            content = @Content
+    )
     @GetMapping("/{id}/alunos")
     public ResponseEntity<List<AlunoComPresencaResponseDTO>> alunosDaTurma(@PathVariable Integer id) {
         return ResponseEntity.ok(service.getAlunosDaTurmaComPresenca(id));

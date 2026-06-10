@@ -3,10 +3,7 @@ package chronos.tech.ServiceTest;
 import chronos.tech.application.dto.request.AulaRequestDTO;
 import chronos.tech.application.dto.request.MovimentacaoAulaDTO;
 import chronos.tech.application.dto.response.*;
-import chronos.tech.application.mapper.AulaMapper;
-import chronos.tech.application.mapper.MateriaMapper;
-import chronos.tech.application.mapper.PessoaMapper;
-import chronos.tech.application.mapper.TemaAulaMapper;
+import chronos.tech.application.mapper.*;
 import chronos.tech.application.service.AulaService;
 import chronos.tech.domain.model.classes.Aula;
 import chronos.tech.domain.model.classes.Pessoa;
@@ -64,8 +61,12 @@ class AulaServiceTest {
     @InjectMocks
     private AulaService service;
 
+    @Mock
+    private TurmaMapper turmaMapper;
+
     private Aula aula;
     private AulaResponseDTO responseDTO;
+    private TurmaResponseDTO turmaResponseDTO;
 
     @BeforeEach
     void setup() {
@@ -246,14 +247,18 @@ class AulaServiceTest {
     void deveRetornarAulasPorTurma() {
 
         TemaAula tema = mock(TemaAula.class);
-
+        Turma turma = mock(Turma.class);
         aula.setTema(tema);
+        aula.setTurma(turma);
 
         when(repository.findByTurmaIdTurma(1))
                 .thenReturn(List.of(aula));
 
         when(chamadaAulaRepository.existsByAula(aula))
                 .thenReturn(true);
+
+        when(turmaMapper.toResponse(any(Turma.class)))
+                .thenReturn(turmaResponseDTO);
 
         when(mapper.toResponse(aula))
                 .thenReturn(responseDTO);
