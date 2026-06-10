@@ -37,34 +37,35 @@ public class PessoaRepositoryAdapter implements PessoaRepository {
 
     @Override
     public Long countTotal() {
-        return 0L;
+        return repository.countTotal();
     }
 
     @Override
     public Long countByTipoVinculo(String nome) {
-        return 0L;
+        return repository.countByTipoVinculo(nome);
     }
 
     @Override
     public Long countMembrosAtivos() {
-        return 0L;
+        return repository.countMembrosAtivos();
     }
 
     @Override
     public List<Object[]> countByGenero() {
-        return List.of();
+        return repository.countByGenero();
     }
 
     @Override
     public List<LocalDate> findAllDatasNascimento() {
-        return List.of();
+        return repository.findAllDatasNascimento();
     }
 
     @Override
     public List<Object[]> findDatasNascimentoEGenero() {
-        return List.of();
+        return repository.findDatasNascimentoEGenero();
     }
 
+    @Override
     public Optional<Pessoa> findByNome(String nome) {
         return repository.findByNome(nome);
     }

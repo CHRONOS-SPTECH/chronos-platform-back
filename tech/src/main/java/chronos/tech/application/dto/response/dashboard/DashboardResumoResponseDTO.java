@@ -5,6 +5,7 @@ public record DashboardResumoResponseDTO(
         CapacidadeDTO capacidade_pedagogica,
         EngajamentoDTO engajamento_voluntario,
         ResumoTurmasDTO resumo_turmas
+
 ) {
     public record ComunidadeDTO(
             Long total_pessoas, Long membros,

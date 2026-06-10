@@ -15,24 +15,14 @@ import java.util.Optional;
 public class AulaRepositoryAdapter implements AulaRepository {
     private final SpringDataAulaRepository repository;
 
-    @Override
-    public List<Aula> findAll() {
-        return repository.findAll();
-    }
+    public List<Aula> findAll() { return repository.findAll(); }
+    public Optional<Aula> findById(Integer id) { return repository.findById(id); }
+    public Aula save(Aula aula) { return repository.save(aula); }
+    public void deleteById(Integer id) { repository.deleteById(id); }
 
     @Override
-    public Optional<Aula> findById(Integer id) {
-        return repository.findById(id);
-    }
-
-    @Override
-    public Aula save(Aula aula) {
-        return repository.save(aula);
-    }
-
-    @Override
-    public void deleteById(Integer id) {
-        repository.deleteById(id);
+    public List<Pessoa> findInstrutoresAtivos() {
+        return repository.findInstrutoresAtivos();
     }
 
     @Override
@@ -62,10 +52,5 @@ public class AulaRepositoryAdapter implements AulaRepository {
     @Override
     public List<Aula> findByTurmaIdTurmaAndDataAulaAndIdAulaNot(Integer idTurma, Date dataAula, Integer idAula) {
         return repository.findByTurmaIdTurmaAndDataAulaAndIdAulaNot(idTurma, dataAula, idAula);
-    }
-  
-      @Override
-    public List<Pessoa> findInstrutoresAtivos() {
-        return List.of();
     }
 }
