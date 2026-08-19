@@ -22,15 +22,18 @@ public class Evento {
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "id_evento")
         private Integer idEvento;
-        @ManyToOne(cascade = CascadeType.PERSIST)
-        @JoinColumn(name = "id_categoria")
-        private CategoriaAtividade idCategoria;
-        @ManyToOne(cascade = CascadeType.PERSIST)
-        @JoinColumn(name = "id_secretaria")
-        private Secretaria idSecretaria;
         private String titulo;
         @Column(name = "data_evento")
         private LocalDate dataEvento;
+
+        @ManyToOne(fetch = FetchType.LAZY, optional = false)
+        @JoinColumn(name = "id_categoria", nullable = false)
+        private CategoriaAtividade idCategoria;
+
+        @ManyToOne(fetch = FetchType.LAZY, optional = false)
+        @JoinColumn(name = "id_secretaria", nullable = false)
+        private Secretaria idSecretaria;
+        
         @Column(name = "hora_inicio_evento")
         private LocalTime horaInicioEvento;
         @Column(name = "hora_fim_evento")

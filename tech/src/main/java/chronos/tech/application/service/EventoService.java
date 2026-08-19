@@ -4,57 +4,116 @@ import chronos.tech.application.dto.request.EventoRequestDTO;
 import chronos.tech.application.dto.response.EventoResponseDTO;
 import chronos.tech.application.mapper.EventoMapper;
 import chronos.tech.application.port.in.EventoUseCase;
+import chronos.tech.domain.model.classes.CategoriaAtividade;
 import chronos.tech.domain.model.classes.Evento;
+import chronos.tech.domain.model.classes.Secretaria;
+import chronos.tech.domain.port.CategoriaAtividadeRepository;
 import chronos.tech.domain.port.EventoRepository;
+import chronos.tech.domain.port.SecretariaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class EventoService implements EventoUseCase {
 
     private final EventoRepository repository;
+    private final CategoriaAtividadeRepository categoriaRepository;
+    private final SecretariaRepository secretariaRepository;
     private final EventoMapper mapper;
 
-    //Método para pegar todos os eventos
     @Override
-    public List<EventoResponseDTO> getAllEventos(){
-        return repository.findAll().stream().map(mapper::toResponse).toList();
+    @Transactional(readOnly = true)
+    public List<EventoResponseDTO> getAllEventos() {
+        return repository.findAll()
+                .stream()
+                .map(mapper::toResponse)
+                .toList();
     }
 
-    //Método pegar um evento específico
     @Override
-    public EventoResponseDTO getEvento(Long id){
+    @Transactional(readOnly = true)
+    public EventoResponseDTO getEvento(Long id) {
         Evento evento = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Evento não encontrado com o ID: " + id));
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "Evento não encontrado com o ID: " + id
+                        ));
+
         return mapper.toResponse(evento);
     }
 
-    //Salvar no banco de dados h2
     @Override
-    public EventoResponseDTO saveEvento(EventoRequestDTO evento){
-        Evento entidade = mapper.toModel(evento);
-        return mapper.toResponse(repository.save(entidade));
+    public EventoResponseDTO saveEvento(EventoRequestDTO dto) {
+        CategoriaAtividade categoria =
+                categoriaRepository.findById(dto.id_categoria())
+                        .orElseThrow(() ->
+                                new RuntimeException(
+                                        "Categoria não encontrada com o ID: "
+                                                + dto.id_categoria()
+                                ));
+
+        Secretaria secretaria =
+                secretariaRepository.findById(dto.id_secretaria())
+                        .orElseThrow(() ->
+                                new RuntimeException(
+                                        "Secretaria não encontrada com o ID: "
+                                                + dto.id_secretaria()
+                                ));
+
+        Evento evento = mapper.toModel(dto);
+
+        evento.setIdCategoria(categoria);
+        evento.setIdSecretaria(secretaria);
+
+        Evento salvo = repository.save(evento);
+
+        return mapper.toResponse(salvo);
     }
 
-    //Atualizar o evento
     @Override
-    public EventoResponseDTO updateEvento(Long id, EventoRequestDTO eventoAtualizado){
-            Evento eventoExistente = repository.findById(id)
-                    .orElseThrow(() -> new RuntimeException("Evento não encontrado com o ID: " + id));
+    public EventoResponseDTO updateEvento(
+            Long id,
+            EventoRequestDTO dto
+    ) {
+        Evento eventoExistente = repository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "Evento não encontrado com o ID: " + id
+                        ));
 
-            mapper.updateFromDto(eventoAtualizado, eventoExistente);
-            return mapper.toResponse(repository.save(eventoExistente));
+        CategoriaAtividade categoria =
+                categoriaRepository.findById(dto.id_categoria())
+                        .orElseThrow(() ->
+                                new RuntimeException(
+                                        "Categoria não encontrada com o ID: "
+                                                + dto.id_categoria()
+                                ));
+
+        Secretaria secretaria =
+                secretariaRepository.findById(dto.id_secretaria())
+                        .orElseThrow(() ->
+                                new RuntimeException(
+                                        "Secretaria não encontrada com o ID: "
+                                                + dto.id_secretaria()
+                                ));
+
+        mapper.updateFromDto(dto, eventoExistente);
+
+        eventoExistente.setIdCategoria(categoria);
+        eventoExistente.setIdSecretaria(secretaria);
+
+        Evento atualizado = repository.save(eventoExistente);
+
+        return mapper.toResponse(atualizado);
     }
 
-    //Deletar um evento
     @Override
-    public void deletEvento(Long id){
+    public void deletEvento(Long id) {
         repository.deleteById(id);
     }
-
-
-
 }
