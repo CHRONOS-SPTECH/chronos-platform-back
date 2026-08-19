@@ -8,6 +8,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
+import chronos.tech.domain.model.classes.ParticipacaoEvento;
 
 @Mapper(componentModel = "spring")
 public interface EventoMapper {
@@ -26,6 +27,10 @@ public interface EventoMapper {
     @Mapping(target = "data_evento", source = "dataEvento")
     @Mapping(target = "hora_inicio_evento", source = "horaInicioEvento")
     @Mapping(target = "hora_fim_evento", source = "horaFimEventos")
+    @Mapping(
+            target = "participantes",
+            source = "participacaoEventoLong"
+    )
     EventoResponseDTO toResponse(Evento evento);
 
     @Mapping(target = "idEvento", ignore = true)
@@ -42,4 +47,19 @@ public interface EventoMapper {
             EventoRequestDTO dto,
             @MappingTarget Evento evento
     );
+
+    default EventoResponseDTO.ParticipanteDTO toParticipante(
+            ParticipacaoEvento participacao
+    ) {
+        if (participacao == null || participacao.getPessoa() == null) {
+            return null;
+        }
+
+        return new EventoResponseDTO.ParticipanteDTO(
+                participacao.getPessoa().getIdPessoa(),
+                participacao.getPessoa().getNome(),
+                participacao.getPessoa().getEmail(),
+                participacao.getCompareceu()
+        );
+    }
 }
