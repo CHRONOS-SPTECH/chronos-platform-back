@@ -37,6 +37,8 @@ public class Pessoa {
     private LocalDate dataMembro;
     @Column(name = "data_saida")
     private LocalDate dataSaida;
+    @Column(name = "biometria_facial", columnDefinition = "LONGTEXT")
+    private String biometriaFacial;
 
     @OneToMany(mappedBy = "pessoa")
     private List<MatriculaTurma> matriculaTurmas;

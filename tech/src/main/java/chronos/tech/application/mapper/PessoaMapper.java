@@ -22,6 +22,7 @@ public interface PessoaMapper {
     @Mapping(target = "dataIngresso", source = "data_ingresso")
     @Mapping(target = "dataMembro", source = "data_membro")
     @Mapping(target = "dataSaida", source = "data_saida")
+    @Mapping(target = "biometriaFacial", ignore = true)
     Pessoa toModel(PessoaRequestDTO dto);
 
     @Mapping(target = "id_pessoa", source = "idPessoa")
@@ -42,6 +43,7 @@ public interface PessoaMapper {
     @Mapping(target = "dataIngresso", source = "data_ingresso")
     @Mapping(target = "dataMembro", source = "data_membro")
     @Mapping(target = "dataSaida", source = "data_saida")
+    @Mapping(target = "biometriaFacial", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateFromDto(PessoaRequestDTO dto, @MappingTarget Pessoa pessoa);
 

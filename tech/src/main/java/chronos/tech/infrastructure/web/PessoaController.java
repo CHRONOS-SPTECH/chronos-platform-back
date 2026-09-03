@@ -1,5 +1,6 @@
 package chronos.tech.infrastructure.web;
 
+import chronos.tech.application.dto.request.PessoaRegistroRequestDTO;
 import chronos.tech.application.dto.request.PessoaRequestDTO;
 import chronos.tech.application.dto.response.PessoaDetalhadaResponseDTO;
 import chronos.tech.application.dto.response.PessoaResponseDTO;
@@ -117,6 +118,32 @@ public class PessoaController {
     public ResponseEntity<PessoaResponseDTO> savePessoa(
             @RequestBody @Validated PessoaRequestDTO pessoaRequestDto){
         PessoaResponseDTO pessoaResponseDto = service.createPessoa(pessoaRequestDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(pessoaResponseDto);
+    }
+
+    @Operation(
+            summary = "Registrar aluno com biometria e imagem de perfil",
+            description = "Cria um novo aluno com upload seguro de imagem de perfil e biometria facial criptografada",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Dados do aluno + arquivo de imagem + arquivo de biometria",
+                    required = true,
+                    content = @Content(mediaType = "multipart/form-data")
+            )
+    )
+    @ApiResponse(
+            responseCode = "201",
+            description = "Aluno registrado com sucesso",
+            content = @Content(schema = @Schema(implementation = PessoaResponseDTO.class))
+    )
+    @ApiResponse(
+            responseCode = "400",
+            description = "Dados inválidos ou arquivo não permitido",
+            content = @Content
+    )
+    @PostMapping("/registro")
+    public ResponseEntity<PessoaResponseDTO> registrarPessoaComBiometria(
+            @ModelAttribute PessoaRegistroRequestDTO pessoaRegistroRequestDTO){
+        PessoaResponseDTO pessoaResponseDto = service.createPessoaComBiometria(pessoaRegistroRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(pessoaResponseDto);
     }
 

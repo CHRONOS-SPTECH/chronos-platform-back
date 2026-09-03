@@ -26,20 +26,20 @@ public class DashboardService {
     private final AulaRepository aulaRepository;
 
     public DashboardResumoResponseDTO getResumo() {
-        Long total       = pessoaRepository.countTotal();
-        Long membros     = pessoaRepository.countByTipoVinculo("Membro");
+        Long total = pessoaRepository.countTotal();
+        Long membros = pessoaRepository.countByTipoVinculo("Membro");
         Long membro_forca = pessoaRepository.countByTipoVinculo("Membro Força Viva");
-        Long provac      = pessoaRepository.countByTipoVinculo("Provacionista");
-        Long externo     = pessoaRepository.countByTipoVinculo("Público Externo");
+        Long provac = pessoaRepository.countByTipoVinculo("Provacionista");
+        Long externo = pessoaRepository.countByTipoVinculo("Público Externo");
         Long instrutores = (long) aulaRepository.findInstrutoresAtivos().size();
         Long membrosAtivos = pessoaRepository.countMembrosAtivos();
-        Long percentual  = membros > 0 ? (membrosAtivos * 100) / membros : 0L;
+        Long percentual = membros > 0 ? (membrosAtivos * 100) / membros : 0L;
         Long emAndamento = turmaRepository.countByStatus(StatusTurma.EM_ANDAMENTO);
         Long naoIniciadas = turmaRepository.countByStatus(StatusTurma.NAO_INICIADA);
 
         return new DashboardResumoResponseDTO(
                 new DashboardResumoResponseDTO.ComunidadeDTO(total, membros + membro_forca, provac, externo),
-                new DashboardResumoResponseDTO.CapacidadeDTO(instrutores),
+                new DashboardResumoResponseDTO.CapacidadeDTO(membro_forca),
                 new DashboardResumoResponseDTO.EngajamentoDTO(membrosAtivos, percentual),
                 new DashboardResumoResponseDTO.ResumoTurmasDTO(emAndamento, naoIniciadas)
         );
@@ -127,7 +127,7 @@ public class DashboardService {
         faixas.put("35-44", new long[]{0, 0});
         faixas.put("45-54", new long[]{0, 0});
         faixas.put("55-64", new long[]{0, 0});
-        faixas.put("65+",   new long[]{0, 0});
+        faixas.put("65+", new long[]{0, 0});
 
         long somaIdades = 0;
         int count = 0;
@@ -144,7 +144,7 @@ public class DashboardService {
 
             boolean feminino = genero != null && genero.toLowerCase().contains("femin");
             if (feminino) faixas.get(faixa)[0]++;
-            else          faixas.get(faixa)[1]++;
+            else faixas.get(faixa)[1]++;
         }
 
         List<DashboardFaixaEtariaResponseDTO.FaixaDTO> lista = faixas.entrySet().stream()
@@ -171,7 +171,7 @@ public class DashboardService {
         if (idade >= 35 && idade <= 44) return "35-44";
         if (idade >= 45 && idade <= 54) return "45-54";
         if (idade >= 55 && idade <= 64) return "55-64";
-        if (idade >= 65)                return "65+";
+        if (idade >= 65) return "65+";
         return null;
     }
 }
