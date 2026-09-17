@@ -156,6 +156,12 @@
             <version>2.25.0</version>
         </dependency>
 
+        <!-- Spring Web (ensure multipart support classes are available) -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+        </dependency>
+
         <!-- Criptografia - Bouncy Castle -->
         <dependency>
             <groupId>org.bouncycastle</groupId>

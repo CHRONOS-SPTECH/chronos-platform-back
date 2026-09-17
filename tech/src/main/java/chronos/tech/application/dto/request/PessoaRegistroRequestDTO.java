@@ -1,6 +1,6 @@
 package chronos.tech.application.dto.request;
 
-import org.springframework.web.multipart.MultipartFile;
+import java.util.List;
 
 public class PessoaRegistroRequestDTO {
     private String nome;
@@ -14,29 +14,12 @@ public class PessoaRegistroRequestDTO {
     private String data_ingresso;
     private String data_membro;
     private String data_saida;
-    private MultipartFile imagemPerfil;
-    private MultipartFile biometriaFacial;
+
+    // Novos campos que recebem a imagem convertida e o vetor em JSON
+    private String imagemPerfilBase64;
+    private List<Double> vetorBiometrico;
 
     public PessoaRegistroRequestDTO() {}
-
-    public PessoaRegistroRequestDTO(String nome, String email, String telefone, String genero,
-                                     String cpf, Boolean bolsista, Integer tipo_vinculo_id,
-                                     String data_nascimento, String data_ingresso, String data_membro,
-                                     String data_saida, MultipartFile imagemPerfil, MultipartFile biometriaFacial) {
-        this.nome = nome;
-        this.email = email;
-        this.telefone = telefone;
-        this.genero = genero;
-        this.cpf = cpf;
-        this.bolsista = bolsista;
-        this.tipo_vinculo_id = tipo_vinculo_id;
-        this.data_nascimento = data_nascimento;
-        this.data_ingresso = data_ingresso;
-        this.data_membro = data_membro;
-        this.data_saida = data_saida;
-        this.imagemPerfil = imagemPerfil;
-        this.biometriaFacial = biometriaFacial;
-    }
 
     public String getNome() { return nome; }
     public void setNome(String nome) { this.nome = nome; }
@@ -71,9 +54,9 @@ public class PessoaRegistroRequestDTO {
     public String getData_saida() { return data_saida; }
     public void setData_saida(String data_saida) { this.data_saida = data_saida; }
 
-    public MultipartFile getImagemPerfil() { return imagemPerfil; }
-    public void setImagemPerfil(MultipartFile imagemPerfil) { this.imagemPerfil = imagemPerfil; }
+    public String getImagemPerfilBase64() { return imagemPerfilBase64; }
+    public void setImagemPerfilBase64(String imagemPerfilBase64) { this.imagemPerfilBase64 = imagemPerfilBase64; }
 
-    public MultipartFile getBiometriaFacial() { return biometriaFacial; }
-    public void setBiometriaFacial(MultipartFile biometriaFacial) { this.biometriaFacial = biometriaFacial; }
+    public List<Double> getVetorBiometrico() { return vetorBiometrico; }
+    public void setVetorBiometrico(List<Double> vetorBiometrico) { this.vetorBiometrico = vetorBiometrico; }
 }

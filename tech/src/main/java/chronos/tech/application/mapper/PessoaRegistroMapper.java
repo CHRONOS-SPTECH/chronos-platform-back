@@ -5,6 +5,7 @@ import chronos.tech.domain.model.classes.Pessoa;
 import chronos.tech.domain.model.classes.TipoVinculo;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -39,6 +40,7 @@ public interface PessoaRegistroMapper {
         return tipoVinculo;
     }
 
+    @Named("stringToLocalDate")
     default LocalDate stringToLocalDate(String date) {
         if (date == null || date.isEmpty()) {
             return null;

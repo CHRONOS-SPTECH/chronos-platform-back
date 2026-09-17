@@ -12,6 +12,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -121,14 +123,11 @@ public class PessoaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(pessoaResponseDto);
     }
 
+    private static final Logger logger = LoggerFactory.getLogger(PessoaController.class);
+
     @Operation(
-            summary = "Registrar aluno com biometria e imagem de perfil",
-            description = "Cria um novo aluno com upload seguro de imagem de perfil e biometria facial criptografada",
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "Dados do aluno + arquivo de imagem + arquivo de biometria",
-                    required = true,
-                    content = @Content(mediaType = "multipart/form-data")
-            )
+            summary = "Registrar aluno com biometria e imagem de perfil via JSON",
+            description = "Cria um novo aluno enviando imagem em Base64 e biometria facial em JSON puro"
     )
     @ApiResponse(
             responseCode = "201",
@@ -137,14 +136,19 @@ public class PessoaController {
     )
     @ApiResponse(
             responseCode = "400",
-            description = "Dados inválidos ou arquivo não permitido",
+            description = "Dados inválidos",
             content = @Content
     )
     @PostMapping("/registro")
     public ResponseEntity<PessoaResponseDTO> registrarPessoaComBiometria(
-            @ModelAttribute PessoaRegistroRequestDTO pessoaRegistroRequestDTO){
-        PessoaResponseDTO pessoaResponseDto = service.createPessoaComBiometria(pessoaRegistroRequestDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(pessoaResponseDto);
+            @RequestBody @Validated PessoaRegistroRequestDTO pessoaRegistroRequestDTO){
+        try {
+            PessoaResponseDTO pessoaResponseDto = service.createPessoaComBiometria(pessoaRegistroRequestDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body(pessoaResponseDto);
+        } catch (Exception e) {
+            logger.error("[Registro] falha ao processar registro de biometria", e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
     }
 
     @Operation(

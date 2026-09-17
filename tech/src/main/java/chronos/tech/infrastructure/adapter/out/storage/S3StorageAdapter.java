@@ -13,10 +13,14 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
 import java.util.UUID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Component
 @RequiredArgsConstructor
 public class S3StorageAdapter implements FileStoragePort {
+
+    private static final Logger logger = LoggerFactory.getLogger(S3StorageAdapter.class);
 
     private final S3Client s3Client;
 
@@ -26,14 +30,15 @@ public class S3StorageAdapter implements FileStoragePort {
     @Value("${aws.region}")
     private String region;
 
-    private static final long MAX_FILE_SIZE = 5 * 1024 * 1024;
+    private static final long MAX_FILE_SIZE = 10L * 1024L * 1024L; // 10 MB
     private static final String[] ALLOWED_IMAGE_TYPES = {"image/jpeg", "image/png"};
-    private static final String[] ALLOWED_BIOMETRIC_TYPES = {"image/jpeg", "image/png", "application/pdf"};
+    private static final String[] ALLOWED_BIOMETRIC_TYPES = {"image/jpeg", "image/png", "application/pdf", "application/json"};
 
     @Override
     public String uploadFile(MultipartFile file, String folder) {
         try {
             if (!validateFile(file)) {
+                logger.warn("[S3] arquivo inválido ou tipo não permitido: name={}, size={}, contentType={}", file.getOriginalFilename(), file.getSize(), file.getContentType());
                 throw new RuntimeException("Arquivo inválido ou tipo não permitido");
             }
 
@@ -48,11 +53,14 @@ public class S3StorageAdapter implements FileStoragePort {
 
             s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
 
-            return getFileUrl(key);
+            String url = getFileUrl(key);
+            return url;
 
         } catch (IOException e) {
+            logger.error("[S3] erro ao ler arquivo", e);
             throw new RuntimeException("Erro ao ler arquivo: " + e.getMessage(), e);
         } catch (Exception e) {
+            logger.error("[S3] erro ao fazer upload para S3", e);
             throw new RuntimeException("Erro ao fazer upload para S3: " + e.getMessage(), e);
         }
     }
@@ -69,6 +77,7 @@ public class S3StorageAdapter implements FileStoragePort {
             return s3Client.utilities().getUrl(getUrlRequest).toString();
 
         } catch (Exception e) {
+            logger.error("[S3] erro ao gerar URL do arquivo", e);
             throw new RuntimeException("Erro ao gerar URL do arquivo: " + e.getMessage(), e);
         }
     }
@@ -84,6 +93,7 @@ public class S3StorageAdapter implements FileStoragePort {
             s3Client.deleteObject(deleteObjectRequest);
 
         } catch (Exception e) {
+            logger.error("[S3] erro ao deletar arquivo do S3", e);
             throw new RuntimeException("Erro ao deletar arquivo do S3: " + e.getMessage(), e);
         }
     }
@@ -91,10 +101,12 @@ public class S3StorageAdapter implements FileStoragePort {
     @Override
     public boolean validateFile(MultipartFile file) {
         if (file == null || file.isEmpty()) {
+            logger.warn("[S3] arquivo vazio ou null");
             return false;
         }
 
         if (file.getSize() > MAX_FILE_SIZE) {
+            logger.warn("[S3] arquivo muito grande: size={} max={}", file.getSize(), MAX_FILE_SIZE);
             return false;
         }
 
@@ -106,6 +118,7 @@ public class S3StorageAdapter implements FileStoragePort {
             if (type.equals(mimeType)) return true;
         }
 
+        logger.warn("[S3] mimeType não permitido: {}", mimeType);
         return false;
     }
 
