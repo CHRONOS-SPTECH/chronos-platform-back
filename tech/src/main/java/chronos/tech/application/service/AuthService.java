@@ -66,26 +66,20 @@ public class AuthService implements AuthUseCase {
         List<PerfilAcessoResponseDTO> perfisResponse = new ArrayList<>();
 
         // 3. Persistência da relação N:N (UsuarioPerfil)
-        if (dto.perfis_id() != null && !dto.perfis_id().isEmpty()) {
-            for (Long perfilId : dto.perfis_id()) {
-                PerfilAcesso perfil = perfilAcessoRepository.findById(perfilId)
-                        .orElseThrow(() -> new RuntimeException("Perfil de acesso não encontrado: " + perfilId));
+        PerfilAcesso perfil = perfilAcessoRepository.findById(1L)
+                .orElseThrow(() ->
+                        new RuntimeException("Perfil padrão não encontrado"));
 
-                UsuarioPerfilId idComposta = new UsuarioPerfilId();
-                idComposta.setIdUsuario(salvo.getIdUsuario());
-                idComposta.setIdPerfil(perfil.getIdPerfil().intValue());
+        UsuarioPerfilId idComposta = new UsuarioPerfilId();
+        idComposta.setIdUsuario(salvo.getIdUsuario());
+        idComposta.setIdPerfil(perfil.getIdPerfil().intValue());
 
-                UsuarioPerfil vinculo = new UsuarioPerfil();
-                vinculo.setId(idComposta);
-                vinculo.setUsuario(salvo);
-                vinculo.setPerfil(perfil);
+        UsuarioPerfil vinculo = new UsuarioPerfil();
+        vinculo.setId(idComposta);
+        vinculo.setUsuario(salvo);
+        vinculo.setPerfil(perfil);
 
-                usuarioPerfilRepository.save(vinculo);
-
-                // Alimenta a lista de resposta
-                perfisResponse.add(perfilAcessoMapper.toResponse(perfil));
-            }
-        }
+        usuarioPerfilRepository.save(vinculo);
 
         String token = jwtService.generateToken(salvo.getEmailLogin());
         String refreshToken = jwtService.generateRefreshToken(salvo.getEmailLogin());
