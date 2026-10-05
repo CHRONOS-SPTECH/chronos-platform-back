@@ -1,5 +1,6 @@
 package chronos.tech.application.port.in;
 
+import chronos.tech.application.dto.request.PessoaRegistroRequestDTO;
 import chronos.tech.application.dto.request.PessoaRequestDTO;
 import chronos.tech.application.dto.response.PessoaDetalhadaResponseDTO;
 import chronos.tech.application.dto.response.PessoaResponseDTO;
@@ -20,4 +21,7 @@ public interface PessoaUseCase {
     PessoaResponseDTO updatePessoa(Long id, PessoaRequestDTO pessoaAtualizado);
 
     void deletePessoa(Long id);
+
+    PessoaResponseDTO createPessoaComBiometria(PessoaRegistroRequestDTO requestDto);
 }
+
