@@ -11,8 +11,6 @@ import java.util.List;
 
 public record AuthRegisterRequestDTO(
         @Valid @NotNull PessoaRequestDTO pessoa,
-        @NotEmpty
-        List<Long> perfis_id,
         @NotBlank @Email @Size(max = 150) String email_login,
         @NotBlank @Size(min = 6, max = 255) String senha
 ) {

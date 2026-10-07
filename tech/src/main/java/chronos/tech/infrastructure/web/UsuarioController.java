@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,6 +41,7 @@ public class UsuarioController {
             description = "Dados inválidos",
             content = @Content
     )
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<UsuarioResponseDTO> cadastrar(
             @RequestBody @Validated UsuarioRequestDTO usuario){
@@ -95,6 +97,7 @@ public class UsuarioController {
             description = "Usuário não encontrado",
             content = @Content
     )
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<UsuarioResponseDTO> atualizar(
             @PathVariable @Validated Long id,
@@ -116,6 +119,7 @@ public class UsuarioController {
             description = "Usuário não encontrado",
             content = @Content
     )
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(
             @PathVariable @Validated Long id) {
