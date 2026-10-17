@@ -258,7 +258,11 @@ public class AulaService implements AulaUseCase {
             } else {
                 try {
                     LocalDate localData = LocalDate.parse(mov.dataAula());
-                    LocalTime localHoraInicio = LocalTime.parse(mov.horaInicio());
+                    String horaStr = mov.horaInicio().trim();
+                    if (horaStr.matches("^\\d:.*")) {
+                        horaStr = "0" + horaStr;
+                    }
+                    LocalTime localHoraInicio = LocalTime.parse(horaStr);
                     LocalTime localHoraFim = localHoraInicio.plusHours(2);
 
                     Date dataBanco = Date.valueOf(localData);
