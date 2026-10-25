@@ -7,9 +7,11 @@ import chronos.tech.application.port.in.EventoUseCase;
 import chronos.tech.domain.model.classes.CategoriaAtividade;
 import chronos.tech.domain.model.classes.Evento;
 import chronos.tech.domain.model.classes.Secretaria;
+import chronos.tech.domain.model.classes.Turma;
 import chronos.tech.domain.port.CategoriaAtividadeRepository;
 import chronos.tech.domain.port.EventoRepository;
 import chronos.tech.domain.port.SecretariaRepository;
+import chronos.tech.domain.port.TurmaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +26,7 @@ public class EventoService implements EventoUseCase {
     private final EventoRepository repository;
     private final CategoriaAtividadeRepository categoriaRepository;
     private final SecretariaRepository secretariaRepository;
+    private final TurmaRepository turmaRepository;
     private final EventoMapper mapper;
 
     @Override
@@ -69,6 +72,8 @@ public class EventoService implements EventoUseCase {
 
         evento.setIdCategoria(categoria);
         evento.setIdSecretaria(secretaria);
+        evento.setTurmas(buscarTurmas(dto.id_turmas()));
+        evento.setIncluirPublicoExterno(dto.incluir_publico_externo());
 
         Evento salvo = repository.save(evento);
 
@@ -106,6 +111,8 @@ public class EventoService implements EventoUseCase {
 
         eventoExistente.setIdCategoria(categoria);
         eventoExistente.setIdSecretaria(secretaria);
+        eventoExistente.setTurmas(buscarTurmas(dto.id_turmas()));
+        eventoExistente.setIncluirPublicoExterno(dto.incluir_publico_externo());
 
         Evento atualizado = repository.save(eventoExistente);
 
@@ -115,5 +122,13 @@ public class EventoService implements EventoUseCase {
     @Override
     public void deletEvento(Long id) {
         repository.deleteById(id);
+    }
+
+    private java.util.Set<Turma> buscarTurmas(List<Long> ids) {
+        return ids.stream()
+                .distinct()
+                .map(id -> turmaRepository.findById(id)
+                        .orElseThrow(() -> new RuntimeException("Turma não encontrada com o ID: " + id)))
+                .collect(java.util.stream.Collectors.toSet());
     }
 }

@@ -9,6 +9,8 @@ import lombok.Setter;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
 
 @Entity(name = "evento")
 @Table(name = "evento")
@@ -23,6 +25,12 @@ public class Evento {
         @Column(name = "id_evento")
         private Integer idEvento;
         private String titulo;
+        @Column(name = "descricao", columnDefinition = "TEXT")
+        private String descricao;
+        @Column(name = "local_evento")
+        private String localEvento;
+        @Column(name = "incluir_publico_externo", nullable = false)
+        private Boolean incluirPublicoExterno = false;
         @Column(name = "data_evento")
         private LocalDate dataEvento;
 
@@ -41,5 +49,13 @@ public class Evento {
 
         @OneToMany(mappedBy = "evento")
         private List<ParticipacaoEvento> participacaoEventoLong;
+
+        @ManyToMany
+        @JoinTable(
+                name = "evento_turma",
+                joinColumns = @JoinColumn(name = "id_evento"),
+                inverseJoinColumns = @JoinColumn(name = "id_turma")
+        )
+        private Set<Turma> turmas = new HashSet<>();
 
 }
