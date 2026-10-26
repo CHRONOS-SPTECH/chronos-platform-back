@@ -1,6 +1,7 @@
 package chronos.tech.infrastructure.adapter.out.persistence;
 
 import chronos.tech.domain.model.classes.MatriculaTurma;
+import chronos.tech.domain.model.classes.Pessoa;
 import chronos.tech.domain.port.MatriculaTurmaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -43,5 +44,10 @@ public class MatriculaTurmaRepositoryAdapter implements MatriculaTurmaRepository
     @Override
     public Page<MatriculaTurma> findByTurmaIdTurma(Integer turmaId, Pageable pageable) {
         return repository.findByTurmaIdTurma(turmaId, pageable);
+    }
+
+    @Override
+    public Page<Pessoa> findAlunos(Pageable pageable) {
+        return repository.findAlunos(pageable);
     }
 }

@@ -1,6 +1,7 @@
 package chronos.tech.domain.port;
 
 import chronos.tech.domain.model.classes.MatriculaTurma;
+import chronos.tech.domain.model.classes.Pessoa;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,4 +15,5 @@ public interface MatriculaTurmaRepository {
     void deleteById(Long id);
     List<MatriculaTurma> findByTurmaIdTurma(Integer turmaId);
     Page<MatriculaTurma> findByTurmaIdTurma(Integer turmaId, Pageable pageable);
+    Page<Pessoa> findAlunos(Pageable pageable);
 }

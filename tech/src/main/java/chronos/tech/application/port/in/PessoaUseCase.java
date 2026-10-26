@@ -6,6 +6,8 @@ import chronos.tech.application.dto.response.PessoaDetalhadaResponseDTO;
 import chronos.tech.application.dto.response.PessoaResponseDTO;
 
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface PessoaUseCase {
     List<PessoaDetalhadaResponseDTO> getAllPersonsDetails ();
@@ -17,6 +19,7 @@ public interface PessoaUseCase {
     PessoaResponseDTO pegarPorId(Long id);
 
     List<PessoaResponseDTO> getAllPersons();
+    Page<PessoaResponseDTO> getAllAlunos(Pageable pageable);
 
     PessoaResponseDTO updatePessoa(Long id, PessoaRequestDTO pessoaAtualizado);
 

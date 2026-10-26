@@ -12,9 +12,12 @@ import chronos.tech.application.port.out.CryptoPort;
 import chronos.tech.application.port.out.FileStoragePort;
 import chronos.tech.domain.model.classes.Pessoa;
 import chronos.tech.domain.port.PessoaRepository;
+import chronos.tech.domain.port.MatriculaTurmaRepository;
 import chronos.tech.infrastructure.utils.CustomMultipartFile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -24,6 +27,7 @@ import java.util.List;
 public class PessoaService implements PessoaUseCase {
 
     private final PessoaRepository repository;
+    private final MatriculaTurmaRepository matriculaTurmaRepository;
     private final PessoaMapper mapper;
     private final PessoaRegistroMapper registroMapper;
     private final CryptoPort cryptoPort;
@@ -110,6 +114,11 @@ public class PessoaService implements PessoaUseCase {
                 .stream()
                 .map(mapper::toResponse)
                 .toList();
+    }
+
+    @Override
+    public Page<PessoaResponseDTO> getAllAlunos(Pageable pageable) {
+        return matriculaTurmaRepository.findAlunos(pageable).map(mapper::toResponse);
     }
 
     @Override
