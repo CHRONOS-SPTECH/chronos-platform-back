@@ -21,6 +21,8 @@ import chronos.tech.domain.port.MatriculaTurmaRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Date;
@@ -51,6 +53,11 @@ public class AulaService implements AulaUseCase {
 
     public List<AulaResponseDTO> getAllAulas() {
         return repository.findAll().stream().map(mapper::toResponse).toList();
+    }
+
+    @Override
+    public Page<AulaResponseDTO> getAllAulas(Pageable pageable) {
+        return repository.findAll(pageable).map(mapper::toResponse);
     }
 
     public AulaResponseDTO getAula(Integer id) {
@@ -95,6 +102,17 @@ public class AulaService implements AulaUseCase {
                 .toList();
     }
 
+    @Override
+    public Page<AulaComTemaEMateriaResponseDTO> getAulasDoDia(Date data, Integer instrutorId, Pageable pageable) {
+        return repository.findByDataAulaAndInstrutorIdPessoa(data, instrutorId, pageable)
+                .map(a -> new AulaComTemaEMateriaResponseDTO(
+                        mapper.toResponse(a),
+                        temaMapper.toResponse(a.getTema()),
+                        materiaMapper.toResponse(a.getTema().getIdMateria()),
+                        chamadaAulaRepository.existsByAula(a)
+                ));
+    }
+
     public AulaComTemaEMateriaResponseDTO getAulaComTemaEMateriaPorId(Integer id) {
         Aula aula = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Aula não encontrada com o ID: " + id));
@@ -115,10 +133,20 @@ public class AulaService implements AulaUseCase {
                 .toList();
     }
 
+    @Override
+    public Page<AulaComTemaEMateriaComInstrutorResponseDTO> getAllAulasDetails(Pageable pageable) {
+        return repository.findAll(pageable).map(this::converterParaDtoCompleto);
+    }
+
     public List<AulaComTemaEMateriaComInstrutorResponseDTO> getAulasPorTurma(Integer idTurma) {
         return repository.findByTurmaIdTurma(idTurma).stream()
                 .map(this::converterParaDtoCompleto)
                 .toList();
+    }
+
+    @Override
+    public Page<AulaComTemaEMateriaComInstrutorResponseDTO> getAulasPorTurma(Integer idTurma, Pageable pageable) {
+        return repository.findByTurmaIdTurma(idTurma, pageable).map(this::converterParaDtoCompleto);
     }
 
     @Override

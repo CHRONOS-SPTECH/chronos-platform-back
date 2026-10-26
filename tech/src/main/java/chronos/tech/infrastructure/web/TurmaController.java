@@ -17,6 +17,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import chronos.tech.application.dto.response.TurmaAlunoPaginaResponseDTO;
 
 import java.util.List;
 
@@ -160,8 +164,31 @@ public class TurmaController {
             content = @Content
     )
     @GetMapping("/{id}/alunos")
-    public ResponseEntity<List<AlunoComPresencaResponseDTO>> alunosDaTurma(@PathVariable Integer id) {
-        return ResponseEntity.ok(service.getAlunosDaTurmaComPresenca(id));
+    public ResponseEntity<Page<AlunoComPresencaResponseDTO>> alunosDaTurma(
+            @PathVariable Integer id,
+            @PageableDefault(size = 20, sort = "pessoa.nome") Pageable pageable) {
+        return ResponseEntity.ok(service.getAlunosDaTurmaComPresenca(id, pageable));
+    }
+
+    @Operation(
+            summary = "Buscar alunos por turma",
+            description = "Retorna alunos com base no ID da Turma"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Alunos da turma encontrado com sucesso",
+            content = @Content(schema = @Schema(implementation = TurmaResponseDTO.class))
+    )
+    @ApiResponse(
+            responseCode = "404",
+            description = "Alunos da turma não encontrada",
+            content = @Content
+    )
+    @GetMapping("/{id}/alunosPorTurma")
+    public ResponseEntity<TurmaAlunoPaginaResponseDTO> alunosPorTurma(
+            @PathVariable Long id,
+            @PageableDefault(size = 20, sort = "pessoa.nome") Pageable pageable) {
+        return ResponseEntity.ok(service.getAlunosByTurma(id, pageable));
     }
 
 }

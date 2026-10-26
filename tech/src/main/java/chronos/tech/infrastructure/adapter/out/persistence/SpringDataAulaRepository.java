@@ -3,6 +3,8 @@ package chronos.tech.infrastructure.adapter.out.persistence;
 import chronos.tech.domain.model.classes.Aula;
 import chronos.tech.domain.model.classes.Pessoa;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
@@ -16,7 +18,9 @@ public interface SpringDataAulaRepository extends JpaRepository<Aula, Integer> {
     List<Pessoa> findInstrutoresAtivos();
 
     List<Aula> findByDataAulaAndInstrutorIdPessoa(Date data, Integer instrutorId);
+    Page<Aula> findByDataAulaAndInstrutorIdPessoa(Date data, Integer instrutorId, Pageable pageable);
     List<Aula> findByTurmaIdTurma(Integer idTurma);
+    Page<Aula> findByTurmaIdTurma(Integer idTurma, Pageable pageable);
     List<Aula> findByInstrutorIdPessoaAndDataAula(Integer idInstrutor, Date dataAula);
     List<Aula> findByTurmaIdTurmaAndDataAula(Integer idTurma, Date dataAula);
     List<Aula> findByInstrutorIdPessoaAndDataAulaAndIdAulaNot(Integer idInstrutor, Date dataAula, Integer idAula);

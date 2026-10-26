@@ -4,6 +4,8 @@ import chronos.tech.domain.model.classes.MatriculaTurma;
 import chronos.tech.domain.port.MatriculaTurmaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -36,5 +38,10 @@ public class MatriculaTurmaRepositoryAdapter implements MatriculaTurmaRepository
     @Override
     public List<MatriculaTurma> findByTurmaIdTurma(Integer turmaId) {
         return repository.findByTurmaIdTurma(turmaId);
+    }
+
+    @Override
+    public Page<MatriculaTurma> findByTurmaIdTurma(Integer turmaId, Pageable pageable) {
+        return repository.findByTurmaIdTurma(turmaId, pageable);
     }
 }

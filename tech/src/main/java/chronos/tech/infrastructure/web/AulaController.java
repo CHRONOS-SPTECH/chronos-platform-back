@@ -21,6 +21,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -45,8 +48,9 @@ public class AulaController {
             content = @Content(schema = @Schema(implementation = AulaResponseDTO.class))
     )
     @GetMapping
-    public ResponseEntity<List<AulaResponseDTO>> all() {
-        return ResponseEntity.ok(service.getAllAulas());
+    public ResponseEntity<Page<AulaResponseDTO>> all(
+            @PageableDefault(size = 20, sort = "idAula") Pageable pageable) {
+        return ResponseEntity.ok(service.getAllAulas(pageable));
     }
 
 
@@ -147,15 +151,16 @@ public class AulaController {
             content = @Content
     )
     @GetMapping("/dia")
-    public ResponseEntity<List<AulaComTemaEMateriaResponseDTO>> aulasDoDia(
+    public ResponseEntity<Page<AulaComTemaEMateriaResponseDTO>> aulasDoDia(
             @RequestParam
             @Validated
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data,
-            @RequestParam @Validated Integer instrutorId) {
+            @RequestParam @Validated Integer instrutorId,
+            @PageableDefault(size = 20, sort = "idAula") Pageable pageable) {
 
         Date dataSql = Date.valueOf(data);
 
-        return ResponseEntity.ok(service.getAulasDoDia(dataSql, instrutorId));
+        return ResponseEntity.ok(service.getAulasDoDia(dataSql, instrutorId, pageable));
     }
 
     @Operation(
@@ -173,8 +178,9 @@ public class AulaController {
             content = @Content
     )
     @GetMapping("/detalhadas")
-    public ResponseEntity<List<AulaComTemaEMateriaComInstrutorResponseDTO>> getAllAulasDetails() {
-        return ResponseEntity.ok(service.getAllAulasDetails());
+    public ResponseEntity<Page<AulaComTemaEMateriaComInstrutorResponseDTO>> getAllAulasDetails(
+            @PageableDefault(size = 20, sort = "idAula") Pageable pageable) {
+        return ResponseEntity.ok(service.getAllAulasDetails(pageable));
     }
 
     @Operation(
@@ -235,8 +241,10 @@ public class AulaController {
             content = @Content
     )
     @GetMapping("turma/{id}")
-    public ResponseEntity<List<AulaComTemaEMateriaComInstrutorResponseDTO>> getAulasPorTurma(@PathVariable Integer id) {
-        return ResponseEntity.ok(service.getAulasPorTurma(id));
+    public ResponseEntity<Page<AulaComTemaEMateriaComInstrutorResponseDTO>> getAulasPorTurma(
+            @PathVariable Integer id,
+            @PageableDefault(size = 20, sort = "idAula") Pageable pageable) {
+        return ResponseEntity.ok(service.getAulasPorTurma(id, pageable));
     }
 
     @Operation(
