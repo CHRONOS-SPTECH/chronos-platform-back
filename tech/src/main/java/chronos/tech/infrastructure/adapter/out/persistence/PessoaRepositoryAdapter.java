@@ -1,6 +1,7 @@
 package chronos.tech.infrastructure.adapter.out.persistence;
 
 import chronos.tech.domain.model.classes.Pessoa;
+import chronos.tech.domain.model.classes.EventoDestinatario;
 import chronos.tech.domain.port.PessoaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -68,6 +69,11 @@ public class PessoaRepositoryAdapter implements PessoaRepository {
     @Override
     public Optional<Pessoa> findByNome(String nome) {
         return repository.findByNome(nome);
+    }
+
+    @Override
+    public List<EventoDestinatario> findPublicoExternoAtivoSemMatricula() {
+        return repository.findPublicoExternoAtivoSemMatricula("Público Externo");
     }
 
 

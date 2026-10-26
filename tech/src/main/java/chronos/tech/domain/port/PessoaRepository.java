@@ -1,6 +1,7 @@
 package chronos.tech.domain.port;
 
 import chronos.tech.domain.model.classes.Pessoa;
+import chronos.tech.domain.model.classes.EventoDestinatario;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -27,4 +28,5 @@ public interface PessoaRepository {
 
     List<Object[]> findDatasNascimentoEGenero();
     Optional<Pessoa> findByNome(String nome);
+    List<EventoDestinatario> findPublicoExternoAtivoSemMatricula();
 }
