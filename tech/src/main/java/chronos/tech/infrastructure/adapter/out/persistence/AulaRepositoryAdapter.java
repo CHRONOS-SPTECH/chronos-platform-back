@@ -5,6 +5,8 @@ import chronos.tech.domain.model.classes.Pessoa;
 import chronos.tech.domain.port.AulaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.sql.Date;
 import java.util.List;
@@ -16,6 +18,7 @@ public class AulaRepositoryAdapter implements AulaRepository {
     private final SpringDataAulaRepository repository;
 
     public List<Aula> findAll() { return repository.findAll(); }
+    public Page<Aula> findAll(Pageable pageable) { return repository.findAll(pageable); }
     public Optional<Aula> findById(Integer id) { return repository.findById(id); }
     public Aula save(Aula aula) { return repository.save(aula); }
     public void deleteById(Integer id) { repository.deleteById(id); }
@@ -31,12 +34,22 @@ public class AulaRepositoryAdapter implements AulaRepository {
     }
 
     @Override
+    public Page<Aula> findByDataAulaAndInstrutorIdPessoa(Date data, Integer instrutorId, Pageable pageable) {
+        return repository.findByDataAulaAndInstrutorIdPessoa(data, instrutorId, pageable);
+    }
+
+    @Override
     public List<Aula> findByInstrutorIdPessoaAndDataAula(Integer idInstrutor, Date dataAula) {
         return repository.findByInstrutorIdPessoaAndDataAula(idInstrutor, dataAula);
     }
 
     public List<Aula> findByTurmaIdTurma(Integer idTurma){
         return repository.findByTurmaIdTurma(idTurma);
+    }
+
+    @Override
+    public Page<Aula> findByTurmaIdTurma(Integer idTurma, Pageable pageable) {
+        return repository.findByTurmaIdTurma(idTurma, pageable);
     }
 
     @Override
