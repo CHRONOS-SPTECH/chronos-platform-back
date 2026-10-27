@@ -2,6 +2,8 @@ package chronos.tech.infrastructure.adapter.out.persistence;
 
 import chronos.tech.domain.model.classes.MatriculaTurma;
 import chronos.tech.domain.model.classes.Pessoa;
+import chronos.tech.domain.model.classes.EventoDestinatario;
+import chronos.tech.domain.model.enums.StatusTurma;
 import chronos.tech.domain.port.MatriculaTurmaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -10,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
+import java.time.LocalDate;
 
 @Component
 @RequiredArgsConstructor
@@ -49,5 +52,11 @@ public class MatriculaTurmaRepositoryAdapter implements MatriculaTurmaRepository
     @Override
     public Page<Pessoa> findAlunos(Pageable pageable) {
         return repository.findAlunos(pageable);
+    }
+
+    @Override
+    public List<EventoDestinatario> findDestinatariosAtivosEmTurmasIniciadas(List<Integer> turmaIds, LocalDate hoje) {
+        if (turmaIds == null || turmaIds.isEmpty()) return List.of();
+        return repository.findDestinatariosAtivosEmTurmasIniciadas(turmaIds, StatusTurma.EM_ANDAMENTO, hoje);
     }
 }

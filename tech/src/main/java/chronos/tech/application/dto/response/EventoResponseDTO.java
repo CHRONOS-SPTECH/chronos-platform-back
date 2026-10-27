@@ -12,6 +12,10 @@ public record EventoResponseDTO(
         LocalTime hora_fim_evento,
         Integer id_categoria,
         Integer id_secretaria,
+        String descricao,
+        String local_evento,
+        List<Integer> id_turmas,
+        Boolean incluir_publico_externo,
         List<ParticipanteDTO> participantes
 ) {
     public record ParticipanteDTO(
