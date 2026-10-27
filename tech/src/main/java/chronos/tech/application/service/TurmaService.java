@@ -1,25 +1,24 @@
 package chronos.tech.application.service;
 
 import chronos.tech.application.dto.request.TurmaRequestDTO;
+import chronos.tech.application.dto.response.AlunoComPresencaResponseDTO;
+import chronos.tech.application.dto.response.TurmaAlunoPaginaResponseDTO;
 import chronos.tech.application.dto.response.TurmaAlunoResponseDTO;
 import chronos.tech.application.dto.response.TurmaDeletadaResponseDTO;
 import chronos.tech.application.dto.response.TurmaResponseDTO;
 import chronos.tech.application.mapper.TurmaMapper;
 import chronos.tech.application.port.in.TurmaUseCase;
+import chronos.tech.domain.model.classes.ChamadaAula;
+import chronos.tech.domain.model.classes.MatriculaTurma;
 import chronos.tech.domain.model.classes.Pessoa;
 import chronos.tech.domain.model.classes.Turma;
 import chronos.tech.domain.model.enums.StatusTurma;
-import chronos.tech.application.dto.response.AlunoComPresencaResponseDTO;
-import chronos.tech.application.dto.response.TurmaResponseDTO;
-import chronos.tech.application.mapper.TurmaMapper;
-import chronos.tech.application.port.in.TurmaUseCase;
-import chronos.tech.domain.model.classes.ChamadaAula;
-import chronos.tech.domain.model.classes.MatriculaTurma;
-import chronos.tech.domain.model.classes.Turma;
 import chronos.tech.domain.port.ChamadaAulaRepository;
 import chronos.tech.domain.port.MatriculaTurmaRepository;
 import chronos.tech.domain.port.TurmaRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -129,6 +128,23 @@ public class TurmaService implements TurmaUseCase {
         );
     }
 
+    @Override
+    public TurmaAlunoPaginaResponseDTO getAlunosByTurma(Long id, Pageable pageable) {
+        Turma turma = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Turma não encontrada com o ID: " + id));
+        Page<MatriculaTurma> matriculas = matriculaTurmaRepository.findByTurmaIdTurma(
+                turma.getIdTurma(), pageable);
+        List<TurmaAlunoResponseDTO.AlunoResumoDTO> alunos = matriculas.map(matricula -> {
+            Pessoa pessoa = matricula.getPessoa();
+            return new TurmaAlunoResponseDTO.AlunoResumoDTO(
+                    pessoa.getIdPessoa().longValue(), pessoa.getNome(), pessoa.getEmail(),
+                    pessoa.getDataSaida() == null ? "Ativo" : "Inativo");
+        }).getContent();
+        return new TurmaAlunoPaginaResponseDTO(
+                turma.getIdTurma().longValue(), turma.getNomeTurma(), matriculas.getTotalElements(),
+                matriculas.getNumber(), matriculas.getSize(), matriculas.getTotalPages(), alunos);
+    }
+
     //Listar todos os alunos de uma turma com presença
     @Override
     public List<AlunoComPresencaResponseDTO> getAlunosDaTurmaComPresenca(Integer turmaId) {
@@ -159,6 +175,25 @@ public class TurmaService implements TurmaUseCase {
                     );
                 })
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<AlunoComPresencaResponseDTO> getAlunosDaTurmaComPresenca(Integer turmaId, Pageable pageable) {
+        return matriculaTurmaRepository.findByTurmaIdTurma(turmaId, pageable).map(matricula -> {
+            Integer pessoaId = matricula.getPessoa().getIdPessoa();
+            List<ChamadaAula> chamadasAluno = chamadaAulaRepository
+                    .findByPessoaIdPessoaAndAulaTurmaIdTurma(pessoaId, turmaId);
+            double percentualPresenca = 0.0;
+            if (!chamadasAluno.isEmpty()) {
+                long compareceuCount = chamadasAluno.stream()
+                        .filter(chamada -> Boolean.TRUE.equals(chamada.getCompareceu()))
+                        .count();
+                percentualPresenca = compareceuCount * 100.0 / chamadasAluno.size();
+            }
+            Pessoa pessoa = matricula.getPessoa();
+            return new AlunoComPresencaResponseDTO(pessoaId, pessoa.getNome(), pessoa.getCpf(),
+                    pessoa.getGenero(), pessoa.getEmail(), percentualPresenca);
+        });
     }
 
 }

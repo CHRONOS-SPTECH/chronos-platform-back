@@ -7,6 +7,9 @@ import chronos.tech.application.dto.response.AlunoComPresencaResponseDTO;
 import chronos.tech.application.dto.response.TurmaResponseDTO;
 
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import chronos.tech.application.dto.response.TurmaAlunoPaginaResponseDTO;
 
 public interface TurmaUseCase {
     List<TurmaResponseDTO> getAllTurmas();
@@ -22,6 +25,8 @@ public interface TurmaUseCase {
     TurmaDeletadaResponseDTO encerrarTurma(Long id);
 
     TurmaAlunoResponseDTO getAlunosByTurma(Long id);
+    TurmaAlunoPaginaResponseDTO getAlunosByTurma(Long id, Pageable pageable);
 
     List<AlunoComPresencaResponseDTO> getAlunosDaTurmaComPresenca(Integer turmaId);
+    Page<AlunoComPresencaResponseDTO> getAlunosDaTurmaComPresenca(Integer turmaId, Pageable pageable);
 }
