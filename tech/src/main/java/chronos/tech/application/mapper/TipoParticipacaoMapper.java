@@ -1,7 +1,7 @@
 package chronos.tech.application.mapper;
 
-import chronos.tech.application.dto.request.TipoParticipacaoRequestDTO;
-import chronos.tech.application.dto.response.TipoParticipacaoResponseDTO;
+import chronos.tech.application.dto.cadastro.TipoParticipacaoRequestDTO;
+import chronos.tech.application.dto.cadastro.TipoParticipacaoResponseDTO;
 import chronos.tech.domain.model.classes.TipoParticipacao;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;

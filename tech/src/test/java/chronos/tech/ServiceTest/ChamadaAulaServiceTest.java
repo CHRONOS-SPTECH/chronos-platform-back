@@ -1,9 +1,9 @@
 package chronos.tech.ServiceTest;
 
-import chronos.tech.application.dto.request.ChamadaAlunoRequestDTO;
-import chronos.tech.application.dto.request.ChamadaAulaRequestDTO;
-import chronos.tech.application.dto.request.ListaChamadaAulaRequestDTO;
-import chronos.tech.application.dto.response.ChamadaAulaResponseDTO;
+import chronos.tech.application.dto.chamada.ChamadaAlunoRequestDTO;
+import chronos.tech.application.dto.chamada.ChamadaAulaRequestDTO;
+import chronos.tech.application.dto.chamada.ListaChamadaAulaRequestDTO;
+import chronos.tech.application.dto.chamada.ChamadaAulaResponseDTO;
 import chronos.tech.application.mapper.ChamadaAulaMapper;
 import chronos.tech.application.service.ChamadaAulaService;
 import chronos.tech.domain.model.classes.ChamadaAula;

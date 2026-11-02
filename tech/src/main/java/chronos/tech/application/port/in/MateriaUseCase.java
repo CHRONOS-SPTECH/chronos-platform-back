@@ -1,7 +1,7 @@
 package chronos.tech.application.port.in;
 
-import chronos.tech.application.dto.request.MateriaRequestDTO;
-import chronos.tech.application.dto.response.MateriaResponseDTO;
+import chronos.tech.application.dto.cadastro.MateriaRequestDTO;
+import chronos.tech.application.dto.cadastro.MateriaResponseDTO;
 
 import java.util.List;
 

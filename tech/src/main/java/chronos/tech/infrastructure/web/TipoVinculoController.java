@@ -1,7 +1,7 @@
 package chronos.tech.infrastructure.web;
 
-import chronos.tech.application.dto.request.TipoVinculoRequestDTO;
-import chronos.tech.application.dto.response.TipoVinculoResponseDTO;
+import chronos.tech.application.dto.cadastro.TipoVinculoRequestDTO;
+import chronos.tech.application.dto.cadastro.TipoVinculoResponseDTO;
 import chronos.tech.application.port.in.TipoVinculoUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;

@@ -1,7 +1,7 @@
 package chronos.tech.application.mapper;
 
-import chronos.tech.application.dto.request.TurmaRequestDTO;
-import chronos.tech.application.dto.response.TurmaResponseDTO;
+import chronos.tech.application.dto.turma.TurmaRequestDTO;
+import chronos.tech.application.dto.turma.TurmaResponseDTO;
 import chronos.tech.domain.model.classes.Turma;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;

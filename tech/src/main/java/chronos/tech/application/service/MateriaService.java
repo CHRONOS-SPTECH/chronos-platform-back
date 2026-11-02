@@ -1,7 +1,7 @@
 package chronos.tech.application.service;
 
-import chronos.tech.application.dto.request.MateriaRequestDTO;
-import chronos.tech.application.dto.response.MateriaResponseDTO;
+import chronos.tech.application.dto.cadastro.MateriaRequestDTO;
+import chronos.tech.application.dto.cadastro.MateriaResponseDTO;
 import chronos.tech.application.mapper.MateriaMapper;
 import chronos.tech.application.port.in.MateriaUseCase;
 import chronos.tech.domain.model.classes.Materia;

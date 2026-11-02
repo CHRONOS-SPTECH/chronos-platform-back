@@ -1,9 +1,18 @@
 package chronos.tech.application.service;
 
-import chronos.tech.application.dto.request.AulaRequestDTO;
-import chronos.tech.application.dto.request.LinhaPlanilhaDTO;
-import chronos.tech.application.dto.request.MovimentacaoAulaDTO;
-import chronos.tech.application.dto.response.*;
+import chronos.tech.application.dto.aula.AulaComTemaEMateriaComInstrutorResponseDTO;
+import chronos.tech.application.dto.aula.AulaComTemaEMateriaResponseDTO;
+import chronos.tech.application.dto.aula.AulaResponseDTO;
+import chronos.tech.application.dto.cadastro.MateriaResponseDTO;
+import chronos.tech.application.dto.cadastro.TemaAulaResponseDTO;
+import chronos.tech.application.dto.pessoa.PessoaResumidoResponseDTO;
+import chronos.tech.application.dto.turma.TurmaResponseDTO;
+import chronos.tech.application.dto.importacao.ItemRelatorioImportacaoResponseDTO;
+import chronos.tech.application.dto.importacao.RelatorioImportacaoResponseDTO;
+
+import chronos.tech.application.dto.aula.AulaRequestDTO;
+import chronos.tech.application.dto.importacao.LinhaPlanilhaDTO;
+import chronos.tech.application.dto.aula.MovimentacaoAulaDTO;
 import chronos.tech.application.mapper.*;
 import chronos.tech.application.port.in.AulaUseCase;
 import chronos.tech.application.util.ExcelProcessor;

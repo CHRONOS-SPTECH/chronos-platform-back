@@ -30,6 +30,11 @@ public class UsuarioRepositoryAdapter implements UsuarioRepository {
     }
 
     @Override
+    public Optional<Usuario> findByPessoaIdPessoa(Integer pessoaId) {
+        return repository.findByPessoaIdPessoa(pessoaId);
+    }
+
+    @Override
     public Usuario save(Usuario usuario) {
         return repository.save(usuario);
     }

@@ -1,7 +1,7 @@
 package chronos.tech.application.port.in;
 
-import chronos.tech.application.dto.request.SecretariaRequestDTO;
-import chronos.tech.application.dto.response.SecretariaResponseDTO;
+import chronos.tech.application.dto.cadastro.SecretariaRequestDTO;
+import chronos.tech.application.dto.cadastro.SecretariaResponseDTO;
 
 import java.util.List;
 

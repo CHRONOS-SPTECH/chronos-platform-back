@@ -11,6 +11,8 @@ public interface UsuarioRepository {
 
     Optional<Usuario> findByEmailLogin(String emailLogin);
 
+    Optional<Usuario> findByPessoaIdPessoa(Integer pessoaId);
+
     Usuario save(Usuario usuario);
 
     void deleteById(Long id);

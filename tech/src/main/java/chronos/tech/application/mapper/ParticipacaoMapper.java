@@ -1,7 +1,7 @@
 package chronos.tech.application.mapper;
 
-import chronos.tech.application.dto.request.ParticipacaoRequestDTO;
-import chronos.tech.application.dto.response.ParticipacaoResponseDTO;
+import chronos.tech.application.dto.cadastro.ParticipacaoRequestDTO;
+import chronos.tech.application.dto.cadastro.ParticipacaoResponseDTO;
 import chronos.tech.domain.model.classes.Evento;
 import chronos.tech.domain.model.classes.ParticipacaoEvento;
 import chronos.tech.domain.model.classes.Pessoa;

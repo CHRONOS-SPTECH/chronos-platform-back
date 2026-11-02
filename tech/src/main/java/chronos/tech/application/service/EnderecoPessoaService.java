@@ -1,7 +1,7 @@
 package chronos.tech.application.service;
 
-import chronos.tech.application.dto.request.EnderecoPessoaRequestDTO;
-import chronos.tech.application.dto.response.EnderecoPessoaResponseDTO;
+import chronos.tech.application.dto.pessoa.EnderecoPessoaRequestDTO;
+import chronos.tech.application.dto.pessoa.EnderecoPessoaResponseDTO;
 import chronos.tech.application.mapper.EnderecoPessoaMapper;
 import chronos.tech.application.port.in.EnderecoPessoaUseCase;
 import chronos.tech.domain.model.classes.EnderecoPessoa;

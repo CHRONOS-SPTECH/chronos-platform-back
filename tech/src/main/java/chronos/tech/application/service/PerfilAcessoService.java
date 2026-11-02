@@ -1,7 +1,7 @@
 package chronos.tech.application.service;
 
-import chronos.tech.application.dto.request.PerfilAcessoRequestDTO;
-import chronos.tech.application.dto.response.PerfilAcessoResponseDTO;
+import chronos.tech.application.dto.cadastro.PerfilAcessoRequestDTO;
+import chronos.tech.application.dto.cadastro.PerfilAcessoResponseDTO;
 import chronos.tech.application.mapper.PerfilAcessoMapper;
 import chronos.tech.application.port.in.PerfilAcessoUseCase;
 import chronos.tech.domain.model.classes.PerfilAcesso;

@@ -1,10 +1,10 @@
 package chronos.tech.application.service;
 
-import chronos.tech.application.dto.request.AuthLoginRequestDTO;
-import chronos.tech.application.dto.request.AuthRefreshRequestDTO;
-import chronos.tech.application.dto.request.AuthRegisterRequestDTO;
-import chronos.tech.application.dto.response.AuthResponseDTO;
-import chronos.tech.application.dto.response.PerfilAcessoResponseDTO;
+import chronos.tech.application.dto.auth.AuthLoginRequestDTO;
+import chronos.tech.application.dto.auth.AuthRefreshRequestDTO;
+import chronos.tech.application.dto.auth.AuthRegisterRequestDTO;
+import chronos.tech.application.dto.auth.AuthResponseDTO;
+import chronos.tech.application.dto.cadastro.PerfilAcessoResponseDTO;
 import chronos.tech.application.mapper.PerfilAcessoMapper;
 import chronos.tech.application.mapper.PessoaMapper;
 import chronos.tech.application.mapper.UsuarioMapper;

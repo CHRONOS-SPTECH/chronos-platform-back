@@ -1,7 +1,7 @@
 package chronos.tech.application.port.in;
 
-import chronos.tech.application.dto.request.EventoRequestDTO;
-import chronos.tech.application.dto.response.EventoResponseDTO;
+import chronos.tech.application.dto.evento.EventoRequestDTO;
+import chronos.tech.application.dto.evento.EventoResponseDTO;
 
 import java.util.List;
 

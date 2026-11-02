@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.query.JpqlQueryBuilder;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -33,6 +35,10 @@ public interface SpringDataPessoaRepository extends JpaRepository<Pessoa, Long> 
     List<Object[]> findDatasNascimentoEGenero();
 
     Optional<Pessoa> findByNome(String nome);
+
+    @Query(value = "SELECT p FROM pessoa p WHERE p.tipoVinculo.nome_vinculo = :nomeVinculo AND p.dataSaida IS NULL",
+            countQuery = "SELECT COUNT(p.idPessoa) FROM pessoa p WHERE p.tipoVinculo.nome_vinculo = :nomeVinculo AND p.dataSaida IS NULL")
+    Page<Pessoa> findByTipoVinculo(@Param("nomeVinculo") String nomeVinculo, Pageable pageable);
 
     @Query("""
             SELECT new chronos.tech.domain.model.classes.EventoDestinatario(p.nome, p.email)

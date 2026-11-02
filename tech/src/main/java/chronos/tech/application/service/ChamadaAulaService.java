@@ -1,8 +1,8 @@
 package chronos.tech.application.service;
 
-import chronos.tech.application.dto.request.ChamadaAulaRequestDTO;
-import chronos.tech.application.dto.request.ListaChamadaAulaRequestDTO;
-import chronos.tech.application.dto.response.ChamadaAulaResponseDTO;
+import chronos.tech.application.dto.chamada.ChamadaAulaRequestDTO;
+import chronos.tech.application.dto.chamada.ListaChamadaAulaRequestDTO;
+import chronos.tech.application.dto.chamada.ChamadaAulaResponseDTO;
 import chronos.tech.application.mapper.ChamadaAulaMapper;
 import chronos.tech.application.port.in.ChamadaAulaUseCase;
 import chronos.tech.domain.model.classes.Aula;

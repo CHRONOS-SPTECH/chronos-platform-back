@@ -1,6 +1,10 @@
 package chronos.tech.ControllerTest;
 
-import chronos.tech.application.dto.response.*;
+import chronos.tech.application.dto.aula.AulaComTemaEMateriaComInstrutorResponseDTO;
+import chronos.tech.application.dto.aula.AulaComTemaEMateriaResponseDTO;
+import chronos.tech.application.dto.aula.AulaResponseDTO;
+import chronos.tech.application.dto.importacao.RelatorioImportacaoResponseDTO;
+
 import chronos.tech.application.port.in.AulaUseCase;
 import chronos.tech.infrastructure.security.CustomUserDetailsService;
 import chronos.tech.infrastructure.security.JwtAuthenticationFilter;

@@ -1,7 +1,7 @@
 package chronos.tech.application.mapper;
 
-import chronos.tech.application.dto.request.TemaAulaRequestDTO;
-import chronos.tech.application.dto.response.TemaAulaResponseDTO;
+import chronos.tech.application.dto.cadastro.TemaAulaRequestDTO;
+import chronos.tech.application.dto.cadastro.TemaAulaResponseDTO;
 import chronos.tech.domain.model.classes.Materia;
 import chronos.tech.domain.model.classes.TemaAula;
 import org.mapstruct.BeanMapping;

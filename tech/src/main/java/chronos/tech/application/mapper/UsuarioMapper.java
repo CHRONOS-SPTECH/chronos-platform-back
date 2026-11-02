@@ -1,7 +1,7 @@
 package chronos.tech.application.mapper;
 
-import chronos.tech.application.dto.request.UsuarioRequestDTO;
-import chronos.tech.application.dto.response.UsuarioResponseDTO;
+import chronos.tech.application.dto.usuario.UsuarioRequestDTO;
+import chronos.tech.application.dto.usuario.UsuarioResponseDTO;
 import chronos.tech.domain.model.classes.Usuario;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

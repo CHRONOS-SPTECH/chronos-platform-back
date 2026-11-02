@@ -1,6 +1,6 @@
 package chronos.tech.ControllerTest;
 
-import chronos.tech.application.dto.response.ChamadaAulaResponseDTO;
+import chronos.tech.application.dto.chamada.ChamadaAulaResponseDTO;
 import chronos.tech.application.port.in.ChamadaAulaUseCase;
 import chronos.tech.infrastructure.security.CustomUserDetailsService;
 import chronos.tech.infrastructure.security.JwtAuthenticationFilter;

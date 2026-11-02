@@ -1,9 +1,9 @@
 package chronos.tech.ServiceTest;
 
-import chronos.tech.application.dto.request.TurmaRequestDTO;
-import chronos.tech.application.dto.response.AlunoComPresencaResponseDTO;
-import chronos.tech.application.dto.response.TurmaDeletadaResponseDTO;
-import chronos.tech.application.dto.response.TurmaResponseDTO;
+import chronos.tech.application.dto.turma.TurmaRequestDTO;
+import chronos.tech.application.dto.pessoa.AlunoComPresencaResponseDTO;
+import chronos.tech.application.dto.turma.TurmaDeletadaResponseDTO;
+import chronos.tech.application.dto.turma.TurmaResponseDTO;
 import chronos.tech.application.mapper.TurmaMapper;
 import chronos.tech.application.service.TurmaService;
 import chronos.tech.domain.model.classes.ChamadaAula;

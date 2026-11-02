@@ -1,7 +1,8 @@
 package chronos.tech.application.mapper;
 
-import chronos.tech.application.dto.request.EnderecoPessoaRequestDTO;
-import chronos.tech.application.dto.response.EnderecoPessoaResponseDTO;
+import chronos.tech.application.dto.pessoa.EnderecoPessoaRequestDTO;
+import chronos.tech.application.dto.pessoa.EnderecoPessoaCadastroRequestDTO;
+import chronos.tech.application.dto.pessoa.EnderecoPessoaResponseDTO;
 import chronos.tech.domain.model.classes.EnderecoPessoa;
 import chronos.tech.domain.model.classes.Pessoa;
 import org.mapstruct.BeanMapping;
@@ -17,6 +18,10 @@ public interface EnderecoPessoaMapper {
     @Mapping(target = "uf", source = "uf")
     EnderecoPessoa toModel(EnderecoPessoaRequestDTO dto);
 
+    @Mapping(target = "idEndereco", ignore = true)
+    @Mapping(target = "pessoa", ignore = true)
+    EnderecoPessoa toModel(EnderecoPessoaCadastroRequestDTO dto);
+
     @Mapping(target = "id_endereco", source = "idEndereco")
     @Mapping(target = "id_pessoa", source = "pessoa.idPessoa")
     @Mapping(target = "uf", source = "uf")
@@ -27,6 +32,10 @@ public interface EnderecoPessoaMapper {
     @Mapping(target = "uf", source = "uf")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateFromDto(EnderecoPessoaRequestDTO dto, @MappingTarget EnderecoPessoa enderecoPessoa);
+
+    @Mapping(target = "idEndereco", ignore = true)
+    @Mapping(target = "pessoa", ignore = true)
+    void updateFromCadastroDto(EnderecoPessoaCadastroRequestDTO dto, @MappingTarget EnderecoPessoa enderecoPessoa);
 
     default Pessoa map(Long id_pessoa) {
         if (id_pessoa == null) return null;

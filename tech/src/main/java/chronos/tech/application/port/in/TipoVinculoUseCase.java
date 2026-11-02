@@ -1,7 +1,7 @@
 package chronos.tech.application.port.in;
 
-import chronos.tech.application.dto.request.TipoVinculoRequestDTO;
-import chronos.tech.application.dto.response.TipoVinculoResponseDTO;
+import chronos.tech.application.dto.cadastro.TipoVinculoRequestDTO;
+import chronos.tech.application.dto.cadastro.TipoVinculoResponseDTO;
 
 import java.util.List;
 

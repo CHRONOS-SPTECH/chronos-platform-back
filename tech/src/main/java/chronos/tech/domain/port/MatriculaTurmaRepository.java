@@ -1,6 +1,7 @@
 package chronos.tech.domain.port;
 
 import chronos.tech.domain.model.classes.MatriculaTurma;
+import chronos.tech.domain.model.classes.compostas.MatriculaTurmaId;
 import chronos.tech.domain.model.classes.Pessoa;
 import chronos.tech.domain.model.classes.EventoDestinatario;
 
@@ -12,10 +13,11 @@ import org.springframework.data.domain.Pageable;
 
 public interface MatriculaTurmaRepository {
     List<MatriculaTurma> findAll();
-    Optional<MatriculaTurma> findById(Long id);
+    Optional<MatriculaTurma> findById(MatriculaTurmaId id);
     MatriculaTurma save(MatriculaTurma matriculaTurma);
-    void deleteById(Long id);
+    void deleteById(MatriculaTurmaId id);
     List<MatriculaTurma> findByTurmaIdTurma(Integer turmaId);
+    List<MatriculaTurma> findByPessoaIdPessoa(Integer pessoaId);
     Page<MatriculaTurma> findByTurmaIdTurma(Integer turmaId, Pageable pageable);
     Page<Pessoa> findAlunos(Pageable pageable);
     List<EventoDestinatario> findDestinatariosAtivosEmTurmasIniciadas(List<Integer> turmaIds, LocalDate hoje);

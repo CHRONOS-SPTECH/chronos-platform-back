@@ -1,7 +1,7 @@
 package chronos.tech.infrastructure.web;
 
-import chronos.tech.application.dto.request.EnderecoPessoaRequestDTO;
-import chronos.tech.application.dto.response.EnderecoPessoaResponseDTO;
+import chronos.tech.application.dto.pessoa.EnderecoPessoaRequestDTO;
+import chronos.tech.application.dto.pessoa.EnderecoPessoaResponseDTO;
 import chronos.tech.application.port.in.EnderecoPessoaUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;

@@ -1,8 +1,8 @@
 package chronos.tech.application.port.in;
 
-import chronos.tech.application.dto.request.ChamadaAulaRequestDTO;
-import chronos.tech.application.dto.request.ListaChamadaAulaRequestDTO;
-import chronos.tech.application.dto.response.ChamadaAulaResponseDTO;
+import chronos.tech.application.dto.chamada.ChamadaAulaRequestDTO;
+import chronos.tech.application.dto.chamada.ListaChamadaAulaRequestDTO;
+import chronos.tech.application.dto.chamada.ChamadaAulaResponseDTO;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package chronos.tech.infrastructure.web;
 
-import chronos.tech.application.dto.request.NivelFormacaoRequestDTO;
-import chronos.tech.application.dto.response.NivelFormacaoResponseDTO;
+import chronos.tech.application.dto.cadastro.NivelFormacaoRequestDTO;
+import chronos.tech.application.dto.cadastro.NivelFormacaoResponseDTO;
 import chronos.tech.application.port.in.NivelFormacaoUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;

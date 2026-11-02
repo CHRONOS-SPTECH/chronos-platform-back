@@ -24,6 +24,11 @@ public class HistoricoAcademicoRepositoryAdapter implements HistoricoAcademicoRe
     }
 
     @Override
+    public List<HistoricoAcademico> findByPessoaId(Integer pessoaId) {
+        return repository.findByPessoaId(pessoaId);
+    }
+
+    @Override
     public HistoricoAcademico save(HistoricoAcademico historico) {
         return repository.save(historico);
     }

@@ -1,7 +1,7 @@
 package chronos.tech.application.mapper;
 
-import chronos.tech.application.dto.request.AulaRequestDTO;
-import chronos.tech.application.dto.response.AulaResponseDTO;
+import chronos.tech.application.dto.aula.AulaRequestDTO;
+import chronos.tech.application.dto.aula.AulaResponseDTO;
 import chronos.tech.domain.model.classes.Aula;
 import chronos.tech.domain.model.classes.Pessoa;
 import chronos.tech.domain.model.classes.TemaAula;

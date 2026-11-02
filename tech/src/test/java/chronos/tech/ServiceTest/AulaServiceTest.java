@@ -1,8 +1,15 @@
 package chronos.tech.ServiceTest;
 
-import chronos.tech.application.dto.request.AulaRequestDTO;
-import chronos.tech.application.dto.request.MovimentacaoAulaDTO;
-import chronos.tech.application.dto.response.*;
+import chronos.tech.application.dto.aula.AulaComTemaEMateriaComInstrutorResponseDTO;
+import chronos.tech.application.dto.aula.AulaComTemaEMateriaResponseDTO;
+import chronos.tech.application.dto.aula.AulaResponseDTO;
+import chronos.tech.application.dto.cadastro.MateriaResponseDTO;
+import chronos.tech.application.dto.cadastro.TemaAulaResponseDTO;
+import chronos.tech.application.dto.pessoa.PessoaResumidoResponseDTO;
+import chronos.tech.application.dto.turma.TurmaResponseDTO;
+
+import chronos.tech.application.dto.aula.AulaRequestDTO;
+import chronos.tech.application.dto.aula.MovimentacaoAulaDTO;
 import chronos.tech.application.mapper.*;
 import chronos.tech.application.service.AulaService;
 import chronos.tech.domain.model.classes.Aula;

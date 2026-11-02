@@ -1,6 +1,7 @@
 package chronos.tech.infrastructure.adapter.out.persistence;
 
 import chronos.tech.domain.model.classes.MatriculaTurma;
+import chronos.tech.domain.model.classes.compostas.MatriculaTurmaId;
 import chronos.tech.domain.model.classes.Pessoa;
 import chronos.tech.domain.model.classes.EventoDestinatario;
 import chronos.tech.domain.model.enums.StatusTurma;
@@ -25,7 +26,7 @@ public class MatriculaTurmaRepositoryAdapter implements MatriculaTurmaRepository
     }
 
     @Override
-    public Optional<MatriculaTurma> findById(Long id) {
+    public Optional<MatriculaTurma> findById(MatriculaTurmaId id) {
         return repository.findById(id);
     }
 
@@ -35,7 +36,7 @@ public class MatriculaTurmaRepositoryAdapter implements MatriculaTurmaRepository
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(MatriculaTurmaId id) {
         repository.deleteById(id);
     }
 
@@ -45,13 +46,18 @@ public class MatriculaTurmaRepositoryAdapter implements MatriculaTurmaRepository
     }
 
     @Override
+    public List<MatriculaTurma> findByPessoaIdPessoa(Integer pessoaId) {
+        return repository.findByPessoaIdPessoa(pessoaId);
+    }
+
+    @Override
     public Page<MatriculaTurma> findByTurmaIdTurma(Integer turmaId, Pageable pageable) {
         return repository.findByTurmaIdTurma(turmaId, pageable);
     }
 
     @Override
     public Page<Pessoa> findAlunos(Pageable pageable) {
-        return repository.findAlunos(pageable);
+        return repository.findAlunos(List.of("Provacionista", "Membro", "Membro Força Viva"), pageable);
     }
 
     @Override

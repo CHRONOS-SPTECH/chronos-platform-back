@@ -1,7 +1,7 @@
 package chronos.tech.application.service;
 
-import chronos.tech.application.dto.request.EventoRequestDTO;
-import chronos.tech.application.dto.response.EventoResponseDTO;
+import chronos.tech.application.dto.evento.EventoRequestDTO;
+import chronos.tech.application.dto.evento.EventoResponseDTO;
 import chronos.tech.application.event.EventoCriadoEvent;
 import chronos.tech.application.mapper.EventoMapper;
 import chronos.tech.application.port.in.EventoUseCase;

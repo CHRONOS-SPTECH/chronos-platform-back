@@ -1,10 +1,10 @@
 package chronos.tech.infrastructure.web;
 
-import chronos.tech.application.dto.request.TurmaRequestDTO;
-import chronos.tech.application.dto.response.TurmaAlunoResponseDTO;
-import chronos.tech.application.dto.response.TurmaDeletadaResponseDTO;
-import chronos.tech.application.dto.response.AlunoComPresencaResponseDTO;
-import chronos.tech.application.dto.response.TurmaResponseDTO;
+import chronos.tech.application.dto.turma.TurmaRequestDTO;
+import chronos.tech.application.dto.turma.TurmaAlunoResponseDTO;
+import chronos.tech.application.dto.turma.TurmaDeletadaResponseDTO;
+import chronos.tech.application.dto.pessoa.AlunoComPresencaResponseDTO;
+import chronos.tech.application.dto.turma.TurmaResponseDTO;
 import chronos.tech.application.port.in.TurmaUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import chronos.tech.application.dto.response.TurmaAlunoPaginaResponseDTO;
+import chronos.tech.application.dto.turma.TurmaAlunoPaginaResponseDTO;
 
 import java.util.List;
 

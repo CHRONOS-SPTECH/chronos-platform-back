@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Component
 @RequiredArgsConstructor
@@ -27,13 +29,8 @@ public class PessoaRepositoryAdapter implements PessoaRepository {
     }
 
     @Override
-    public List<Pessoa> findAll() {
-        return repository.findAll();
-    }
-
-    @Override
-    public void deleteById(Long id) {
-        repository.deleteById(id);
+    public Page<Pessoa> findByTipoVinculo(String nomeVinculo, Pageable pageable) {
+        return repository.findByTipoVinculo(nomeVinculo, pageable);
     }
 
     @Override

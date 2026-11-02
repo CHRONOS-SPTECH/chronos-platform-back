@@ -1,7 +1,7 @@
 package chronos.tech.application.mapper;
 
-import chronos.tech.application.dto.request.PerfilAcessoRequestDTO;
-import chronos.tech.application.dto.response.PerfilAcessoResponseDTO;
+import chronos.tech.application.dto.cadastro.PerfilAcessoRequestDTO;
+import chronos.tech.application.dto.cadastro.PerfilAcessoResponseDTO;
 import chronos.tech.domain.model.classes.PerfilAcesso;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;

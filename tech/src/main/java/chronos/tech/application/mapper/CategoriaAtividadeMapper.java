@@ -1,7 +1,7 @@
 package chronos.tech.application.mapper;
 
-import chronos.tech.application.dto.request.CategoriaAtividadeRequestDTO;
-import chronos.tech.application.dto.response.CategoriaAtividadeResponseDTO;
+import chronos.tech.application.dto.cadastro.CategoriaAtividadeRequestDTO;
+import chronos.tech.application.dto.cadastro.CategoriaAtividadeResponseDTO;
 import chronos.tech.domain.model.classes.CategoriaAtividade;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;

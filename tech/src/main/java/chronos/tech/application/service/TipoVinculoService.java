@@ -1,7 +1,7 @@
 package chronos.tech.application.service;
 
-import chronos.tech.application.dto.request.TipoVinculoRequestDTO;
-import chronos.tech.application.dto.response.TipoVinculoResponseDTO;
+import chronos.tech.application.dto.cadastro.TipoVinculoRequestDTO;
+import chronos.tech.application.dto.cadastro.TipoVinculoResponseDTO;
 import chronos.tech.application.mapper.TipoVinculoMapper;
 import chronos.tech.application.port.in.TipoVinculoUseCase;
 import chronos.tech.domain.model.classes.TipoVinculo;

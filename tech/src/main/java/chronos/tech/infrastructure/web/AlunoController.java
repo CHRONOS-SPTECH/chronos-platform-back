@@ -1,6 +1,6 @@
 package chronos.tech.infrastructure.web;
 
-import chronos.tech.application.dto.response.PessoaResponseDTO;
+import chronos.tech.application.dto.pessoa.AlunoListaResponseDTO;
 import chronos.tech.application.port.in.PessoaUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -28,9 +28,9 @@ public class AlunoController {
 
     @Operation(summary = "Listar todos os alunos", description = "Retorna alunos de todas as turmas com paginação")
     @ApiResponse(responseCode = "200", description = "Página de alunos retornada com sucesso",
-            content = @Content(schema = @Schema(implementation = PessoaResponseDTO.class)))
+            content = @Content(schema = @Schema(implementation = AlunoListaResponseDTO.class)))
     @GetMapping
-    public ResponseEntity<Page<PessoaResponseDTO>> getAllAlunos(
+    public ResponseEntity<Page<AlunoListaResponseDTO>> getAllAlunos(
             @PageableDefault(size = 20, sort = "nome") Pageable pageable) {
         return ResponseEntity.ok(pessoaService.getAllAlunos(pageable));
     }

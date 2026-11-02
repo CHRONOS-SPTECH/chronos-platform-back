@@ -1,6 +1,6 @@
 package chronos.tech.ControllerTest;
 
-import chronos.tech.application.dto.response.UsuarioResponseDTO;
+import chronos.tech.application.dto.usuario.UsuarioResponseDTO;
 import chronos.tech.application.port.in.UsuarioUseCase;
 import chronos.tech.infrastructure.security.CustomUserDetailsService;
 import chronos.tech.infrastructure.security.JwtAuthenticationFilter;

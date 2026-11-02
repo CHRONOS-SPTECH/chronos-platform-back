@@ -1,7 +1,7 @@
 package chronos.tech.ServiceTest;
 
-import chronos.tech.application.dto.request.MatriculaTurmaRequestDTO;
-import chronos.tech.application.dto.response.MatriculaTurmaResponseDTO;
+import chronos.tech.application.dto.turma.MatriculaTurmaRequestDTO;
+import chronos.tech.application.dto.turma.MatriculaTurmaResponseDTO;
 import chronos.tech.application.mapper.MatriculaTurmaMapper;
 import chronos.tech.application.service.MatriculaTurmaService;
 import chronos.tech.domain.model.classes.MatriculaTurma;

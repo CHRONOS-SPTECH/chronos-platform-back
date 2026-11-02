@@ -1,7 +1,7 @@
 package chronos.tech.application.port.in;
 
-import chronos.tech.application.dto.request.EnderecoPessoaRequestDTO;
-import chronos.tech.application.dto.response.EnderecoPessoaResponseDTO;
+import chronos.tech.application.dto.pessoa.EnderecoPessoaRequestDTO;
+import chronos.tech.application.dto.pessoa.EnderecoPessoaResponseDTO;
 
 import java.util.List;
 

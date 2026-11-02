@@ -1,6 +1,6 @@
 package chronos.tech.application.util;
 
-import chronos.tech.application.dto.request.LinhaPlanilhaDTO;
+import chronos.tech.application.dto.importacao.LinhaPlanilhaDTO;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.InputStream;

@@ -1,9 +1,9 @@
 package chronos.tech.infrastructure.web;
 
-import chronos.tech.application.dto.request.AuthLoginRequestDTO;
-import chronos.tech.application.dto.request.AuthRefreshRequestDTO;
-import chronos.tech.application.dto.request.AuthRegisterRequestDTO;
-import chronos.tech.application.dto.response.AuthResponseDTO;
+import chronos.tech.application.dto.auth.AuthLoginRequestDTO;
+import chronos.tech.application.dto.auth.AuthRefreshRequestDTO;
+import chronos.tech.application.dto.auth.AuthRegisterRequestDTO;
+import chronos.tech.application.dto.auth.AuthResponseDTO;
 import chronos.tech.application.port.in.AuthUseCase;
 import chronos.tech.infrastructure.security.JwtService;
 import io.swagger.v3.oas.annotations.Operation;

@@ -1,8 +1,8 @@
 package chronos.tech.ControllerTest;
 
-import chronos.tech.application.dto.response.AlunoComPresencaResponseDTO;
-import chronos.tech.application.dto.response.TurmaDeletadaResponseDTO;
-import chronos.tech.application.dto.response.TurmaResponseDTO;
+import chronos.tech.application.dto.pessoa.AlunoComPresencaResponseDTO;
+import chronos.tech.application.dto.turma.TurmaDeletadaResponseDTO;
+import chronos.tech.application.dto.turma.TurmaResponseDTO;
 import chronos.tech.application.port.in.TurmaUseCase;
 import chronos.tech.domain.model.enums.StatusTurma;
 import chronos.tech.infrastructure.security.CustomUserDetailsService;

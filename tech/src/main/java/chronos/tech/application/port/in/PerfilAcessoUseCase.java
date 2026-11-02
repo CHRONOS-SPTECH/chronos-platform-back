@@ -1,7 +1,7 @@
 package chronos.tech.application.port.in;
 
-import chronos.tech.application.dto.request.PerfilAcessoRequestDTO;
-import chronos.tech.application.dto.response.PerfilAcessoResponseDTO;
+import chronos.tech.application.dto.cadastro.PerfilAcessoRequestDTO;
+import chronos.tech.application.dto.cadastro.PerfilAcessoResponseDTO;
 
 import java.util.List;
 

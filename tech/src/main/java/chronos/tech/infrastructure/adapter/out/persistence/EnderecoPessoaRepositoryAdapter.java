@@ -14,6 +14,7 @@ public class EnderecoPessoaRepositoryAdapter implements EnderecoPessoaRepository
     private final SpringDataEnderecoPessoaRepository repository;
     public List<EnderecoPessoa> findAll() { return repository.findAll(); }
     public Optional<EnderecoPessoa> findById(Integer id) { return repository.findById(id); }
+    public Optional<EnderecoPessoa> findByPessoaIdPessoa(Integer pessoaId) { return repository.findByPessoaIdPessoa(pessoaId); }
     public EnderecoPessoa save(EnderecoPessoa enderecoPessoa) { return repository.save(enderecoPessoa); }
     public void deleteById(Integer id) { repository.deleteById(id); }
 }

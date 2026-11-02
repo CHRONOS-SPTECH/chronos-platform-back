@@ -1,9 +1,12 @@
 package chronos.tech.infrastructure.web;
 
-import chronos.tech.application.dto.request.PessoaRegistroRequestDTO;
-import chronos.tech.application.dto.request.PessoaRequestDTO;
-import chronos.tech.application.dto.response.PessoaDetalhadaResponseDTO;
-import chronos.tech.application.dto.response.PessoaResponseDTO;
+import chronos.tech.application.dto.pessoa.PessoaRegistroRequestDTO;
+import chronos.tech.application.dto.pessoa.PessoaRequestDTO;
+import chronos.tech.application.dto.pessoa.PessoaBiometriaRequestDTO;
+import chronos.tech.application.dto.pessoa.PessoaDetalhadaResponseDTO;
+import chronos.tech.application.dto.pessoa.PessoaFichaResponseDTO;
+import chronos.tech.application.dto.pessoa.PessoaResponseDTO;
+import chronos.tech.application.dto.pessoa.PessoaPublicoExternoListaResponseDTO;
 import chronos.tech.application.port.in.PessoaUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -12,14 +15,15 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 
 @RestController
 @RequestMapping("/pessoas")
@@ -32,16 +36,17 @@ public class PessoaController {
 
     @Operation(
             summary = "Listar todas as pessoas",
-            description = "Retorna todas as pessoas cadastradas"
+            description = "Retorna pessoas ativas com vínculo Público Externo, paginadas"
     )
     @ApiResponse(
             responseCode = "200",
             description = "Lista retornada com sucesso",
-            content = @Content(schema = @Schema(implementation = PessoaResponseDTO.class))
+            content = @Content(schema = @Schema(implementation = PessoaPublicoExternoListaResponseDTO.class))
     )
     @GetMapping
-    public ResponseEntity<List<PessoaResponseDTO>> getAllPersons() {
-        return ResponseEntity.ok().body(service.getAllPersons());
+    public ResponseEntity<Page<PessoaPublicoExternoListaResponseDTO>> getAllPersons(
+            @PageableDefault(size = 20, sort = "nome") Pageable pageable) {
+        return ResponseEntity.ok(service.getAllPersons(pageable));
     }
 
     @Operation(
@@ -76,20 +81,19 @@ public class PessoaController {
             )
     )
     @GetMapping("/details")
-    public ResponseEntity<List<PessoaDetalhadaResponseDTO>> getAllPersonsDetails() {
-
-        return ResponseEntity.ok()
-                .body(service.getAllPersonsDetails());
+    public ResponseEntity<Page<PessoaDetalhadaResponseDTO>> getAllPersonsDetails(
+            @PageableDefault(size = 20, sort = "nome") Pageable pageable) {
+        return ResponseEntity.ok(service.getAllPersonsDetails(pageable));
     }
 
     @Operation(
-            summary = "Buscar pessoa detalhada por ID",
-            description = "Retorna uma pessoa específica pelo ID"
+            summary = "Buscar ficha detalhada da pessoa por ID",
+            description = "Retorna dados pessoais, endereço, vínculo, turmas, presença, histórico e indicador de biometria"
     )
     @ApiResponse(
             responseCode = "200",
             description = "Pessoa encontrada",
-            content = @Content(schema = @Schema(implementation = PessoaResponseDTO.class))
+            content = @Content(schema = @Schema(implementation = PessoaFichaResponseDTO.class))
     )
     @ApiResponse(
             responseCode = "404",
@@ -97,7 +101,7 @@ public class PessoaController {
             content = @Content
     )
     @GetMapping("/details/{id}")
-    public ResponseEntity<PessoaDetalhadaResponseDTO> getPersonDetailsId(
+    public ResponseEntity<PessoaFichaResponseDTO> getPersonDetailsId(
             @PathVariable @Validated Long id){
         return ResponseEntity.ok(service.getPersonsDetailsId(id));
     }
@@ -118,12 +122,10 @@ public class PessoaController {
     )
     @PostMapping
     public ResponseEntity<PessoaResponseDTO> savePessoa(
-            @RequestBody @Validated PessoaRequestDTO pessoaRequestDto){
+            @RequestBody @Valid PessoaRequestDTO pessoaRequestDto){
         PessoaResponseDTO pessoaResponseDto = service.createPessoa(pessoaRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(pessoaResponseDto);
     }
-
-    private static final Logger logger = LoggerFactory.getLogger(PessoaController.class);
 
     @Operation(
             summary = "Registrar aluno com biometria e imagem de perfil via JSON",
@@ -141,14 +143,9 @@ public class PessoaController {
     )
     @PostMapping("/registro")
     public ResponseEntity<PessoaResponseDTO> registrarPessoaComBiometria(
-            @RequestBody @Validated PessoaRegistroRequestDTO pessoaRegistroRequestDTO){
-        try {
-            PessoaResponseDTO pessoaResponseDto = service.createPessoaComBiometria(pessoaRegistroRequestDTO);
-            return ResponseEntity.status(HttpStatus.CREATED).body(pessoaResponseDto);
-        } catch (Exception e) {
-            logger.error("[Registro] falha ao processar registro de biometria", e);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
+            @RequestBody @Valid PessoaRegistroRequestDTO pessoaRegistroRequestDTO){
+        PessoaResponseDTO response = service.createPessoaComBiometria(pessoaRegistroRequestDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @Operation(
@@ -165,21 +162,18 @@ public class PessoaController {
             description = "Pessoa não encontrada",
             content = @Content
     )
-    @PutMapping("{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<PessoaResponseDTO> updatePessoa(
             @PathVariable @Validated Long id,
-            @RequestBody PessoaRequestDTO pessoa){
+            @RequestBody @Valid PessoaRequestDTO pessoa){
         PessoaResponseDTO pessoaAtualizada = service.updatePessoa(id, pessoa);
         return ResponseEntity.ok().body(pessoaAtualizada);
     }
 
-    @Operation(
-            summary = "Deletar pessoa",
-            description = "Remove uma pessoa pelo ID"
-    )
+    @Operation(summary = "Inativar pessoa", description = "Preenche a data de saída e preserva o histórico da pessoa")
     @ApiResponse(
-            responseCode = "200",
-            description = "Pessoa removida com sucesso",
+            responseCode = "204",
+            description = "Pessoa inativada com sucesso",
             content = @Content
     )
     @ApiResponse(
@@ -187,11 +181,36 @@ public class PessoaController {
             description = "Pessoa não encontrada",
             content = @Content
     )
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePessoa(
             @PathVariable @Validated Long id){
         service.deletePessoa(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}/inativacao")
+    public ResponseEntity<Void> inativarPessoa(@PathVariable Long id) {
+        service.inativarPessoa(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}/reativacao")
+    public ResponseEntity<Void> reativarPessoa(@PathVariable Long id) {
+        service.reativarPessoa(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}/biometria")
+    public ResponseEntity<PessoaResponseDTO> atualizarBiometria(
+            @PathVariable Long id,
+            @RequestBody @Valid PessoaBiometriaRequestDTO request) {
+        return ResponseEntity.ok(service.atualizarBiometria(id, request));
+    }
+
+    @DeleteMapping("/{id}/biometria")
+    public ResponseEntity<Void> removerBiometria(@PathVariable Long id) {
+        service.removerBiometria(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

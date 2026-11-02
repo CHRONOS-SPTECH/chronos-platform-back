@@ -1,7 +1,7 @@
 package chronos.tech.ControllerTest;
 
-import chronos.tech.application.dto.request.MatriculaTurmaRequestDTO;
-import chronos.tech.application.dto.response.MatriculaTurmaResponseDTO;
+import chronos.tech.application.dto.turma.MatriculaTurmaRequestDTO;
+import chronos.tech.application.dto.turma.MatriculaTurmaResponseDTO;
 import chronos.tech.application.port.in.MatriculaTurmaUseCase;
 import chronos.tech.infrastructure.security.CustomUserDetailsService;
 import chronos.tech.infrastructure.security.JwtAuthenticationFilter;

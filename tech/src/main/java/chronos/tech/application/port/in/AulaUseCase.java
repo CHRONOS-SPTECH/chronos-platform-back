@@ -1,11 +1,11 @@
 package chronos.tech.application.port.in;
 
-import chronos.tech.application.dto.request.AulaRequestDTO;
-import chronos.tech.application.dto.request.MovimentacaoAulaDTO;
-import chronos.tech.application.dto.response.AulaComTemaEMateriaComInstrutorResponseDTO;
-import chronos.tech.application.dto.response.AulaComTemaEMateriaResponseDTO;
-import chronos.tech.application.dto.response.AulaResponseDTO;
-import chronos.tech.application.dto.response.RelatorioImportacaoResponseDTO;
+import chronos.tech.application.dto.aula.AulaRequestDTO;
+import chronos.tech.application.dto.aula.MovimentacaoAulaDTO;
+import chronos.tech.application.dto.aula.AulaComTemaEMateriaComInstrutorResponseDTO;
+import chronos.tech.application.dto.aula.AulaComTemaEMateriaResponseDTO;
+import chronos.tech.application.dto.aula.AulaResponseDTO;
+import chronos.tech.application.dto.importacao.RelatorioImportacaoResponseDTO;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Date;

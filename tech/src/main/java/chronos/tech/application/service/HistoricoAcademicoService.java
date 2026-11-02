@@ -1,7 +1,7 @@
 package chronos.tech.application.service;
 
-import chronos.tech.application.dto.request.HistoricoAcademicoRequestDTO;
-import chronos.tech.application.dto.response.HistoricoAcademicoResponseDTO;
+import chronos.tech.application.dto.historico.HistoricoAcademicoRequestDTO;
+import chronos.tech.application.dto.historico.HistoricoAcademicoResponseDTO;
 import chronos.tech.application.mapper.HistoricoAcademicoMapper;
 import chronos.tech.application.port.in.HistoricoAcademicoUseCase;
 import chronos.tech.domain.model.classes.HistoricoAcademico;

@@ -1,8 +1,8 @@
 package chronos.tech.ServiceTest;
 
-import chronos.tech.application.dto.request.PessoaRequestDTO;
-import chronos.tech.application.dto.response.PessoaDetalhadaResponseDTO;
-import chronos.tech.application.dto.response.PessoaResponseDTO;
+import chronos.tech.application.dto.pessoa.PessoaRequestDTO;
+import chronos.tech.application.dto.pessoa.PessoaDetalhadaResponseDTO;
+import chronos.tech.application.dto.pessoa.PessoaResponseDTO;
 import chronos.tech.application.mapper.PessoaMapper;
 import chronos.tech.application.service.PessoaService;
 import chronos.tech.domain.model.classes.Pessoa;

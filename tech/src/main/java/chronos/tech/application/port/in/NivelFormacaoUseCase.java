@@ -1,7 +1,7 @@
 package chronos.tech.application.port.in;
 
-import chronos.tech.application.dto.request.NivelFormacaoRequestDTO;
-import chronos.tech.application.dto.response.NivelFormacaoResponseDTO;
+import chronos.tech.application.dto.cadastro.NivelFormacaoRequestDTO;
+import chronos.tech.application.dto.cadastro.NivelFormacaoResponseDTO;
 
 import java.util.List;
 

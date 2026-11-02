@@ -1,7 +1,7 @@
 package chronos.tech.application.service;
 
-import chronos.tech.application.dto.request.NivelFormacaoRequestDTO;
-import chronos.tech.application.dto.response.NivelFormacaoResponseDTO;
+import chronos.tech.application.dto.cadastro.NivelFormacaoRequestDTO;
+import chronos.tech.application.dto.cadastro.NivelFormacaoResponseDTO;
 import chronos.tech.application.mapper.NivelFormacaoMapper;
 import chronos.tech.application.port.in.NivelFormacaoUseCase;
 import chronos.tech.domain.model.classes.NivelFormacao;

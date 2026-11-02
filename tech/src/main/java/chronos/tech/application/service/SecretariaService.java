@@ -1,7 +1,7 @@
 package chronos.tech.application.service;
 
-import chronos.tech.application.dto.request.SecretariaRequestDTO;
-import chronos.tech.application.dto.response.SecretariaResponseDTO;
+import chronos.tech.application.dto.cadastro.SecretariaRequestDTO;
+import chronos.tech.application.dto.cadastro.SecretariaResponseDTO;
 import chronos.tech.application.mapper.SecretariaMapper;
 import chronos.tech.application.port.in.SecretariaUseCase;
 import chronos.tech.domain.model.classes.Secretaria;

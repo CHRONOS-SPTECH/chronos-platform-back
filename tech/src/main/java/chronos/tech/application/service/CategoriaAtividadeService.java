@@ -1,8 +1,8 @@
 package chronos.tech.application.service;
 
 import chronos.tech.application.port.in.CategoriaAtividadeUseCase;
-import chronos.tech.application.dto.request.CategoriaAtividadeRequestDTO;
-import chronos.tech.application.dto.response.CategoriaAtividadeResponseDTO;
+import chronos.tech.application.dto.cadastro.CategoriaAtividadeRequestDTO;
+import chronos.tech.application.dto.cadastro.CategoriaAtividadeResponseDTO;
 import chronos.tech.application.mapper.CategoriaAtividadeMapper;
 import chronos.tech.domain.model.classes.CategoriaAtividade;
 import chronos.tech.domain.port.CategoriaAtividadeRepository;

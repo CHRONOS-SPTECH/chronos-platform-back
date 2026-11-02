@@ -8,6 +8,7 @@ import java.util.Optional;
 public interface HistoricoAcademicoRepository {
     List<HistoricoAcademico> findAll();
     Optional<HistoricoAcademico> findById(Long id);
+    List<HistoricoAcademico> findByPessoaId(Integer pessoaId);
     HistoricoAcademico save(HistoricoAcademico historico);
     void deleteById(Long id);
 

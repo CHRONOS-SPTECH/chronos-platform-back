@@ -1,7 +1,7 @@
 package chronos.tech.infrastructure.web;
 
-import chronos.tech.application.dto.request.TemaAulaRequestDTO;
-import chronos.tech.application.dto.response.TemaAulaResponseDTO;
+import chronos.tech.application.dto.cadastro.TemaAulaRequestDTO;
+import chronos.tech.application.dto.cadastro.TemaAulaResponseDTO;
 import chronos.tech.application.port.in.TemaAulaUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;

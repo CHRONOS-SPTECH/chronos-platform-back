@@ -1,7 +1,7 @@
 package chronos.tech.infrastructure.web;
 
-import chronos.tech.application.dto.request.ParticipacaoRequestDTO;
-import chronos.tech.application.dto.response.ParticipacaoResponseDTO;
+import chronos.tech.application.dto.cadastro.ParticipacaoRequestDTO;
+import chronos.tech.application.dto.cadastro.ParticipacaoResponseDTO;
 import chronos.tech.application.port.in.ParticipacaoUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;

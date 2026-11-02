@@ -1,7 +1,7 @@
 package chronos.tech.infrastructure.web;
 
-import chronos.tech.application.dto.request.MatriculaTurmaRequestDTO;
-import chronos.tech.application.dto.response.MatriculaTurmaResponseDTO;
+import chronos.tech.application.dto.turma.MatriculaTurmaRequestDTO;
+import chronos.tech.application.dto.turma.MatriculaTurmaResponseDTO;
 import chronos.tech.application.port.in.MatriculaTurmaUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -41,8 +41,8 @@ public class MatriculaTurmaController {
     }
 
     @Operation(
-            summary = "Buscar matrícula por ID",
-            description = "Retorna uma matrícula específica pelo ID"
+            summary = "Buscar matrícula por pessoa e turma",
+            description = "Busca usando a chave composta idTurma + idPessoa"
     )
     @ApiResponse(
             responseCode = "200",
@@ -54,10 +54,11 @@ public class MatriculaTurmaController {
             description = "Matrícula não encontrada",
             content = @Content
     )
-    @GetMapping("/{id}")
+    @GetMapping("/{idTurma}/pessoas/{idPessoa}")
     public ResponseEntity<MatriculaTurmaResponseDTO> byId(
-            @PathVariable @Validated Long id) {
-        return ResponseEntity.ok(service.getMatricula(id));
+            @PathVariable Integer idTurma,
+            @PathVariable Integer idPessoa) {
+        return ResponseEntity.ok(service.getMatricula(idTurma, idPessoa));
     }
 
     @Operation(
@@ -94,11 +95,12 @@ public class MatriculaTurmaController {
             description = "Matrícula não encontrada",
             content = @Content
     )
-    @PutMapping("/{id}")
+    @PutMapping("/{idTurma}/pessoas/{idPessoa}")
     public ResponseEntity<MatriculaTurmaResponseDTO> update(
-            @PathVariable @Validated Long id,
+            @PathVariable Integer idTurma,
+            @PathVariable Integer idPessoa,
             @RequestBody MatriculaTurmaRequestDTO dto) {
-        return ResponseEntity.ok(service.updateMatricula(id, dto));
+        return ResponseEntity.ok(service.updateMatricula(idTurma, idPessoa, dto));
     }
 
     @Operation(
@@ -115,10 +117,11 @@ public class MatriculaTurmaController {
             description = "Matrícula não encontrada",
             content = @Content
     )
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{idTurma}/pessoas/{idPessoa}")
     public ResponseEntity<Void> delete(
-            @PathVariable @Validated Long id) {
-        service.deleteMatricula(id);
+            @PathVariable Integer idTurma,
+            @PathVariable Integer idPessoa) {
+        service.deleteMatricula(idTurma, idPessoa);
         return ResponseEntity.noContent().build();
     }
 }

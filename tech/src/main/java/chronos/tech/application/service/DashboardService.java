@@ -1,6 +1,6 @@
 package chronos.tech.application.service;
 
-import chronos.tech.application.dto.response.dashboard.*;
+import chronos.tech.application.dto.dashboard.*;
 import chronos.tech.domain.model.classes.Pessoa;
 import chronos.tech.domain.model.enums.StatusTurma;
 import chronos.tech.domain.port.AulaRepository;

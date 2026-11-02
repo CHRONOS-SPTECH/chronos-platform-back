@@ -1,7 +1,7 @@
 package chronos.tech.application.mapper;
 
-import chronos.tech.application.dto.request.SecretariaRequestDTO;
-import chronos.tech.application.dto.response.SecretariaResponseDTO;
+import chronos.tech.application.dto.cadastro.SecretariaRequestDTO;
+import chronos.tech.application.dto.cadastro.SecretariaResponseDTO;
 import chronos.tech.domain.model.classes.Secretaria;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;

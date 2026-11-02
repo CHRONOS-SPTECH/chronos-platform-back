@@ -1,7 +1,7 @@
 package chronos.tech.infrastructure.web;
 
-import chronos.tech.application.dto.request.GestaoSecretariaRequestDTO;
-import chronos.tech.application.dto.response.GestaoSecretariaResponseDTO;
+import chronos.tech.application.dto.cadastro.GestaoSecretariaRequestDTO;
+import chronos.tech.application.dto.cadastro.GestaoSecretariaResponseDTO;
 import chronos.tech.application.port.in.GestaoSecretariaUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;

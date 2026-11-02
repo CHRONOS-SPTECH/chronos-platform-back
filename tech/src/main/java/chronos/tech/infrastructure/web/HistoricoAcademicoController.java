@@ -1,7 +1,7 @@
 package chronos.tech.infrastructure.web;
 
-import chronos.tech.application.dto.request.HistoricoAcademicoRequestDTO;
-import chronos.tech.application.dto.response.HistoricoAcademicoResponseDTO;
+import chronos.tech.application.dto.historico.HistoricoAcademicoRequestDTO;
+import chronos.tech.application.dto.historico.HistoricoAcademicoResponseDTO;
 import chronos.tech.application.port.in.HistoricoAcademicoUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;

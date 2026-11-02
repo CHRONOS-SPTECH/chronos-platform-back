@@ -1,10 +1,11 @@
 package chronos.tech.application.mapper;
 
-import chronos.tech.application.dto.request.MatriculaTurmaRequestDTO;
-import chronos.tech.application.dto.response.MatriculaTurmaResponseDTO;
+import chronos.tech.application.dto.turma.MatriculaTurmaRequestDTO;
+import chronos.tech.application.dto.turma.MatriculaTurmaResponseDTO;
 import chronos.tech.domain.model.classes.MatriculaTurma;
 import chronos.tech.domain.model.classes.Pessoa;
 import chronos.tech.domain.model.classes.Turma;
+import chronos.tech.domain.model.classes.compostas.MatriculaTurmaId;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -13,7 +14,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(componentModel = "spring")
 public interface MatriculaTurmaMapper {
-    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "id", expression = "java(toId(dto))")
     @Mapping(target = "turma", source = "id_turma")
     @Mapping(target = "pessoa", source = "id_pessoa")
     @Mapping(target = "dataMatricula", source = "data_matricula")
@@ -25,8 +26,8 @@ public interface MatriculaTurmaMapper {
     MatriculaTurmaResponseDTO toResponse(MatriculaTurma matriculaTurma);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "turma", source = "id_turma")
-    @Mapping(target = "pessoa", source = "id_pessoa")
+    @Mapping(target = "turma", ignore = true)
+    @Mapping(target = "pessoa", ignore = true)
     @Mapping(target = "dataMatricula", source = "data_matricula")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateFromDto(MatriculaTurmaRequestDTO dto, @MappingTarget MatriculaTurma matriculaTurma);
@@ -43,5 +44,9 @@ public interface MatriculaTurmaMapper {
         Pessoa pessoa = new Pessoa();
         pessoa.setIdPessoa(Math.toIntExact(id_pessoa));
         return pessoa;
+    }
+
+    default MatriculaTurmaId toId(MatriculaTurmaRequestDTO dto) {
+        return new MatriculaTurmaId(Math.toIntExact(dto.id_turma()), Math.toIntExact(dto.id_pessoa()));
     }
 }

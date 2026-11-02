@@ -1,7 +1,7 @@
 package chronos.tech.application.service;
 
-import chronos.tech.application.dto.request.UsuarioRequestDTO;
-import chronos.tech.application.dto.response.UsuarioResponseDTO;
+import chronos.tech.application.dto.usuario.UsuarioRequestDTO;
+import chronos.tech.application.dto.usuario.UsuarioResponseDTO;
 import chronos.tech.application.mapper.UsuarioMapper;
 import chronos.tech.application.port.in.UsuarioUseCase;
 import chronos.tech.domain.model.classes.Usuario;

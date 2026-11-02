@@ -1,6 +1,6 @@
 package chronos.tech.infrastructure.web;
 
-import chronos.tech.application.dto.response.dashboard.*;
+import chronos.tech.application.dto.dashboard.*;
 import chronos.tech.application.service.DashboardService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;

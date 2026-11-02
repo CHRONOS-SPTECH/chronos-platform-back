@@ -1,7 +1,7 @@
 package chronos.tech.application.mapper;
 
-import chronos.tech.application.dto.request.UsuarioPerfilRequestDTO;
-import chronos.tech.application.dto.response.UsuarioPerfilResponseDTO;
+import chronos.tech.application.dto.usuario.UsuarioPerfilRequestDTO;
+import chronos.tech.application.dto.usuario.UsuarioPerfilResponseDTO;
 import chronos.tech.domain.model.classes.PerfilAcesso;
 import chronos.tech.domain.model.classes.Usuario;
 import chronos.tech.domain.model.classes.UsuarioPerfil;

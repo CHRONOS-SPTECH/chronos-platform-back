@@ -1,7 +1,7 @@
 package chronos.tech.infrastructure.web;
 
-import chronos.tech.application.dto.request.PerfilAcessoRequestDTO;
-import chronos.tech.application.dto.response.PerfilAcessoResponseDTO;
+import chronos.tech.application.dto.cadastro.PerfilAcessoRequestDTO;
+import chronos.tech.application.dto.cadastro.PerfilAcessoResponseDTO;
 import chronos.tech.application.port.in.PerfilAcessoUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
