@@ -2,6 +2,8 @@ package chronos.tech.infrastructure.web;
 
 import chronos.tech.application.dto.turma.MatriculaTurmaRequestDTO;
 import chronos.tech.application.dto.turma.MatriculaTurmaResponseDTO;
+import chronos.tech.application.dto.turma.MatriculaTurmaLoteRequestDTO;
+import chronos.tech.application.dto.turma.MatriculaTurmaLoteResponseDTO;
 import chronos.tech.application.port.in.MatriculaTurmaUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -13,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Tag(name = "Matrículas em Turma", description = "Endpoints para gerenciamento de matrículas em turmas")
 @SecurityRequirement(name = "bearerAuth")
+@PreAuthorize("hasAnyRole('ADMINISTRADOR', 'SECRETÁRIO')")
 public class MatriculaTurmaController {
 
     private final MatriculaTurmaUseCase service;
@@ -79,6 +83,15 @@ public class MatriculaTurmaController {
     public ResponseEntity<MatriculaTurmaResponseDTO> create(
             @RequestBody @Validated MatriculaTurmaRequestDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.saveMatricula(dto));
+    }
+
+    @PostMapping("/lote")
+    public ResponseEntity<MatriculaTurmaLoteResponseDTO> createBatch(
+            @RequestBody @Validated MatriculaTurmaLoteRequestDTO dto) {
+        MatriculaTurmaLoteResponseDTO result = service.saveMatriculas(dto);
+        HttpStatus status = result.total_com_erro() == 0 ? HttpStatus.CREATED
+                : result.total_matriculado() == 0 ? HttpStatus.UNPROCESSABLE_ENTITY : HttpStatus.MULTI_STATUS;
+        return ResponseEntity.status(status).body(result);
     }
 
     @Operation(

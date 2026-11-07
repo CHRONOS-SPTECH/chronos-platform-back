@@ -9,7 +9,6 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 
 @Entity(name = "turma")
 @Table(name = "turma")
@@ -65,8 +64,4 @@ public class Turma {
 
         return ((double) diasPassados / diasTotais) * 100;
     }
-
-    @OneToMany(mappedBy = "turma")
-    private List<MatriculaTurma> matriculaTurmas;
-
 }

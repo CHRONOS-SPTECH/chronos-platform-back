@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Component
 @RequiredArgsConstructor
@@ -21,18 +23,22 @@ public class TurmaRepositoryAdapter implements TurmaRepository {
     }
 
     @Override
+    public Page<Turma> findAll(Pageable pageable) {
+        return repository.findAll(pageable);
+    }
+
+    @Override
     public Optional<Turma> findById(Long id) {
-        return repository.findById(id);
+        try {
+            return repository.findById(Math.toIntExact(id));
+        } catch (ArithmeticException e) {
+            return Optional.empty();
+        }
     }
 
     @Override
     public Turma save(Turma turma) {
         return repository.save(turma);
-    }
-
-    @Override
-    public void deleteById(Long id) {
-        repository.deleteById(id);
     }
 
     @Override

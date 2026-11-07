@@ -20,5 +20,6 @@ public interface MatriculaTurmaRepository {
     List<MatriculaTurma> findByPessoaIdPessoa(Integer pessoaId);
     Page<MatriculaTurma> findByTurmaIdTurma(Integer turmaId, Pageable pageable);
     Page<Pessoa> findAlunos(Pageable pageable);
+    Page<Pessoa> findAlunosDisponiveis(Integer turmaId, Pageable pageable);
     List<EventoDestinatario> findDestinatariosAtivosEmTurmasIniciadas(List<Integer> turmaIds, LocalDate hoje);
 }

@@ -12,6 +12,8 @@ public interface ChamadaAulaRepository {
     ChamadaAula save(ChamadaAula chamadaAula);
     void deleteById(Long id);
     List<ChamadaAula> findByPessoaIdPessoaAndAulaTurmaIdTurma(Integer pessoaId, Integer turmaId);
+    List<ChamadaAula> findByPessoaIdPessoaInAndAulaTurmaIdTurma(List<Integer> pessoaIds, Integer turmaId);
+    List<ChamadaAula> findByAulaTurmaIdTurma(Integer turmaId);
 
     List<ChamadaAula> saveAll(List<ChamadaAula> chamadas);
 

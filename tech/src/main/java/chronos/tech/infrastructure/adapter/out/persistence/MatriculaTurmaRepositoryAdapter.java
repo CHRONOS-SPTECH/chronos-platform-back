@@ -18,6 +18,7 @@ import java.time.LocalDate;
 @Component
 @RequiredArgsConstructor
 public class MatriculaTurmaRepositoryAdapter implements MatriculaTurmaRepository {
+    private static final List<String> VINCULOS_ALUNO = List.of("Provacionista", "Membro", "Membro Força Viva");
     private final SpringDataMatriculaTurmaRepository repository;
 
     @Override
@@ -57,7 +58,12 @@ public class MatriculaTurmaRepositoryAdapter implements MatriculaTurmaRepository
 
     @Override
     public Page<Pessoa> findAlunos(Pageable pageable) {
-        return repository.findAlunos(List.of("Provacionista", "Membro", "Membro Força Viva"), pageable);
+        return repository.findAlunos(VINCULOS_ALUNO, pageable);
+    }
+
+    @Override
+    public Page<Pessoa> findAlunosDisponiveis(Integer turmaId, Pageable pageable) {
+        return repository.findAlunosDisponiveis(turmaId, VINCULOS_ALUNO, pageable);
     }
 
     @Override

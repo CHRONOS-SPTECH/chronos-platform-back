@@ -8,6 +8,7 @@ import java.util.Optional;
 public interface TipoVinculoRepository {
     List<TipoVinculo> findAll();
     Optional<TipoVinculo> findById(Integer id);
+    Optional<TipoVinculo> findByNome(String nome);
     TipoVinculo save(TipoVinculo tipoVinculo);
     void deleteById(Integer id);
 }

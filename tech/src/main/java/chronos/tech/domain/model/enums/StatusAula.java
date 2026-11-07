@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum StatusAula {
     AGENDADA("Agendada"),
+    REALIZADA("Realizada"),
     CANCELADA("Cancelada"),
     FERIADO("Feriado");
 

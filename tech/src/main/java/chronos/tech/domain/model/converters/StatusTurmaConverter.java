@@ -9,7 +9,13 @@ public class StatusTurmaConverter implements AttributeConverter<StatusTurma, Str
 
     @Override
     public String convertToDatabaseColumn(StatusTurma attribute) {
-        return attribute == null ? null : attribute.toString();
+        if (attribute == null) return null;
+        return switch (attribute) {
+            case NAO_INICIADA -> "Nao Iniciada";
+            case EM_ANDAMENTO -> "Em Andamento";
+            case CONCLUIDA -> "Concluida";
+            case INATIVA -> "Inativa";
+        };
     }
 
     @Override

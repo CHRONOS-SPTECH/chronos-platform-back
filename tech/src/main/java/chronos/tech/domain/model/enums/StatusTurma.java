@@ -12,10 +12,6 @@ public enum StatusTurma {
         this.displayName = displayName;
     }
     
-    public String getDisplayName() {
-        return displayName;
-    }
-    
     @Override
     public String toString() {
         return displayName;
@@ -27,12 +23,14 @@ public enum StatusTurma {
         
         switch (value) {
             case "Não Iniciada":
+            case "Nao Iniciada":
                 return NAO_INICIADA;
             case "Inativa":
                 return INATIVA;
             case "Em Andamento":
                 return EM_ANDAMENTO;
             case "Concluída":
+            case "Concluida":
                 return CONCLUIDA;
             default:
                 // Tenta converter pelo nome do enum como fallback

@@ -14,6 +14,7 @@ public class TipoVinculoRepositoryAdapter implements TipoVinculoRepository {
     private final SpringDataTipoVinculoRepository repository;
     public List<TipoVinculo> findAll() { return repository.findAll(); }
     public Optional<TipoVinculo> findById(Integer id) { return repository.findById(id); }
+    public Optional<TipoVinculo> findByNome(String nome) { return repository.findByNome(nome); }
     public TipoVinculo save(TipoVinculo tipoVinculo) { return repository.save(tipoVinculo); }
     public void deleteById(Integer id) { repository.deleteById(id); }
 }

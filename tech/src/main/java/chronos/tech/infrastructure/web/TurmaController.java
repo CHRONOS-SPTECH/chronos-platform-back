@@ -1,7 +1,10 @@
 package chronos.tech.infrastructure.web;
 
 import chronos.tech.application.dto.turma.TurmaRequestDTO;
-import chronos.tech.application.dto.turma.TurmaAlunoResponseDTO;
+import chronos.tech.application.dto.turma.AvaliacaoFormacaoResponseDTO;
+import chronos.tech.application.dto.turma.DecisaoFormacaoRequestDTO;
+import chronos.tech.application.dto.turma.AlunoDisponivelMatriculaResponseDTO;
+import chronos.tech.application.dto.turma.TurmaDetalhesResponseDTO;
 import chronos.tech.application.dto.turma.TurmaDeletadaResponseDTO;
 import chronos.tech.application.dto.pessoa.AlunoComPresencaResponseDTO;
 import chronos.tech.application.dto.turma.TurmaResponseDTO;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.prepost.PreAuthorize;
 import chronos.tech.application.dto.turma.TurmaAlunoPaginaResponseDTO;
 
 import java.util.List;
@@ -29,6 +33,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Tag(name = "Turmas", description = "Endpoints para gerenciamento de turmas")
 @SecurityRequirement(name = "bearerAuth")
+@PreAuthorize("hasAnyRole('ADMINISTRADOR', 'SECRETÁRIO')")
 public class TurmaController {
 
     private final TurmaUseCase service;
@@ -45,6 +50,12 @@ public class TurmaController {
     @GetMapping
     public ResponseEntity<List<TurmaResponseDTO>> getAllTurmas() {
         return ResponseEntity.ok().body(service.getAllTurmas());
+    }
+
+    @GetMapping(params = "page")
+    public ResponseEntity<Page<TurmaResponseDTO>> getTurmasPaginadas(
+            @PageableDefault(size = 20, sort = "nomeTurma") Pageable pageable) {
+        return ResponseEntity.ok(service.getAllTurmas(pageable));
     }
 
     @Operation(
@@ -65,6 +76,11 @@ public class TurmaController {
     public ResponseEntity<TurmaResponseDTO> getTurma(
             @PathVariable @Validated Long id){
         return ResponseEntity.ok().body(service.getTurma(id));
+    }
+
+    @GetMapping("/{id}/detalhes")
+    public ResponseEntity<TurmaDetalhesResponseDTO> detalhes(@PathVariable Long id) {
+        return ResponseEntity.ok(service.getDetalhes(id));
     }
 
     @Operation(
@@ -101,7 +117,7 @@ public class TurmaController {
             description = "Turma não encontrada",
             content = @Content
     )
-    @PutMapping("{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<TurmaResponseDTO> updateTurma(
             @PathVariable @Validated Long id,
             @RequestBody TurmaRequestDTO turma){
@@ -129,6 +145,16 @@ public class TurmaController {
         return ResponseEntity.ok(service.deleteTurma(id));
     }
 
+    @PatchMapping("/{id}/inativacao")
+    public ResponseEntity<TurmaDeletadaResponseDTO> inativarTurma(@PathVariable Long id) {
+        return ResponseEntity.ok(service.deleteTurma(id));
+    }
+
+    @PatchMapping("/{id}/iniciar")
+    public ResponseEntity<TurmaDeletadaResponseDTO> iniciarTurma(@PathVariable Long id) {
+        return ResponseEntity.ok(service.iniciarTurma(id));
+    }
+
     @Operation(
             summary = "Encerrar turma",
             description = "Muda o status da turma para concluída"
@@ -147,6 +173,21 @@ public class TurmaController {
     public ResponseEntity<TurmaDeletadaResponseDTO> encerrarTurma(
             @PathVariable Long id) {
         return ResponseEntity.ok(service.encerrarTurma(id));
+    }
+
+    @GetMapping("/{id}/formandos")
+    public ResponseEntity<Page<AvaliacaoFormacaoResponseDTO>> formandos(
+            @PathVariable Long id,
+            @PageableDefault(size = 20, sort = "pessoa.nome") Pageable pageable) {
+        return ResponseEntity.ok(service.listarFormandos(id, pageable));
+    }
+
+    @PatchMapping("/{id}/formandos/{idPessoa}/decisao")
+    public ResponseEntity<AvaliacaoFormacaoResponseDTO> decidirFormacao(
+            @PathVariable Long id,
+            @PathVariable Long idPessoa,
+            @RequestBody @Validated DecisaoFormacaoRequestDTO decisao) {
+        return ResponseEntity.ok(service.decidirFormacao(id, idPessoa, decisao));
     }
 
     @Operation(
@@ -168,6 +209,15 @@ public class TurmaController {
             @PathVariable Integer id,
             @PageableDefault(size = 20, sort = "pessoa.nome") Pageable pageable) {
         return ResponseEntity.ok(service.getAlunosDaTurmaComPresenca(id, pageable));
+    }
+
+    @Operation(summary = "Listar alunos disponíveis para matrícula",
+            description = "Pessoas ativas com vínculo elegível que ainda não estão matriculadas nesta turma")
+    @GetMapping("/{id}/alunos-disponiveis")
+    public ResponseEntity<Page<AlunoDisponivelMatriculaResponseDTO>> alunosDisponiveisParaMatricula(
+            @PathVariable Long id,
+            @PageableDefault(size = 20, sort = "nome") Pageable pageable) {
+        return ResponseEntity.ok(service.getAlunosDisponiveis(id, pageable));
     }
 
     @Operation(

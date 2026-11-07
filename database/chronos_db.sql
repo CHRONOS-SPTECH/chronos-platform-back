@@ -56,7 +56,7 @@ CREATE TABLE turma (
     nome_turma VARCHAR(100) NOT NULL,
     data_inicio DATE NOT NULL,
     data_encerramento DATE,
-    status_turma ENUM('Nao Iniciada', 'Em Andamento', 'Concluida') DEFAULT 'Nao Iniciada'
+    status_turma ENUM('Nao Iniciada', 'Em Andamento', 'Concluida', 'Inativa') DEFAULT 'Nao Iniciada'
 );
 
 -- Tabela: pessoa
@@ -127,6 +127,21 @@ CREATE TABLE matricula_turma (
         REFERENCES turma(id_turma),
     CONSTRAINT fk_matricula_pessoa FOREIGN KEY (id_pessoa) 
         REFERENCES pessoa(id_pessoa)
+);
+
+-- Avaliação individual dos alunos Provacionistas após o encerramento da turma
+CREATE TABLE avaliacao_formacao_turma (
+    id_turma INT NOT NULL,
+    id_pessoa INT NOT NULL,
+    status_avaliacao ENUM('PENDENTE', 'APROVADO', 'REPROVADO') NOT NULL DEFAULT 'PENDENTE',
+    data_decisao DATE NULL,
+    id_usuario_decisor INT NULL,
+    observacao VARCHAR(500) NULL,
+    PRIMARY KEY (id_turma, id_pessoa),
+    CONSTRAINT fk_avaliacao_formacao_matricula FOREIGN KEY (id_turma, id_pessoa)
+        REFERENCES matricula_turma(id_turma, id_pessoa),
+    CONSTRAINT fk_avaliacao_formacao_usuario FOREIGN KEY (id_usuario_decisor)
+        REFERENCES usuario(id_usuario)
 );
 
 -- Tabela: materia

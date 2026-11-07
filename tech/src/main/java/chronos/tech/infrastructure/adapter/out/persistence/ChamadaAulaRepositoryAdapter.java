@@ -40,6 +40,16 @@ public class ChamadaAulaRepositoryAdapter implements ChamadaAulaRepository {
     }
 
     @Override
+    public List<ChamadaAula> findByPessoaIdPessoaInAndAulaTurmaIdTurma(List<Integer> pessoaIds, Integer turmaId) {
+        return pessoaIds.isEmpty() ? List.of() : repository.findByPessoaIdPessoaInAndAulaTurmaIdTurma(pessoaIds, turmaId);
+    }
+
+    @Override
+    public List<ChamadaAula> findByAulaTurmaIdTurma(Integer turmaId) {
+        return repository.findByAulaTurmaIdTurma(turmaId);
+    }
+
+    @Override
     public List<ChamadaAula> saveAll(List<ChamadaAula> chamadas) {
         return repository.saveAll(chamadas);
     }

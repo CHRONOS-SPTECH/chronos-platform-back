@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
-public interface SpringDataTurmaRepository extends JpaRepository<Turma, Long> {
+public interface SpringDataTurmaRepository extends JpaRepository<Turma, Integer> {
 
     @Query("SELECT COUNT(t) FROM turma t WHERE t.statusTurma = :status")
     Long countByStatus(@Param("status") StatusTurma status);
