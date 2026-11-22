@@ -54,4 +54,10 @@ public interface SpringDataPessoaRepository extends JpaRepository<Pessoa, Long> 
     List<EventoDestinatario> findPublicoExternoAtivoSemMatricula(
             @Param("tipoVinculo") String tipoVinculo
     );
+
+    @Query("SELECT p FROM pessoa p WHERE p.dataSaida IS NULL AND LOWER(p.tipoVinculo.nome_vinculo) IN ('provacionista', 'membro', 'membro força viva')")
+    List<Pessoa> findActiveStudents();
+
+    @Query("SELECT COUNT(p) FROM pessoa p WHERE p.dataSaida IS NULL AND LOWER(p.tipoVinculo.nome_vinculo) IN ('provacionista', 'membro', 'membro força viva')")
+    long countActiveStudents();
 }

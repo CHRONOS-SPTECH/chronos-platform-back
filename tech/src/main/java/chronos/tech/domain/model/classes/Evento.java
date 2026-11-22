@@ -27,6 +27,8 @@ public class Evento {
         private String titulo;
         @Column(name = "descricao", columnDefinition = "TEXT")
         private String descricao;
+        @Column(name = "status_evento")
+        private String statusEvento = "Agendado";
         @Column(name = "local_evento")
         private String localEvento;
         @Column(name = "incluir_publico_externo", nullable = false)

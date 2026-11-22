@@ -4,6 +4,8 @@ import chronos.tech.application.dto.aula.AulaComTemaEMateriaComInstrutorResponse
 import chronos.tech.application.dto.aula.AulaComTemaEMateriaResponseDTO;
 import chronos.tech.application.dto.aula.AulaResponseDTO;
 import chronos.tech.application.dto.importacao.RelatorioImportacaoResponseDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import chronos.tech.application.port.in.AulaUseCase;
 import chronos.tech.infrastructure.security.CustomUserDetailsService;
@@ -64,13 +66,13 @@ class AulaControllerTest {
 
         AulaResponseDTO aula = mock(AulaResponseDTO.class);
 
-        when(service.getAllAulas())
-                .thenReturn(List.of(aula));
+        when(service.getAllAulas(any(Pageable.class)))
+                .thenReturn(Page.empty());
 
         mockMvc.perform(get("/aulas"))
                 .andExpect(status().isOk());
 
-        verify(service).getAllAulas();
+        verify(service).getAllAulas(any(Pageable.class));
     }
 
     @Test
@@ -145,16 +147,15 @@ class AulaControllerTest {
         AulaComTemaEMateriaResponseDTO dto =
                 mock(AulaComTemaEMateriaResponseDTO.class);
 
-        when(service.getAulasDoDia(any(Date.class), eq(1)))
-                .thenReturn(List.of(dto));
+        when(service.getAulasDoDia(any(Date.class), eq(1), any(Pageable.class)))
+                .thenReturn(Page.empty());
 
         mockMvc.perform(get("/aulas/dia")
                         .param("data", "2026-06-01")
                         .param("instrutorId", "1"))
                 .andExpect(status().isOk());
 
-        verify(service)
-                .getAulasDoDia(any(Date.class), eq(1));
+        verify(service).getAulasDoDia(any(Date.class), eq(1), any(Pageable.class));
     }
 
     @Test
@@ -163,13 +164,13 @@ class AulaControllerTest {
         AulaComTemaEMateriaComInstrutorResponseDTO dto =
                 mock(AulaComTemaEMateriaComInstrutorResponseDTO.class);
 
-        when(service.getAllAulasDetails())
-                .thenReturn(List.of(dto));
+        when(service.getAllAulasDetails(any(Pageable.class)))
+                .thenReturn(Page.empty());
 
         mockMvc.perform(get("/aulas/detalhadas"))
                 .andExpect(status().isOk());
 
-        verify(service).getAllAulasDetails();
+        verify(service).getAllAulasDetails(any(Pageable.class));
     }
 
     @Test
@@ -222,13 +223,13 @@ class AulaControllerTest {
         AulaComTemaEMateriaComInstrutorResponseDTO dto =
                 mock(AulaComTemaEMateriaComInstrutorResponseDTO.class);
 
-        when(service.getAulasPorTurma(idTurma))
-                .thenReturn(List.of(dto));
+        when(service.getAulasPorTurma(eq(idTurma), any(Pageable.class)))
+                .thenReturn(Page.empty());
 
         mockMvc.perform(get("/aulas/turma/{id}", idTurma))
                 .andExpect(status().isOk());
 
-        verify(service).getAulasPorTurma(idTurma);
+        verify(service).getAulasPorTurma(eq(idTurma), any(Pageable.class));
     }
 
     @Test

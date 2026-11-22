@@ -74,4 +74,24 @@ public interface SpringDataMatriculaTurmaRepository extends JpaRepository<Matric
             @Param("status") StatusTurma status,
             @Param("hoje") LocalDate hoje
     );
+
+    @EntityGraph(attributePaths = {"pessoa", "pessoa.tipoVinculo", "turma"})
+    @Query("""
+            SELECT m FROM matricula_turma m
+            JOIN m.pessoa p
+            JOIN m.turma t
+            WHERE t.statusTurma = :status
+              AND p.dataSaida IS NULL
+              AND LOWER(p.tipoVinculo.nome_vinculo) IN ('provacionista', 'membro', 'membro força viva')
+            """)
+    List<MatriculaTurma> findActiveEnrollments(@Param("status") StatusTurma status);
+
+    @Query("""
+            SELECT COUNT(DISTINCT m) FROM matricula_turma m
+            JOIN m.pessoa p JOIN m.turma t
+            WHERE t.statusTurma = :status
+              AND p.dataSaida IS NULL
+              AND LOWER(p.tipoVinculo.nome_vinculo) IN ('provacionista', 'membro', 'membro força viva')
+            """)
+    long countActiveEnrollments(@Param("status") StatusTurma status);
 }

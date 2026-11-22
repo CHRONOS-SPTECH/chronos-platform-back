@@ -375,6 +375,7 @@ class UsuariosServiceTest {
                         LocalDate.of(2000, 1, 1),
                         LocalDate.now(),
                         null,
+                        null,
                         null
                 );
 

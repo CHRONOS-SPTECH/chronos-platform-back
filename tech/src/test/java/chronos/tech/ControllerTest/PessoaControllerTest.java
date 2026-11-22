@@ -1,5 +1,6 @@
 package chronos.tech.ControllerTest;
 
+import chronos.tech.application.dto.pessoa.PessoaFichaResponseDTO;
 import chronos.tech.application.dto.pessoa.PessoaRequestDTO;
 import chronos.tech.application.dto.pessoa.PessoaDetalhadaResponseDTO;
 import chronos.tech.application.dto.pessoa.PessoaResponseDTO;
@@ -12,6 +13,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -51,15 +54,13 @@ class PessoaControllerTest {
     @Test
     void deveRetornarListaDePessoas() throws Exception {
 
-        PessoaResponseDTO pessoa = mock(PessoaResponseDTO.class);
-
-        when(service.getAllPersons())
-                .thenReturn(List.of(pessoa));
+        when(service.getAllPersons(any(Pageable.class)))
+                .thenReturn(Page.empty());
 
         mockMvc.perform(get("/pessoas"))
                 .andExpect(status().isOk());
 
-        verify(service).getAllPersons();
+        verify(service).getAllPersons(any(Pageable.class));
     }
 
     @Test
@@ -84,13 +85,13 @@ class PessoaControllerTest {
         PessoaDetalhadaResponseDTO pessoa =
                 mock(PessoaDetalhadaResponseDTO.class);
 
-        when(service.getAllPersonsDetails())
-                .thenReturn(List.of(pessoa));
+        when(service.getAllPersonsDetails(any(Pageable.class)))
+                .thenReturn(Page.empty());
 
         mockMvc.perform(get("/pessoas/details"))
                 .andExpect(status().isOk());
 
-        verify(service).getAllPersonsDetails();
+        verify(service).getAllPersonsDetails(any(Pageable.class));
     }
 
     @Test
@@ -98,8 +99,8 @@ class PessoaControllerTest {
 
         Long id = 1L;
 
-        PessoaDetalhadaResponseDTO pessoa =
-                mock(PessoaDetalhadaResponseDTO.class);
+        PessoaFichaResponseDTO pessoa =
+                mock(PessoaFichaResponseDTO.class);
 
         when(service.getPersonsDetailsId(id))
                 .thenReturn(pessoa);
@@ -141,24 +142,26 @@ class PessoaControllerTest {
 
         Long id = 1L;
 
-        PessoaRequestDTO request =
-                mock(PessoaRequestDTO.class);
+        PessoaResponseDTO response = mock(PessoaResponseDTO.class);
 
-        PessoaResponseDTO response =
-                mock(PessoaResponseDTO.class);
-
-        when(service.updatePessoa(
-                eq(id),
-                any(PessoaRequestDTO.class)))
+        when(service.updatePessoa(eq(id), any(PessoaRequestDTO.class)))
                 .thenReturn(response);
+
+        String json = """
+        {
+            "nome":"João Silva",
+            "email":"joao@email.com",
+            "telefone":"11999999999",
+            "tipo_vinculo_id":1
+        }
+        """;
 
         mockMvc.perform(put("/pessoas/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{}"))
+                        .content(json))
                 .andExpect(status().isOk());
 
-        verify(service)
-                .updatePessoa(eq(id), any(PessoaRequestDTO.class));
+        verify(service).updatePessoa(eq(id), any(PessoaRequestDTO.class));
     }
 
     @Test
@@ -169,7 +172,7 @@ class PessoaControllerTest {
         doNothing().when(service).deletePessoa(id);
 
         mockMvc.perform(delete("/pessoas/{id}", id))
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
 
         verify(service).deletePessoa(id);
     }

@@ -15,6 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -166,13 +169,12 @@ class TurmaControllerTest {
         AlunoComPresencaResponseDTO aluno =
                 mock(AlunoComPresencaResponseDTO.class);
 
-        when(service.getAlunosDaTurmaComPresenca(idTurma))
-                .thenReturn(List.of(aluno));
+        when(service.getAlunosDaTurmaComPresenca(eq(idTurma), any(Pageable.class)))
+                .thenReturn(new PageImpl<>(List.of(aluno)));
 
         mockMvc.perform(get("/turmas/{id}/alunos", idTurma))
                 .andExpect(status().isOk());
 
-        verify(service)
-                .getAlunosDaTurmaComPresenca(idTurma);
+        verify(service).getAlunosDaTurmaComPresenca(eq(idTurma), any(Pageable.class));
     }
 }
