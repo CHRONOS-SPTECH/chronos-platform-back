@@ -73,5 +73,8 @@ public class PessoaRepositoryAdapter implements PessoaRepository {
         return repository.findPublicoExternoAtivoSemMatricula("Público Externo");
     }
 
+    @Override
+    public List<Pessoa> findActiveStudents() { return repository.findActiveStudents(); }
+
 
 }

@@ -79,6 +79,7 @@ public class EventoService implements EventoUseCase {
         evento.setIncluirPublicoExterno(dto.incluir_publico_externo());
 
         Evento salvo = repository.save(evento);
+
         eventPublisher.publishEvent(new EventoCriadoEvent(salvo.getIdEvento()));
 
         return mapper.toResponse(salvo);

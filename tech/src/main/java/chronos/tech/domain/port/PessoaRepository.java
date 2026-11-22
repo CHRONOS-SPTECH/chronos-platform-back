@@ -27,6 +27,10 @@ public interface PessoaRepository {
     List<LocalDate> findAllDatasNascimento();
 
     List<Object[]> findDatasNascimentoEGenero();
+
     Optional<Pessoa> findByNome(String nome);
+
     List<EventoDestinatario> findPublicoExternoAtivoSemMatricula();
+
+    List<Pessoa> findActiveStudents();
 }

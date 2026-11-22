@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 public class CustomUserPrincipal implements UserDetails {
     private final Usuario usuario;
@@ -30,7 +31,7 @@ public class CustomUserPrincipal implements UserDetails {
         return perfis.stream()
                 .map(v -> v.getPerfil() != null ? v.getPerfil().getNomePerfil() : null)
                 .filter(nome -> nome != null && !nome.isBlank())
-                .map(nome -> new SimpleGrantedAuthority("ROLE_" + nome.toUpperCase()))
+                .map(nome -> new SimpleGrantedAuthority("ROLE_" + nome.toUpperCase(Locale.ROOT)))
                 .toList();
     }
 

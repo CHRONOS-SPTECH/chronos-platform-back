@@ -2,12 +2,11 @@ package chronos.tech.infrastructure.adapter.out.persistence;
 
 import chronos.tech.domain.model.classes.Aula;
 import chronos.tech.domain.model.classes.Pessoa;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-
-import java.util.List;
+import org.springframework.data.repository.query.Param;
 
 import java.sql.Date;
 import java.util.List;
@@ -18,11 +17,37 @@ public interface SpringDataAulaRepository extends JpaRepository<Aula, Integer> {
     List<Pessoa> findInstrutoresAtivos();
 
     List<Aula> findByDataAulaAndInstrutorIdPessoa(Date data, Integer instrutorId);
+
     Page<Aula> findByDataAulaAndInstrutorIdPessoa(Date data, Integer instrutorId, Pageable pageable);
+
     List<Aula> findByTurmaIdTurma(Integer idTurma);
+
     Page<Aula> findByTurmaIdTurma(Integer idTurma, Pageable pageable);
+
     List<Aula> findByInstrutorIdPessoaAndDataAula(Integer idInstrutor, Date dataAula);
+
     List<Aula> findByTurmaIdTurmaAndDataAula(Integer idTurma, Date dataAula);
+
     List<Aula> findByInstrutorIdPessoaAndDataAulaAndIdAulaNot(Integer idInstrutor, Date dataAula, Integer idAula);
+
     List<Aula> findByTurmaIdTurmaAndDataAulaAndIdAulaNot(Integer idTurma, Date dataAula, Integer idAula);
+
+    List<Aula> findByInstrutorIdPessoa(Integer instrutorId);
+
+    @Query("SELECT a FROM aula a WHERE a.dataAula BETWEEN :startDate AND :endDate")
+    List<Aula> findLessonsBetween(@Param("startDate") Date startDate,
+                                  @Param("endDate") Date endDate);
+
+    @Query("SELECT a FROM aula a WHERE a.instrutor.idPessoa = :instructorId AND a.dataAula BETWEEN :startDate AND " +
+            ":endDate")
+    List<Aula> findAssignedLessonsBetween(@Param("instructorId") Integer instructorId,
+                                          @Param("startDate") Date startDate,
+                                          @Param("endDate") Date endDate);
+
+    @Query("SELECT a FROM aula a WHERE a.dataAula >= :startDate")
+    List<Aula> findScheduledLessonsFrom(@Param("startDate") Date startDate);
+
+    @Query("SELECT COUNT(a) FROM aula a WHERE a.dataAula BETWEEN :startDate AND :endDate")
+    long countLessonsBetween(@Param("startDate") Date startDate,
+                             @Param("endDate") Date endDate);
 }

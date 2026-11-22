@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface SpringDataTurmaRepository extends JpaRepository<Turma, Integer> {
@@ -14,4 +15,6 @@ public interface SpringDataTurmaRepository extends JpaRepository<Turma, Integer>
     Long countByStatus(@Param("status") StatusTurma status);
 
     Optional<Turma> findByNomeTurma(String nomeTurma);
+
+    List<Turma> findByStatusTurma(StatusTurma statusTurma);
 }

@@ -81,10 +81,10 @@ class MatriculaTurmaControllerTest {
         MatriculaTurmaResponseDTO response =
                 Mockito.mock(MatriculaTurmaResponseDTO.class);
 
-        when(service.getMatricula(1L))
+        when(service.getMatricula(1, 1))
                 .thenReturn(response);
 
-        mockMvc.perform(get("/matriculas-turma/1"))
+        mockMvc.perform(get("/matriculas-turma/1/pessoas/1"))
                 .andExpect(status().isOk());
     }
 
@@ -124,11 +124,12 @@ class MatriculaTurmaControllerTest {
                 Mockito.mock(MatriculaTurmaResponseDTO.class);
 
         when(service.updateMatricula(
-                eq(1L),
+                eq(1),
+                eq(1),
                 any(MatriculaTurmaRequestDTO.class)))
                 .thenReturn(response);
 
-        mockMvc.perform(put("/matriculas-turma/1")
+        mockMvc.perform(put("/matriculas-turma/1/pessoas/1")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk());
@@ -137,9 +138,9 @@ class MatriculaTurmaControllerTest {
     @Test
     void deveDeletarMatricula() throws Exception {
 
-        doNothing().when(service).deleteMatricula(1L);
+        doNothing().when(service).deleteMatricula(1, 1);
 
-        mockMvc.perform(delete("/matriculas-turma/1"))
+        mockMvc.perform(delete("/matriculas-turma/1/pessoas/1"))
                 .andExpect(status().isNoContent());
     }
 }
