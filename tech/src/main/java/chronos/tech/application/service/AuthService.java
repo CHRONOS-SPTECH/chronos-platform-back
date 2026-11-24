@@ -4,7 +4,9 @@ import chronos.tech.application.dto.auth.AuthLoginRequestDTO;
 import chronos.tech.application.dto.auth.AuthRefreshRequestDTO;
 import chronos.tech.application.dto.auth.AuthRegisterRequestDTO;
 import chronos.tech.application.dto.auth.AuthResponseDTO;
+import chronos.tech.application.dto.auth.AuthMeResponseDTO;
 import chronos.tech.application.dto.cadastro.PerfilAcessoResponseDTO;
+import chronos.tech.application.dto.cadastro.TelaResponseDTO;
 import chronos.tech.application.mapper.PerfilAcessoMapper;
 import chronos.tech.application.mapper.PessoaMapper;
 import chronos.tech.application.mapper.UsuarioMapper;
@@ -14,6 +16,7 @@ import chronos.tech.domain.model.classes.Pessoa;
 import chronos.tech.domain.model.classes.Usuario;
 import chronos.tech.domain.model.classes.UsuarioPerfil;
 import chronos.tech.domain.model.classes.compostas.UsuarioPerfilId;
+import chronos.tech.domain.model.classes.Tela;
 import chronos.tech.domain.port.PerfilAcessoRepository;
 import chronos.tech.domain.port.UsuarioRepository;
 import chronos.tech.domain.port.UsuarioPerfilRepository;
@@ -27,7 +30,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -80,6 +86,7 @@ public class AuthService implements AuthUseCase {
         vinculo.setPerfil(perfil);
 
         usuarioPerfilRepository.save(vinculo);
+        perfisResponse.add(perfilAcessoMapper.toResponse(perfil));
 
         String token = jwtService.generateToken(salvo.getEmailLogin());
         String refreshToken = jwtService.generateRefreshToken(salvo.getEmailLogin());
@@ -125,4 +132,46 @@ public class AuthService implements AuthUseCase {
                 null // Adicionado nulo ou carregue os perfis se o DTO exigir
         );
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public AuthMeResponseDTO me(String email) {
+        Usuario usuario = usuarioRepository.findByEmailLogin(email)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        List<UsuarioPerfil> vinculos = usuarioPerfilRepository.findByUsuarioId(Long.valueOf(usuario.getIdUsuario()));
+
+        List<PerfilAcessoResponseDTO> perfis = vinculos.stream()
+                .map(UsuarioPerfil::getPerfil)
+                .filter(perfil -> Boolean.TRUE.equals(perfil.getStatusAtivo()))
+                .map(perfilAcessoMapper::toResponse)
+                .collect(Collectors.toList());
+
+        Map<String, TelaResponseDTO> telasPorCodigo = new LinkedHashMap<>();
+        for (UsuarioPerfil vinculo : vinculos) {
+            PerfilAcesso perfil = vinculo.getPerfil();
+            if (!Boolean.TRUE.equals(perfil.getStatusAtivo()) || perfil.getTelas() == null) {
+                continue;
+            }
+
+            for (Tela tela : perfil.getTelas()) {
+                if (!Boolean.TRUE.equals(tela.getStatusAtivo()) || tela.getCodigoTela() == null) {
+                    continue;
+                }
+                telasPorCodigo.putIfAbsent(tela.getCodigoTela(), new TelaResponseDTO(
+                        tela.getIdTela(), tela.getCodigoTela(), tela.getNomeTela(),
+                        tela.getGrupo(), tela.getOrdem(), tela.getStatusAtivo()));
+            }
+        }
+
+        List<TelaResponseDTO> telasPermitidas = telasPorCodigo.values().stream()
+                .sorted(Comparator.comparing(TelaResponseDTO::ordem,
+                                Comparator.nullsLast(Comparator.naturalOrder()))
+                        .thenComparing(TelaResponseDTO::nome_tela,
+                                Comparator.nullsLast(Comparator.naturalOrder())))
+                .toList();
+
+        return new AuthMeResponseDTO(usuarioMapper.toResponse(usuario), perfis, telasPermitidas);
+    }
+
 }

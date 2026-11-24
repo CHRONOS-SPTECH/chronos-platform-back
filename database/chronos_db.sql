@@ -19,7 +19,31 @@ CREATE TABLE tipo_vinculo (
 CREATE TABLE perfil_acesso (
     id_perfil INT AUTO_INCREMENT PRIMARY KEY,
     nome_perfil VARCHAR(50) NOT NULL,
-    descricao VARCHAR(255)
+    descricao VARCHAR(255),
+    status_ativo TINYINT NOT NULL DEFAULT 1,
+    codigo_tela_inicial VARCHAR(50) NULL
+);
+
+-- Tabela: tela
+CREATE TABLE tela (
+    id_tela INT AUTO_INCREMENT PRIMARY KEY,
+    codigo_tela VARCHAR(50) NOT NULL,
+    nome_tela VARCHAR(100) NOT NULL,
+    grupo VARCHAR(100) NULL,
+    ordem INT NULL,
+    status_ativo TINYINT NOT NULL DEFAULT 1,
+    CONSTRAINT uk_tela_codigo UNIQUE (codigo_tela)
+);
+
+-- Tabela: perfil_tela
+CREATE TABLE perfil_tela (
+    id_perfil INT NOT NULL,
+    id_tela INT NOT NULL,
+    CONSTRAINT pk_perfil_tela PRIMARY KEY (id_perfil, id_tela),
+    CONSTRAINT fk_perfil_tela_perfil FOREIGN KEY (id_perfil)
+        REFERENCES perfil_acesso(id_perfil),
+    CONSTRAINT fk_perfil_tela_tela FOREIGN KEY (id_tela)
+        REFERENCES tela(id_tela)
 );
 
 -- Tabela: nivel_formacao
@@ -100,7 +124,7 @@ CREATE TABLE usuario (
     id_pessoa INT UNIQUE NOT NULL,
     email_login VARCHAR(150) UNIQUE NOT NULL,
     senha_hash VARCHAR(255) NOT NULL,
-    status_ativo TINYINT(1) DEFAULT 1, 
+    status_ativo TINYINT(1) NOT NULL DEFAULT 1,
     data_criacao DATETIME DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_usuario_pessoa FOREIGN KEY (id_pessoa) 
         REFERENCES pessoa(id_pessoa)
@@ -266,11 +290,22 @@ INSERT INTO tipo_vinculo (nome_vinculo, descricao) VALUES
 ('Membro', 'Aqueles que já concluíram o curso de Filosofia Para Viver e integram o quadro da escola.'),
 ('Membro Força Viva', 'Membros que assumem a responsabilidade de serem instrutores, secretários ou diretores');
 
-INSERT INTO perfil_acesso (nome_perfil, descricao) VALUES 
-('Administrador', 'Acesso total a todas as configurações, usuários e logs do sistema.'),
-('Diretor', 'Visão gerencial e estratégica do sistema. Acesso indicadores de engajamento, acompanhamento de turmas e aprovação de eventos.'),
-('Secretário', 'Gestão de matrículas, presenças, eventos e dados de contato das pessoas.'),
-('Instrutor', 'Lançamento de temas de aula e registro de frequência das turmas sob sua responsabilidade.');
+INSERT INTO perfil_acesso (nome_perfil, descricao, status_ativo, codigo_tela_inicial) VALUES
+('Administrador', 'Acesso total a todas as configurações, usuários e logs do sistema.', 1, 'home'),
+('Diretor', 'Visão gerencial e estratégica do sistema. Acesso a indicadores de engajamento, acompanhamento de turmas e aprovação de eventos.', 1, 'home'),
+('Secretário', 'Gestão de matrículas, presenças, eventos e dados de contato das pessoas.', 1, 'home'),
+('Instrutor', 'Lançamento de temas de aula e registro de frequência das turmas sob sua responsabilidade.', 1, 'home');
+
+INSERT INTO tela (codigo_tela, nome_tela, grupo, ordem, status_ativo) VALUES
+('home', 'Home', 'Principal', 1, 1),
+('alunos', 'Alunos', 'Gestão acadêmica', 2, 1),
+('turmas', 'Turmas', 'Gestão acadêmica', 3, 1),
+('eventos', 'Eventos', 'Atividades', 4, 1),
+('cronograma', 'Cronograma', 'Gestão acadêmica', 5, 1),
+('chamada', 'Chamada', 'Gestão acadêmica', 6, 1),
+('agenda', 'Agenda', 'Atividades', 7, 1),
+('usuarios', 'Usuários', 'Administração', 8, 1),
+('perfis-acessos', 'Perfis e acessos', 'Administração', 9, 1);
 
 INSERT INTO nivel_formacao (nome_nivel, ordem_hierarquia) VALUES 
 ('Filosofia para Viver', 1),

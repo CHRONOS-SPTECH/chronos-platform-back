@@ -18,10 +18,13 @@ public record EventoRequestDTO(
         String descricao,
         String local_evento,
         List<@NotNull Long> id_turmas,
-        Boolean incluir_publico_externo
+        Boolean incluir_publico_externo,
+        String status_evento
 ) {
     public EventoRequestDTO {
         id_turmas = id_turmas == null ? List.of() : List.copyOf(id_turmas);
         incluir_publico_externo = incluir_publico_externo != null && incluir_publico_externo;
+        status_evento = status_evento == null || status_evento.isBlank()
+                ? null : status_evento.trim();
     }
 }

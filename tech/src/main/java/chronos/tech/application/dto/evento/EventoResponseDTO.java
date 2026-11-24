@@ -16,6 +16,7 @@ public record EventoResponseDTO(
         String local_evento,
         List<Integer> id_turmas,
         Boolean incluir_publico_externo,
+        String status_evento,
         List<ParticipanteDTO> participantes
 ) {
     public record ParticipanteDTO(

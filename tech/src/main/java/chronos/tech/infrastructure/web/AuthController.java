@@ -4,8 +4,10 @@ import chronos.tech.application.dto.auth.AuthLoginRequestDTO;
 import chronos.tech.application.dto.auth.AuthRefreshRequestDTO;
 import chronos.tech.application.dto.auth.AuthRegisterRequestDTO;
 import chronos.tech.application.dto.auth.AuthResponseDTO;
+import chronos.tech.application.dto.auth.AuthMeResponseDTO;
 import chronos.tech.application.port.in.AuthUseCase;
 import chronos.tech.infrastructure.security.JwtService;
+import chronos.tech.infrastructure.security.CustomUserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -15,6 +17,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -63,5 +66,12 @@ public class AuthController {
     public ResponseEntity<AuthResponseDTO> refresh(
             @RequestBody @Validated AuthRefreshRequestDTO dto) {
         return ResponseEntity.ok(authUseCase.refresh(dto));
+    }
+
+    @Operation(summary = "Dados da sessão autenticada", description = "Retorna usuário, perfis ativos e telas permitidas")
+    @GetMapping("/me")
+    public ResponseEntity<AuthMeResponseDTO> me(
+            @AuthenticationPrincipal CustomUserPrincipal principal) {
+        return ResponseEntity.ok(authUseCase.me(principal.getUsername()));
     }
 }

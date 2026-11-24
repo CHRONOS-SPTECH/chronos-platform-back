@@ -25,6 +25,7 @@ public interface EventoMapper {
     @Mapping(target = "horaInicioEvento", source = "hora_inicio_evento")
     @Mapping(target = "horaFimEventos", source = "hora_fim_evento")
     @Mapping(target = "localEvento", source = "local_evento")
+    @Mapping(target = "statusEvento", source = "status_evento")
     Evento toModel(EventoRequestDTO dto);
 
     @Mapping(target = "id_evento", source = "idEvento")
@@ -34,6 +35,7 @@ public interface EventoMapper {
     @Mapping(target = "hora_inicio_evento", source = "horaInicioEvento")
     @Mapping(target = "hora_fim_evento", source = "horaFimEventos")
     @Mapping(target = "local_evento", source = "localEvento")
+    @Mapping(target = "status_evento", source = "statusEvento")
     @Mapping(target = "id_turmas", source = "turmas")
     @Mapping(target = "incluir_publico_externo", source = "incluirPublicoExterno")
     @Mapping(
@@ -55,6 +57,7 @@ public interface EventoMapper {
     @Mapping(target = "horaInicioEvento", source = "hora_inicio_evento")
     @Mapping(target = "horaFimEventos", source = "hora_fim_evento")
     @Mapping(target = "localEvento", source = "local_evento")
+    @Mapping(target = "statusEvento", source = "status_evento")
     @BeanMapping(
             nullValuePropertyMappingStrategy =
                     NullValuePropertyMappingStrategy.IGNORE

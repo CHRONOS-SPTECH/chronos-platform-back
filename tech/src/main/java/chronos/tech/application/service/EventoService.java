@@ -78,6 +78,10 @@ public class EventoService implements EventoUseCase {
         evento.setTurmas(buscarTurmas(dto.id_turmas()));
         evento.setIncluirPublicoExterno(dto.incluir_publico_externo());
 
+        if (evento.getStatusEvento() == null || evento.getStatusEvento().isBlank()) {
+            evento.setStatusEvento("Agendado");
+        }
+
         Evento salvo = repository.save(evento);
 
         eventPublisher.publishEvent(new EventoCriadoEvent(salvo.getIdEvento()));

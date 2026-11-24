@@ -24,7 +24,21 @@ public class PerfilAcesso {
     private String nomePerfil;
     private String descricao;
 
+    @Column(name = "status_ativo", columnDefinition = "TINYINT")
+    private Boolean statusAtivo;
+
+    @Column(name = "codigo_tela_inicial")
+    private String codigoTelaInicial;
+
     @OneToMany(mappedBy = "perfil")
     private List<UsuarioPerfil> usuarioPerfis;
+
+    @ManyToMany
+    @JoinTable(
+            name = "perfil_tela",
+            joinColumns = @JoinColumn(name = "id_perfil"),
+            inverseJoinColumns = @JoinColumn(name = "id_tela")
+    )
+    private List<Tela> telas;
 
 }
